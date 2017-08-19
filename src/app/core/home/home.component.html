@@ -1,0 +1,29 @@
+<div>
+  <h4>Get Game Statistic</h4>
+  <md-input-container>
+    <input mdInput
+      type="number"
+      placeholder="Enter game id"
+      [value]="gameId"
+      (change)="changeGameId($event)">
+  </md-input-container>
+  <button md-button (click)="requestGameData()">Get game statistic</button>
+  <div class="gameTable">
+    <div class="gameTable__levelRow">
+      <div class="gameTable__levelName"
+          *ngFor="let level of gameData.levels">
+        #{{ level.level }}: {{ level.name }}
+      </div>
+    </div>
+    <div class="gameTable__mainData">
+      <div class="gameTable__levelStat"
+          *ngFor="let level of gameData.teamData">
+        <md-card class="gameTable__team"
+            *ngFor="let team of level">
+          <p class="gameTable__teamName"> {{ team.name }} </p>
+          <p class="gameTable__teamTime"> {{ team.time | formatDateTime: 'time' }} </p>
+        </md-card>
+      </div>
+    </div>
+  </div>
+</div>
