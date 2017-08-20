@@ -1,0 +1,28 @@
+<div class="search-component">
+  <md-card>
+    <form [formGroup]="urlForm"
+        novalidate
+        class="example-form"
+        (submit)="sendRequest($event)">
+      <md-card-title>
+        Вставьте URL описания игры или игровой статистики
+      </md-card-title>
+      <md-card-content>
+        <md-input-container class="search-component__url">
+          <input mdInput
+            placeholder="URL игры"
+            formControlName="urlInput">
+          <md-error *ngIf="urlForm.get('urlInput').hasError('pattern')">
+            Адрес некоректный. Поддержываемые домены: *.en.cx и *.quest.ua.
+          </md-error>
+          <md-error *ngIf="urlForm.get('urlInput').hasError('required')">
+            URL <strong>обязательный</strong>
+          </md-error>
+        </md-input-container>
+      </md-card-content>
+      <md-card-actions class="search-component__buttons">
+        <button md-button type="submit" [disabled]="urlForm.invalid">Отправить</button>
+      </md-card-actions>
+    </form>
+  </md-card>
+</div>

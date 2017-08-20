@@ -1,14 +1,8 @@
 <div>
   <h4>Get Game Statistic</h4>
-  <md-input-container>
-    <input mdInput
-      type="number"
-      placeholder="Enter game id"
-      [value]="gameId"
-      (change)="changeGameId($event)">
-  </md-input-container>
-  <button md-button (click)="requestGameData()">Get game statistic</button>
-  <div class="gameTable">
+
+  
+  <div *ngIf="gameData" class="gameTable">
     <div class="gameTable__levelRow">
       <div class="gameTable__levelName"
           *ngFor="let level of gameData.levels">
@@ -21,7 +15,7 @@
         <md-card class="gameTable__team"
             *ngFor="let team of level">
           <p class="gameTable__teamName"> {{ team.name }} </p>
-          <p class="gameTable__teamTime"> {{ team.time | formatDateTime: 'time' }} </p>
+          <p class="gameTable__teamTime"> {{ team.levelTime | formatDateTime: 'time' }} </p>
         </md-card>
       </div>
     </div>

@@ -1,0 +1,29 @@
+@import '../../../styles/variables';
+
+.header {
+  background-color: $main-blue;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  height: 70px;
+  padding: 5px 10px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+
+  &__questLogo {
+    display: inline-block;
+    height: auto;
+    max-height: 100%;
+    vertical-align: middle;
+    max-width: 200px;
+  }
+
+  &__title {
+    color: $light-yellow;
+    display: inline-block;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+    width: calc(100% - 220px);
+  }
+}
