@@ -11,7 +11,7 @@ export class FormatDateTimePipe implements PipeTransform {
 
   public transform (value: string | Date, type: string) {
     if (value) {
-      let date = moment(value, 'DD.MM.YYYYTHH:mm:ss.SSS');
+      let date = moment(value);
       if (date.isValid()) {
         switch (type) {
           case 'longer':

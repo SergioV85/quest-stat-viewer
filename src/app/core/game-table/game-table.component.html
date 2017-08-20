@@ -1,0 +1,36 @@
+<div class="gameTable">
+  <md-button-toggle-group class="gameTable__selector" #group="mdButtonToggleGroup">
+    <md-button-toggle class="gameTable__selectorButton" value="level">
+      Сортировать по времени закрытия уровня
+    </md-button-toggle>
+    <md-button-toggle class="gameTable__selectorButton" value="team">
+      Сортировать по командам
+    </md-button-toggle>
+  </md-button-toggle-group>  
+  <div class="gameTable__container" *ngIf="group.value === 'level'">
+    <div class="gameTable__levelRow">
+      <div class="gameTable__levelName" *ngFor="let level of data.stat.levels">
+        #{{ level.level }}: {{ level.name }}
+      </div>
+    </div>
+    <div class="gameTable__levelStat" *ngFor="let level of data.stat.dataByFinishTime">
+      <md-card class="gameTable__team" *ngFor="let team of level">
+        <p class="gameTable__teamName"> {{ team.name }} </p>
+        <p class="gameTable__teamTime"> {{ team.levelTime | formatDateTime: 'time' }} </p>
+      </md-card>
+    </div>
+  </div>
+  <div class="gameTable__container"  *ngIf="group.value === 'team'">
+    <div class="gameTable__levelRow">
+      <div class="gameTable__levelName" *ngFor="let level of data.stat.levels">
+        #{{ level.level }}: {{ level.name }}
+      </div>
+    </div>
+    <div class="gameTable__teamStat" *ngFor="let team of data.stat.dataByTeam">
+      <md-card class="gameTable__team" *ngFor="let level of team.data">
+        <p class="gameTable__teamName"> {{ level.name }} </p>
+        <p class="gameTable__teamTime"> {{ level.levelTime | formatDateTime: 'time' }} </p>
+      </md-card>
+    </div>
+  </div>
+</div>

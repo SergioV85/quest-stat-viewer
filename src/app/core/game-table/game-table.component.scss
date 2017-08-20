@@ -1,0 +1,56 @@
+.gameTable {
+  &__selector {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  &__selectorButton {
+    width: 50%;
+    text-align: center;
+  }
+
+  &__container {
+    max-width: 100%;
+    overflow: auto;
+  }
+
+  &__levelRow {
+    margin-bottom: 10px;
+    white-space: nowrap;
+  }
+  &__levelName {
+    color: #777;
+    font-size: 10px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    white-space: normal;
+    width: 120px;
+  }
+  &__mainData {
+    white-space: nowrap;
+  }
+  &__levelStat {
+    display: flex;
+    margin: 10px 0;
+    width: 100%;
+    white-space: nowrap
+  }
+  &__team {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 8px;
+    margin: 10px 10px;
+    width: 100px;
+    white-space: normal;
+    flex: 1 1 100px;
+  }
+  &__teamName {
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+  }
+  &__teamTime {
+    font-size: 9px;
+    text-align: center;
+  }
+}

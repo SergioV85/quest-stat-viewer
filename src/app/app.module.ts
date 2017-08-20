@@ -18,7 +18,6 @@ import { AppComponent } from './app.component';
 import { ApiService } from './common/services/api.service';
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
 
-import { HomeComponent } from './core/home';
 import { NoContentComponent } from './core/no-content';
 import { GameTableComponent } from './core/game-table/game-table.component';
 import { SearchGameComponent } from './core/search-game/search-game.component';
@@ -43,7 +42,6 @@ type StoreType = {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    HomeComponent,
     MainPageComponent,
     HeaderComponent,
     SearchGameComponent,

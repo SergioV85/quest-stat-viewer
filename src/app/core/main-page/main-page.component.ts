@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from './../../common/services/api.service';
 
 @Component({
@@ -6,17 +6,18 @@ import { ApiService } from './../../common/services/api.service';
   templateUrl: 'main-page.component.html',
   styleUrls: ['main-page.component.scss']
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent {
+  public gameData: QuestStat.GameData;
+  public dataRequested: boolean;
+
   constructor(private apiService: ApiService) {}
 
-  public ngOnInit() {
-    console.log('Init Main Page');
-  }
-
   public searchGame(searchRequest: QuestStat.GameRequest) {
+    this.dataRequested = true;
     this.apiService.getGameStat(searchRequest)
       .subscribe((data: QuestStat.GameData) => {
-        console.log(data);
+        this.dataRequested = false;
+        this.gameData = data;
       });
   }
 }

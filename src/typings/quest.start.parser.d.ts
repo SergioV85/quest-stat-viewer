@@ -1,11 +1,4 @@
 declare namespace QuestStat {
-  interface AdditionTime {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }
-
   interface LevelData {
     level: number;
     name: string;
@@ -14,18 +7,35 @@ declare namespace QuestStat {
   }
 
   interface TeamData {
+    bestTime: boolean,
+    duration: number,
     id: number;
-    name: string;
+    levelIdx: number,
     levelTime: string;
+    name: string;
     additionsTime?: {
-      bonus?: AdditionTime;
-      penalty?: AdditionTime;
+      bonus?: number;
+      penalty?: number;
     }
   }
 
   interface GameData {
-    levels: LevelData[],
-    teamData: TeamData[][],
+    info: {
+      gameStart: string;
+      gameTimeZone: string;
+    },
+    stat: {
+      dataByLevels: Array<{
+        id: number,
+        data: TeamData[]
+      }>;
+      dataByTeam: Array<{
+        id: number,
+        data: TeamData[]
+      }>;
+      dataByFinishTime: TeamData[][]
+      levels: LevelData[]
+    };
   }
 
   interface GameRequest {

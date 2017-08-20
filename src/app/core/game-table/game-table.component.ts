@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'game-table',
@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['game-table.component.scss']
 })
 export class GameTableComponent {
+  @Input() public data: QuestStat.GameData;
   constructor() {}
 }
