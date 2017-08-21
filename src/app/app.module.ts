@@ -16,12 +16,15 @@ import { AngularMaterialModule } from './common/modules/angular-material.module'
 import { AppComponent } from './app.component';
 
 import { ApiService } from './common/services/api.service';
+
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
+import { FormatDurationPipe } from './common/pipes/duration-transorm.pipe';
 
 import { NoContentComponent } from './core/no-content';
 import { GameTableComponent } from './core/game-table/game-table.component';
 import { SearchGameComponent } from './core/search-game/search-game.component';
 import { MainPageComponent } from './core/main-page/main-page.component';
+import { TeamCardComponent } from './core/team-card/team-card.component';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 
@@ -46,9 +49,11 @@ type StoreType = {
     HeaderComponent,
     SearchGameComponent,
     GameTableComponent,
+    TeamCardComponent,
     FooterComponent,
     NoContentComponent,
-    FormatDateTimePipe
+    FormatDateTimePipe,
+    FormatDurationPipe
   ],
   imports: [
     BrowserModule,

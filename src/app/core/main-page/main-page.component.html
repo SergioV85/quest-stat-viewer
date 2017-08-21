@@ -1,5 +1,9 @@
 <div class="main-page">
-  <search-game *ngIf="!gameData" (requestGameData)="searchGame($event)"></search-game>
-  <md-spinner *ngIf="dataRequested"></md-spinner>
-  <game-table *ngIf="gameData" [data]="gameData"></game-table>
+  <div class="container">
+    <search-game *ngIf="!gameData && !dataRequested" (requestGameData)="searchGame($event)"></search-game>
+    <md-spinner *ngIf="dataRequested"></md-spinner>
+  </div>
+  <div class="full-width">
+    <game-table *ngIf="gameData && !dataRequested" [data]="gameData"></game-table>
+  </div>
 </div>

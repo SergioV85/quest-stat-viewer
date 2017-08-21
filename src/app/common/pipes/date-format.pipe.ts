@@ -29,5 +29,4 @@ export class FormatDateTimePipe implements PipeTransform {
     }
     return value;
   }
-
 }

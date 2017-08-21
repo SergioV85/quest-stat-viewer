@@ -1,0 +1,9 @@
+<md-card class="team-card">
+  <md-icon *ngIf="teamInfo.bestTime"
+      class="team-card__bestTimeIcon">
+    star rate
+  </md-icon>
+  <p class="team-card__name"> {{ teamInfo.name }} </p>
+  <p class="team-card__duration"> {{ teamInfo.duration | formatDuration }} </p>
+  <p class="team-card__time"> {{ teamInfo.levelTime | formatDateTime: 'time' }} </p>
+</md-card>

@@ -1,4 +1,9 @@
 declare namespace QuestStat {
+  interface GroupedTeamData {
+    id: number;
+    data: TeamData[];
+  }
+
   interface LevelData {
     level: number;
     name: string;
@@ -7,10 +12,10 @@ declare namespace QuestStat {
   }
 
   interface TeamData {
-    bestTime: boolean,
-    duration: number,
+    bestTime: boolean;
+    duration: number;
     id: number;
-    levelIdx: number,
+    levelIdx: number;
     levelTime: string;
     name: string;
     additionsTime?: {
@@ -25,16 +30,10 @@ declare namespace QuestStat {
       gameTimeZone: string;
     },
     stat: {
-      dataByLevels: Array<{
-        id: number,
-        data: TeamData[]
-      }>;
-      dataByTeam: Array<{
-        id: number,
-        data: TeamData[]
-      }>;
-      dataByFinishTime: TeamData[][]
-      levels: LevelData[]
+      dataByLevels: GroupedTeamData[];
+      dataByTeam: GroupedTeamData[];
+      dataByFinishTime: TeamData[][];
+      levels: LevelData[];
     };
   }
 

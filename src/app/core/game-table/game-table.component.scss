@@ -1,6 +1,9 @@
 .gameTable {
+  text-align: center;
+
   &__selector {
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
+    max-width: 1000px;
     width: 100%;
   }
   &__selectorButton {
@@ -10,6 +13,7 @@
 
   &__container {
     max-width: 100%;
+    max-height: calc(100vh - 180px);
     overflow: auto;
   }
 
@@ -29,7 +33,7 @@
   &__mainData {
     white-space: nowrap;
   }
-  &__levelStat {
+  &__stat {
     display: flex;
     margin: 10px 0;
     width: 100%;
@@ -37,20 +41,8 @@
   }
   &__team {
     box-sizing: border-box;
-    display: inline-block;
-    padding: 8px;
-    margin: 10px 10px;
-    width: 100px;
+    padding: 4px;
     white-space: normal;
-    flex: 1 1 100px;
-  }
-  &__teamName {
-    font-size: 11px;
-    font-weight: bold;
-    text-align: center;
-  }
-  &__teamTime {
-    font-size: 9px;
-    text-align: center;
+    flex: 0 0 120px;
   }
 }

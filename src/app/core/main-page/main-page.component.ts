@@ -20,4 +20,5 @@ export class MainPageComponent {
         this.gameData = data;
       });
   }
+
 }

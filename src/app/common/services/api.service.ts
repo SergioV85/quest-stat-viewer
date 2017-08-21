@@ -5,8 +5,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ApiService {
-  // private serverAddress: string = 'https://quest-stat-parser.herokuapp.com';
-  private serverAddress: string = 'http://localhost:4040';
+  private serverAddress: string = 'https://quest-stat-parser.herokuapp.com';
+  // private serverAddress: string = 'http://localhost:4040';
 
   constructor(private http: Http) {}
 
