@@ -25,7 +25,6 @@
     "node": "node",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
-    "postinstall": "npm run build:prod",
     "preversion": "npm test",
     "rimraf": "rimraf",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
