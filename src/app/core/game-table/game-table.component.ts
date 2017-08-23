@@ -16,12 +16,19 @@ export class GameTableComponent implements OnInit {
   }
 
   public resortTeamList() {
+    const closedLevelQuantity = R.pipe(
+      R.prop('data'),
+      R.length
+    );
+
     const sumDurations = R.pipe(
       R.prop('data'),
       R.map((team) => team.duration),
-      R.sum);
+      R.sum
+    );
 
     this.teamList = R.sortWith([
+      R.descend(closedLevelQuantity),
       R.ascend(sumDurations)
     ])(this.data.stat.dataByTeam);
   }

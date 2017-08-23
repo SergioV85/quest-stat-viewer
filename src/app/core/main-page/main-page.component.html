@@ -1,7 +1,9 @@
 <div class="main-page">
   <div class="container">
+    <h3 class="error-message" *ngIf="errorMessage">{{ errorMessage }}</h3>
     <search-game *ngIf="!gameData && !dataRequested" (requestGameData)="searchGame($event)"></search-game>
-    <md-spinner *ngIf="dataRequested"></md-spinner>
+    <md-spinner class="loading" *ngIf="dataRequested"></md-spinner>
+    
   </div>
   <div class="full-width">
     <game-table *ngIf="gameData && !dataRequested" [data]="gameData"></game-table>
