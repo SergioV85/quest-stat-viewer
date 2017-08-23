@@ -1,10 +1,27 @@
 @import '../../../styles/variables';
 
 .team-card {
-  min-height: 50px;
+  min-height: 80px;
   padding: 8px;
   display: flex;
   flex-direction: column;
+
+  &--extended {
+    min-height: 100px;
+  }
+
+  &--dismised {
+    background-color: $light-grey-e;
+    color: $light-grey-a;
+    opacity: 0.8;
+
+    .team-card__additionalTime--bonus {
+      color: $light-green;
+    }
+    .team-card__additionalTime--penalty {
+      color: $light-red;
+    }
+  }
 
   &--selected {
     background-color: $light-yellow;
@@ -26,14 +43,27 @@
     font-weight: bold;
     text-align: center;
   }
-  &__duration {
+  &__duration,
+  &__time,
+  &__additionalTime {
     font-size: 11px;
+    margin: 4px 0 0;
     text-align: center;
     word-break: break-word;
   }  
-  &__time {
-    font-size: 11px;
-    text-align: center;
-    word-break: break-word;
+  &__additionalTime {
+    &--bonus {
+      color: $main-green;
+      &:before {
+        content: "бонус"
+      }
+    }
+    &--penalty {
+      color: $main-red;
+
+      &:before {
+        content: "штраф"
+      }
+    }    
   }
 }

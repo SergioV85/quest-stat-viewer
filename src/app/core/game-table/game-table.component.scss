@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 .gameTable {
   text-align: center;
 
@@ -22,13 +24,21 @@
     white-space: nowrap;
   }
   &__levelName {
-    color: #777;
+    color: $main-grey;
     font-size: 10px;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
     white-space: normal;
     width: 120px;
+
+    &--dismissed {
+      color: $light-grey-a;
+    }
+
+    &:last-child {
+      margin-left: 30px;
+    }
   }
   &__mainData {
     white-space: nowrap;
@@ -40,9 +50,35 @@
     white-space: nowrap
   }
   &__team {
+    padding: 4px;
+    box-sizing: border-box;
+    min-width: 120px;
+    white-space: normal;
+    
+    &--flex {
+      margin: 5px 0;
+
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+  }
+  &__column-container {
+    display: flex;
+  }
+  &__column {
     box-sizing: border-box;
     padding: 4px;
-    white-space: normal;
-    flex: 0 0 120px;
+    min-width: 120px;
+    
+    &--noPadding {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    &:last-child {
+      margin-left: 30px;
+    }
   }
 }

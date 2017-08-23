@@ -1,3 +1,4 @@
+import { TeamCardComponent } from './../team-card/team-card.component';
 import { Component, Input, OnInit } from '@angular/core';
 import * as R from 'ramda';
 
@@ -9,13 +10,18 @@ import * as R from 'ramda';
 export class GameTableComponent implements OnInit {
   @Input() public data: QuestStat.GameData;
   public teamList: QuestStat.GroupedTeamData[] = [];
-  constructor() {}
+  public finishList: QuestStat.TeamData[] = [];
 
   public ngOnInit() {
-    this.resortTeamList();
+    this.teamList = this.sortTeamList(this.data.stat.dataByTeam);
+    this.finishList = this.sortFinishResultsColumn(this.data.stat.finishResults);
   }
 
-  public resortTeamList() {
+  public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
+    return R.pathOr(false, ['stat', 'levels', teamStat.levelIdx, 'removed'] , this.data);
+  }
+
+  private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
     const closedLevelQuantity = R.pipe(
       R.prop('data'),
       R.length
@@ -27,9 +33,28 @@ export class GameTableComponent implements OnInit {
       R.sum
     );
 
-    this.teamList = R.sortWith([
+    return R.sortWith([
       R.descend(closedLevelQuantity),
       R.ascend(sumDurations)
-    ])(this.data.stat.dataByTeam);
+    ])(sortingSource);
+  }
+
+  private sortFinishResultsColumn(finishResults): QuestStat.TeamData[] {
+    const closedLevels = (team) => R.pipe(
+      R.find(R.propEq('id', team.id)),
+      R.prop('data'),
+      R.length
+    )(this.data.stat.dataByTeam);
+
+    const calculateFullTime = (team) => R.sum([
+      team.duration,
+      R.negate(R.pathOr(0, ['additionsTime', 'bonus'], team)),
+      R.pathOr(0, ['additionsTime', 'penalty'], team)
+    ]);
+
+    return R.sortWith([
+      R.descend(closedLevels),
+      R.ascend(calculateFullTime)
+    ])(finishResults);
   }
 }

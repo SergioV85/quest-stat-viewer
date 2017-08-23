@@ -32,7 +32,7 @@ declare namespace QuestStat {
     stat: {
       dataByLevels: GroupedTeamData[];
       dataByTeam: GroupedTeamData[];
-      dataByFinishTime: TeamData[][];
+      finishResults: TeamData[];
       levels: LevelData[];
     };
   }
@@ -40,5 +40,10 @@ declare namespace QuestStat {
   interface GameRequest {
     id: number;
     domain: string;
+  }
+
+  interface ViewSettings {
+    showLeaderGap?: boolean,
+    showBestTime?: boolean
   }
 }

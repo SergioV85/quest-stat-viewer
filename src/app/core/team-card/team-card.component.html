@@ -1,9 +1,23 @@
-<md-card class="team-card">
-  <md-icon *ngIf="teamInfo.bestTime"
+<md-card class="team-card"
+    [ngClass]="{
+      'team-card--extended': viewSettings.showLeaderGap,
+      'team-card--dismised': removedLevel
+    }">
+  <md-icon *ngIf="viewSettings.showBestTime && teamInfo.bestTime"
       class="team-card__bestTimeIcon">
     star rate
   </md-icon>
   <p class="team-card__name"> {{ teamInfo.name }} </p>
   <p class="team-card__duration"> {{ teamInfo.duration | formatDuration }} </p>
+  <p *ngIf="viewSettings.showLeaderGap" class="team-card__time">
+    {{ teamInfo.levelTime | formatDateTime: 'time' }}
+  </p>
   <p class="team-card__time"> {{ teamInfo.levelTime | formatDateTime: 'time' }} </p>
+  <p *ngIf="teamInfo.additionsTime" class="team-card__additionalTime"
+      [ngClass]="{
+        'team-card__additionalTime--bonus': teamInfo.additionsTime.bonus,
+        'team-card__additionalTime--penalty': teamInfo.additionsTime.penalty
+      }">
+    {{ additionTime | formatDuration }}
+  </p>
 </md-card>

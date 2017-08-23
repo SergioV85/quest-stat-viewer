@@ -16,6 +16,7 @@ import { AngularMaterialModule } from './common/modules/angular-material.module'
 import { AppComponent } from './app.component';
 
 import { ApiService } from './common/services/api.service';
+import { SharedService } from './common/services/shared.service';
 
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
 import { FormatDurationPipe } from './common/pipes/duration-transorm.pipe';
@@ -33,7 +34,8 @@ import '../styles/headings.css';
 
 // Application wide providers
 const APP_PROVIDERS = [
-  ApiService
+  ApiService,
+  SharedService
 ];
 
 type StoreType = {
