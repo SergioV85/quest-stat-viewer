@@ -26,8 +26,11 @@ declare namespace QuestStat {
 
   interface GameData {
     info: {
-      gameStart: string;
-      gameTimeZone: string;
+      domain: string;
+      id: number;
+      name: string;
+      start: string;
+      timezone: string;
     },
     stat: {
       dataByLevels: GroupedTeamData[];
