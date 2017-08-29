@@ -15,9 +15,9 @@
   <p class="team-card__time"> {{ teamInfo.levelTime | formatDateTime: 'time' }} </p>
   <p *ngIf="teamInfo.additionsTime" class="team-card__additionalTime"
       [ngClass]="{
-        'team-card__additionalTime--bonus': teamInfo.additionsTime.bonus,
-        'team-card__additionalTime--penalty': teamInfo.additionsTime.penalty
+        'team-card__additionalTime--bonus': teamInfo.additionsTime > 0,
+        'team-card__additionalTime--penalty': teamInfo.additionsTime < 0
       }">
-    {{ additionTime | formatDuration }}
+    {{ teamInfo.additionsTime | formatDuration }}
   </p>
 </md-card>

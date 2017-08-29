@@ -18,8 +18,4 @@ export class TeamCardComponent implements OnInit {
       this.viewSettings = settings;
     });
   }
-
-  public get additionTime() {
-    return this.teamInfo.additionsTime.bonus || this.teamInfo.additionsTime.penalty;
-  }
 }

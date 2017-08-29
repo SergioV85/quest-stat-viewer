@@ -18,10 +18,7 @@ declare namespace QuestStat {
     levelIdx: number;
     levelTime: string;
     name: string;
-    additionsTime?: {
-      bonus?: number;
-      penalty?: number;
-    }
+    additionsTime?: number;
   }
 
   interface GameData {
