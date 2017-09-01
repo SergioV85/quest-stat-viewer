@@ -1,4 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
+import * as R from 'ramda';
 import * as  moment from 'moment';
 
 @Pipe({ name: 'formatDuration' })
@@ -6,10 +7,11 @@ export class FormatDurationPipe implements PipeTransform {
 
   public transform (value: number) {
     if (value) {
-      const days = value >= 86400000 ? `${moment.duration(value).get('d')} д ` : '';
-      const hours = value >= 3600000 ? `${moment.duration(value).get('h')} ч ` : '';
-      const minutes = value >= 60000 ? `${moment.duration(value).get('m')} м ` : '';
-      const seconds = `${moment.duration(value).get('s')} с`;
+      const modValue = Math.abs(value);
+      const days = modValue >= 86400000 ? `${moment.duration(modValue).get('d')} д ` : '';
+      const hours = modValue >= 3600000 ? `${moment.duration(modValue).get('h')} ч ` : '';
+      const minutes = modValue >= 60000 ? `${moment.duration(modValue).get('m')} м ` : '';
+      const seconds = `${moment.duration(modValue).get('s')} с`;
 
       return `${days}${hours}${minutes}${seconds}`;
     }
