@@ -16,7 +16,7 @@
     opacity: 0.8;
 
     .team-card__additionalTime--bonus {
-      color: $light-green;
+      color: $main-green;
     }
     .team-card__additionalTime--penalty {
       color: $light-red;
@@ -28,7 +28,7 @@
   }
 
   &__bestTimeIcon {
-    color: $alt-yellow;
+    color: $amber;
     font-size: 16px;
     height: 16px;
     left: -4px;

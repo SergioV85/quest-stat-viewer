@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 import { ApiService } from './../../common/services/api.service';
 import 'rxjs/add/operator/catch';
@@ -15,25 +16,10 @@ export class MainPageComponent {
   public dataRequested: boolean;
   public errorMessage: string;
 
-  constructor(private apiService: ApiService, private snackBar: MdSnackBar) {}
+  constructor(private router: Router, private snackBar: MdSnackBar) {}
 
-  public searchGame(searchRequest: QuestStat.GameRequest) {
+  public searchGame(searchRequest: QuestStat.GameRequest, ) {
     this.dataRequested = true;
-    this.apiService.getGameStat(searchRequest)
-      .catch((error) => {
-        this.snackBar.open('Извините, невозможно обработать запрос', 'Скрыть', {
-          politeness: 'assertive',
-          duration: 30000,
-          extraClasses: ['error-message']
-        });
-        throw Error(error);
-      })
-      .finally(() => {
-        this.dataRequested = false;
-      })
-      .subscribe((data: QuestStat.GameData) => {
-        this.gameData = data;
-      });
+    this.router.navigate([searchRequest.domain, searchRequest.id]);
   }
-
 }

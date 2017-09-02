@@ -1,5 +1,5 @@
 import { TeamCardComponent } from './../team-card/team-card.component';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import * as R from 'ramda';
 
 @Component({
@@ -9,6 +9,7 @@ import * as R from 'ramda';
 })
 export class GameTableComponent implements OnInit {
   @Input() public data: QuestStat.GameData;
+  @Output() public changeLevelData = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
   public finishList: QuestStat.TeamData[] = [];
 
@@ -19,6 +20,13 @@ export class GameTableComponent implements OnInit {
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
     return R.pathOr(false, ['stat', 'levels', teamStat.levelIdx, 'removed'] , this.data);
+  }
+
+  public updateLevelData(value, attribute, levelId) {
+    this.changeLevelData.emit({
+      id: levelId,
+      [attribute]: value
+    });
   }
 
   private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {

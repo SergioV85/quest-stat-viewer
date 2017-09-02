@@ -1,0 +1,44 @@
+<md-card class="level-card level-card--{{ LevelType[levelInfo.type] }}" 
+    [ngClass]="{
+      'level-card--dismised': levelInfo.removed
+    }">
+  <p class="level-card__iconContainer">
+    <span class="level-card__icon level-card__icon--left">
+      <button class="level-card__typeButton" md-icon-button [mdMenuTriggerFor]="menu">
+        <i class="level-card__levelType fa fa-lg"
+            [ngClass]="[levelTypeIcon, levelColorIcon]"
+            [mdTooltip]="levelTypeName"
+            aria-hidden="true">
+        </i>
+      </button>
+      <md-menu #menu="mdMenu">
+        <button *ngFor="let type of LevelTypeSelector"
+            class="level-card__menuButton" 
+            md-menu-item 
+            [disabled]="levelInfo.type === LevelType[type.type]"
+            (click)="selectLevelType(type.type)">
+          <i class="level-card__levelType level-card__levelType--{{ LevelType[type.type] }} fa {{ type.icon }}" 
+              aria-hidden="true"></i>
+          <span>{{ type.name }}</span>
+        </button>
+      </md-menu>
+    </span>
+    <!--span class="level-card__icon level-card__icon--center">
+      <i class="level-card__levelEdit fa fa-pencil fa-2x" aria-hidden="true"></i>
+    </span-->
+    <span class="level-card__icon level-card__icon--right">
+      <button class="level-card__typeButton" 
+          md-icon-button
+          (click)="toggleLevelState()">
+        <i class="level-card__levelStatus fa fa-lg" 
+            [ngClass]="{
+              'fa-eye-slash level-card__levelStatus--dismissed': levelInfo.removed, 
+              'fa-eye': !levelInfo.removed
+            }"
+            aria-hidden="true">
+        </i>
+      </button>
+    </span>
+  </p>
+  <p>#{{ levelInfo.level }}: {{ levelInfo.name }}</p>
+</md-card>

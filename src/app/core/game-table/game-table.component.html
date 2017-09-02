@@ -9,11 +9,12 @@
   </md-button-toggle-group>
   <div class="gameTable__container" *ngIf="group.value">
     <div class="gameTable__levelRow">
-      <div *ngFor="let level of data.stat.levels"
+      <level-card *ngFor="let level of data.stat.levels"
           class="gameTable__levelName"
-          [ngClass]="{'gameTable__levelName--dismissed': level.removed}">
-        #{{ level.level }}: {{ level.name }}
-      </div>
+          [levelInfo]="level"
+          (levelTypeChange)="updateLevelData($event, 'type', level.id)"
+          (levelStateChange)="updateLevelData($event, 'removed', level.id)">
+      </level-card>
     </div>
     <ng-container *ngIf="group.value === 'team'">
       <div class="gameTable__column-container">

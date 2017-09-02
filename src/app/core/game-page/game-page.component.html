@@ -1,0 +1,8 @@
+<div class="main-page">
+  <div class="full-width">
+    <game-table *ngIf="gameData" 
+        [data]="gameData"
+        (changeLevelData)="updateLevel($event)">
+    </game-table>
+  </div>
+</div>

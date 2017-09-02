@@ -21,20 +21,12 @@
 
   &__levelRow {
     margin-bottom: 10px;
+    top: 0;
     white-space: nowrap;
   }
   &__levelName {
-    color: $main-grey;
-    font-size: 10px;
     display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    white-space: normal;
-    width: 120px;
-
-    &--dismissed {
-      color: $light-grey-a;
-    }
+    vertical-align: top;
 
     &:last-child {
       margin-left: 30px;

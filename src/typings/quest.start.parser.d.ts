@@ -5,10 +5,12 @@ declare namespace QuestStat {
   }
 
   interface LevelData {
+    id: number;
     level: number;
     name: string;
+    position: number;
     removed: boolean;
-    type?: string;
+    type?: number;
   }
 
   interface TeamData {
@@ -38,7 +40,7 @@ declare namespace QuestStat {
   }
 
   interface GameRequest {
-    id: number;
+    id: number | string;
     domain: string;
   }
 
