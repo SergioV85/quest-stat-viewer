@@ -23,6 +23,29 @@
     }
   }
 
+  &--timeout {
+    &:before {
+      border-bottom: 20px solid transparent;
+      border-left: 20px solid transparent;
+      border-top: 20px solid $main-green;
+      content: "";
+      height: 0;
+      position: absolute;
+      opacity: 0.8;
+      right: 0;
+      top: 0;
+      width: 0;
+    }
+    &:after {
+      content: "T";
+      color: $main-light;
+      font-size: 10px;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+    }
+  }
+
   &--selected {
     background-color: $light-yellow;
   }
@@ -43,6 +66,7 @@
     font-weight: bold;
     text-align: center;
   }
+  &__timeout,
   &__duration,
   &__time,
   &__additionalTime {
@@ -65,5 +89,8 @@
         content: "штраф"
       }
     }    
+  }
+  &__timeout {
+    color: $main-green;
   }
 }

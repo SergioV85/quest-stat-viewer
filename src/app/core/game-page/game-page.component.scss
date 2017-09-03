@@ -1,6 +1,38 @@
-.main-page {
+@import '../../../styles/variables';
+
+.game-page {
   box-sizing: border-box;
   padding-top: 100px;
+
+  &__header {
+    margin: 0 0 30px;
+  }
+
+  &__viewSelector {
+    margin: 0 5px;
+    width: 100%;
+  }
+
+  &__viewButton {
+    width: 50%;
+    text-align: center;
+  }
+
+  &__changesContainer {
+    /deep/ .mat-figure {
+      justify-content: flex-end;
+    }
+  }
+
+  &__changesStatus {
+    color: $main-red;
+    font-size: 11px;
+    margin: 0 10px;
+  }
+
+  &__saveChangesButton {
+    margin-right: 5px;
+  }
 }
 
 .full-width {

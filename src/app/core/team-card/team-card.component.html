@@ -1,13 +1,17 @@
 <md-card class="team-card"
     [ngClass]="{
       'team-card--extended': viewSettings.showLeaderGap,
-      'team-card--dismised': removedLevel
+      'team-card--dismised': removedLevel,
+      'team-card--timeout': teamInfo.timeout
     }">
   <i *ngIf="viewSettings.showBestTime && teamInfo.bestTime"
       class="team-card__bestTimeIcon fa fa-trophy fa-lg"
       mdTooltip="Лучший результат на уровне">
   </i>
   <p class="team-card__name"> {{ teamInfo.name }} </p>
+  <p *ngIf="teamInfo.timeout" class="team-card__timeout">
+    Таймаут
+  </p>
   <p class="team-card__duration"> {{ teamInfo.duration | formatDuration }} </p>
   <p *ngIf="viewSettings.showLeaderGap" class="team-card__time">
     {{ teamInfo.levelTime | formatDateTime: 'time' }}

@@ -1,22 +1,14 @@
 <div class="gameTable">
-  <md-button-toggle-group class="gameTable__selector" #group="mdButtonToggleGroup">
-    <md-button-toggle class="gameTable__selectorButton" value="level">
-      Сортировать по времени закрытия уровня
-    </md-button-toggle>    
-    <md-button-toggle class="gameTable__selectorButton" value="team">
-      Сортировать по командам
-    </md-button-toggle>
-  </md-button-toggle-group>
-  <div class="gameTable__container" *ngIf="group.value">
+  <div class="gameTable__container" *ngIf="selectedTab">
     <div class="gameTable__levelRow">
-      <level-card *ngFor="let level of data.stat.levels"
+      <level-card *ngFor="let level of levels"
           class="gameTable__levelName"
           [levelInfo]="level"
-          (levelTypeChange)="updateLevelData($event, 'type', level.id)"
-          (levelStateChange)="updateLevelData($event, 'removed', level.id)">
+          (levelTypeChange)="changeLevelType.emit({ type: $event, id: level.id})"
+          (levelStateChange)="removeLevel.emit({ removed: $event, id: level.id})">
       </level-card>
     </div>
-    <ng-container *ngIf="group.value === 'team'">
+    <ng-container *ngIf="selectedTab === 'team'">
       <div class="gameTable__column-container">
         <div class="">
           <div class="gameTable__stat" *ngFor="let team of teamList">
@@ -35,9 +27,9 @@
         </div>
       </div>
     </ng-container>
-    <ng-container  *ngIf="group.value === 'level'">
+    <ng-container  *ngIf="selectedTab === 'level'">
       <div class="gameTable__column-container">
-        <div class="gameTable__column" *ngFor="let level of data.stat.dataByLevels">
+        <div class="gameTable__column" *ngFor="let level of levelsStat">
           <team-card *ngFor="let team of level.data" 
               class="gameTable__team"
               [removedLevel]="isLevelRemoved(team)"

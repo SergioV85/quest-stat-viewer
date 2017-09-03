@@ -1,8 +1,36 @@
-<div class="main-page">
+<div class="game-page">
+  <md-grid-list class="game-page__header" cols="3" rowHeight="40px">
+    <md-grid-tile [colspan]="2">
+      <md-button-toggle-group class="game-page__viewSelector" #group="mdButtonToggleGroup">
+        <md-button-toggle class="game-page__viewButton" value="level" [checked]="true">
+          Сортировать по времени закрытия уровня
+        </md-button-toggle>
+        <md-button-toggle class="game-page__viewButton" value="team">
+          Сортировать по командам
+        </md-button-toggle>
+      </md-button-toggle-group>
+    </md-grid-tile>
+    <md-grid-tile class="game-page__changesContainer">
+      <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
+      <button class="game-page__saveChangesButton" 
+          *ngIf="!changesStatus" 
+          md-raised-button 
+          color="primary"
+          [disabled]="disableSaveButton"
+          (click)="saveChanges()">
+        Сохранить
+      </button>
+    </md-grid-tile>
+  </md-grid-list>
   <div class="full-width">
-    <game-table *ngIf="gameData" 
-        [data]="gameData"
-        (changeLevelData)="updateLevel($event)">
+    <game-table *ngIf="gameData"
+        [levels]="gameData.stat.levels"
+        [teamsStat]="gameData.stat.dataByTeam"
+        [levelsStat]="gameData.stat.dataByLevels"
+        [finishResults]="gameData.stat.finishResults"
+        [selectedTab]="group.value"
+        (changeLevelType)="updateLevel($event)"
+        (removeLevel)="removeLevelFromStat($event)">
     </game-table>
   </div>
 </div>

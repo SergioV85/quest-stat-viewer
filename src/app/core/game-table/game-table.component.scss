@@ -3,16 +3,6 @@
 .gameTable {
   text-align: center;
 
-  &__selector {
-    margin: 0 auto 30px;
-    max-width: 1000px;
-    width: 100%;
-  }
-  &__selectorButton {
-    width: 50%;
-    text-align: center;
-  }
-
   &__container {
     max-width: 100%;
     max-height: calc(100vh - 180px);

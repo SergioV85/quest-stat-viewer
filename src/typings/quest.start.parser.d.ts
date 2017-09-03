@@ -21,6 +21,7 @@ declare namespace QuestStat {
     levelTime: string;
     name: string;
     additionsTime?: number;
+    timeout: boolean;
   }
 
   interface GameData {

@@ -15,4 +15,10 @@ export class ApiService {
       .post(`${this.serverAddress}/games/`, gameData)
       .map((data: any) => data.json());
   }
+
+  public saveLevelSettings({ gameId, levelData}): Observable<QuestStat.GameData> {
+    return this.http
+      .put(`${this.serverAddress}/games/${gameId}/update-levels`, levelData)
+      .map((data: any) => data.json());
+  }
 }

@@ -1,5 +1,5 @@
 import { TeamCardComponent } from './../team-card/team-card.component';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as R from 'ramda';
 
 @Component({
@@ -7,26 +7,28 @@ import * as R from 'ramda';
   templateUrl: 'game-table.component.html',
   styleUrls: ['game-table.component.scss']
 })
-export class GameTableComponent implements OnInit {
-  @Input() public data: QuestStat.GameData;
-  @Output() public changeLevelData = new EventEmitter<{}>();
+export class GameTableComponent {
+  @Input() public levels: QuestStat.LevelData[];
+  @Input() public levelsStat: QuestStat.GroupedTeamData[];
+  @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
+    this.dataByTeam = teamSt;
+    this.teamList = this.sortTeamList(teamSt);
+    console.log('teamSt', teamSt);
+    console.log('teamList', this.teamList);
+  };
+  @Input() public set finishResults(finRes: QuestStat.TeamData[]) {
+    this.finishList = this.sortFinishResultsColumn(finRes);
+  };
+  @Input() public selectedTab: string = 'team';
+  @Output() public changeLevelType = new EventEmitter<{}>();
+  @Output() public removeLevel = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
   public finishList: QuestStat.TeamData[] = [];
-
-  public ngOnInit() {
-    this.teamList = this.sortTeamList(this.data.stat.dataByTeam);
-    this.finishList = this.sortFinishResultsColumn(this.data.stat.finishResults);
-  }
+  public gameData: QuestStat.GameData;
+  public dataByTeam: QuestStat.GroupedTeamData[];
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
-    return R.pathOr(false, ['stat', 'levels', teamStat.levelIdx, 'removed'] , this.data);
-  }
-
-  public updateLevelData(value, attribute, levelId) {
-    this.changeLevelData.emit({
-      id: levelId,
-      [attribute]: value
-    });
+    return R.pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
   }
 
   private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
@@ -37,7 +39,7 @@ export class GameTableComponent implements OnInit {
 
     const sumDurations = R.pipe(
       R.prop('data'),
-      R.map((team) => team.duration),
+      R.map((team: QuestStat.TeamData) => R.subtract(team.duration, team.additionsTime)),
       R.sum
     );
 
@@ -52,7 +54,7 @@ export class GameTableComponent implements OnInit {
       R.find(R.propEq('id', team.id)),
       R.prop('data'),
       R.length
-    )(this.data.stat.dataByTeam);
+    )(this.dataByTeam);
 
     const calculateFullTime = (team) => R.sum([
       team.duration,

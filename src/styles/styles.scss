@@ -67,3 +67,11 @@ body {
     font-size: 20px;
   }
 }
+
+.snack-error-message {
+  background: $main-red !important;
+}
+
+.snack-success-message {
+  background: $main-green !important;
+}
