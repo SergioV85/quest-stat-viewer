@@ -26,7 +26,7 @@
     <game-table *ngIf="gameData"
         [levels]="gameData.stat.levels"        
         [levelsStat]="gameData.stat.dataByLevels"
-        [finishResults]="gameData.stat"
+        [finishResults]="gameData.stat.finishResults"
         [teamsStat]="gameData.stat.dataByTeam"
         [selectedTab]="group.value"
         (changeLevelType)="updateLevel($event)"

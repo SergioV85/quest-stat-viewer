@@ -103,7 +103,7 @@ export class GamePageComponent implements OnInit {
         R.find(R.propEq('id', teamFinishResult.id)),
         R.prop('data'),
         R.find((teamStat) => teamStat.levelIdx === level.position),
-        R.prop('duration')
+        R.pathOr(0, ['duration'])
       )(this.gameData.stat.dataByTeam);
       const newAdditionalTime = removed
         ? R.add(teamFinishResult.additionsTime, levelTime)
@@ -118,7 +118,10 @@ export class GamePageComponent implements OnInit {
       const teamId = R.prop('id', R.head(teamStats));
       const indexInList = R.findIndex(R.propEq('levelIdx', lvlIdx))(teamStats);
       if (indexInList < 0) {
-        return undefined;
+        return {
+          id: teamId,
+          data: teamStats
+        };
       }
       const newStat = R.find(R.propEq('id', teamId))(updatedStatByTeams);
       return {

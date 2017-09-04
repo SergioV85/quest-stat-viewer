@@ -14,7 +14,8 @@ declare namespace QuestStat {
   }
 
   interface TeamData {
-    bestTime: boolean;
+    bestTime?: boolean;
+    closedLevels?: number;
     duration: number;
     extraBonus?: number;
     id: number;
@@ -22,7 +23,7 @@ declare namespace QuestStat {
     levelTime: string;
     name: string;
     additionsTime?: number;
-    timeout: boolean;
+    timeout?: boolean;
   }
 
   interface GameData {
