@@ -3,6 +3,6 @@ export enum LevelType {
     Search,
     Logic,
     Drive,
-    Waiting,
-    Agent
+    Agent,
+    Waiting
   }
