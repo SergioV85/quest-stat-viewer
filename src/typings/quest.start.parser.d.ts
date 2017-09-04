@@ -16,6 +16,7 @@ declare namespace QuestStat {
   interface TeamData {
     bestTime: boolean;
     duration: number;
+    extraBonus?: number;
     id: number;
     levelIdx: number;
     levelTime: string;

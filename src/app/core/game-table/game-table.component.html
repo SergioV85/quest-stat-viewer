@@ -1,7 +1,7 @@
 <div class="gameTable">
   <div class="gameTable__container" *ngIf="selectedTab">
     <div class="gameTable__levelRow">
-      <level-card *ngFor="let level of levels"
+      <level-card *ngFor="let level of levelsList"
           class="gameTable__levelName"
           [levelInfo]="level"
           (levelTypeChange)="changeLevelType.emit({ type: $event, id: level.id})"

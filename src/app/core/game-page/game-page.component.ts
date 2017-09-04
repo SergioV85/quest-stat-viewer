@@ -98,6 +98,22 @@ export class GamePageComponent implements OnInit {
 
     const lvlIdx = R.findIndex(R.propEq('id', level.position))(this.gameData.stat.dataByLevels);
 
+    const updateFinishResults = R.map((teamFinishResult: QuestStat.TeamData) => {
+      const levelTime = R.pipe(
+        R.find(R.propEq('id', teamFinishResult.id)),
+        R.prop('data'),
+        R.find((teamStat) => teamStat.levelIdx === level.position),
+        R.prop('duration')
+      )(this.gameData.stat.dataByTeam);
+      const newAdditionalTime = removed
+        ? R.add(teamFinishResult.additionsTime, levelTime)
+        : R.subtract(teamFinishResult.additionsTime, levelTime);
+
+      return R.merge(teamFinishResult, {
+        additionsTime: newAdditionalTime
+      });
+    }, this.gameData.stat.finishResults);
+
     const replaceTeamStatInList = (teamStats) => {
       const teamId = R.prop('id', R.head(teamStats));
       const indexInList = R.findIndex(R.propEq('levelIdx', lvlIdx))(teamStats);
@@ -126,5 +142,6 @@ export class GamePageComponent implements OnInit {
 
     this.gameData.stat.dataByLevels = newLevelsData;
     this.gameData.stat.dataByTeam = newTeamsData;
+    this.gameData.stat.finishResults = updateFinishResults;
   }
 }

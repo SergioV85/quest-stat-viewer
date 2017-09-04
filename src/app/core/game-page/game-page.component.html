@@ -24,10 +24,10 @@
   </md-grid-list>
   <div class="full-width">
     <game-table *ngIf="gameData"
-        [levels]="gameData.stat.levels"
-        [teamsStat]="gameData.stat.dataByTeam"
+        [levels]="gameData.stat.levels"        
         [levelsStat]="gameData.stat.dataByLevels"
-        [finishResults]="gameData.stat.finishResults"
+        [finishResults]="gameData.stat"
+        [teamsStat]="gameData.stat.dataByTeam"
         [selectedTab]="group.value"
         (changeLevelType)="updateLevel($event)"
         (removeLevel)="removeLevelFromStat($event)">
