@@ -10,6 +10,12 @@ export class ApiService {
 
   constructor(private http: Http) {}
 
+  public getSavedGames(): Observable<QuestStat.GameInfo[]> {
+    return this.http
+      .get(`${this.serverAddress}/games/`)
+      .map((data: any) => data.json());
+  }
+
   public getGameStat(gameData: QuestStat.GameRequest): Observable<QuestStat.GameData> {
     return this.http
       .post(`${this.serverAddress}/games/`, gameData)

@@ -1,0 +1,26 @@
+<div class="saved-games">
+  <md-toolbar>
+    <span>Сохраненные игры</span>
+    <span class="saved-games__spacer"></span>
+    <md-select placeholder="Фильтр по домену" (change)="filterByDomain($event)">
+      <md-option>Все домены</md-option>
+      <md-option *ngFor="let domain of domains"
+          [value]="domain">
+        {{ domain }}
+      </md-option>
+    </md-select>
+  </md-toolbar>
+  <div class="saved-games__container">
+    <md-card *ngFor="let game of games"
+        class="saved-games__game"
+        (click)="selectGame(game)">
+      <md-card-header class="saved-games__game-header">
+        <md-card-title>{{ game.name }}</md-card-title>
+      </md-card-header>
+      <md-card-content class="saved-games__game-content">
+        <p>{{ game.start | formatDateTime: 'short' }}</p>
+        <p>{{ game.domain }}</p>
+      </md-card-content>
+    </md-card>
+  </div>
+</div>

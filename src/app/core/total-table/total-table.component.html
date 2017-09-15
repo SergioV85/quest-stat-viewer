@@ -1,0 +1,21 @@
+<div class="total-table">
+  <md-tab-group (selectChange)="changeTab($event)">
+    <md-tab *ngFor="let type of availableTypes"
+        [label]="type">
+      <ng-template md-tab-label>
+        <i class="fa fa-lg"
+            [ngClass]="[getLevelTypeIcon(type)]"
+            [mdTooltip]="getLevelTypeName(type)"
+            aria-hidden="true">
+        </i>
+        {{ getLevelTypeName(type) }}
+      </ng-template>
+    </md-tab>
+  </md-tab-group>
+  <div>
+    <p *ngFor="let team of sortedTeams">
+      {{ team.name }}
+      {{ team.duration | formatDuration }}
+    </p>
+  </div>
+</div>

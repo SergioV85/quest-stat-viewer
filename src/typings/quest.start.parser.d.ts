@@ -26,14 +26,16 @@ declare namespace QuestStat {
     timeout?: boolean;
   }
 
+  interface GameInfo {
+    domain: string;
+    id: number;
+    name: string;
+    start: string;
+    timezone: string;
+  }
+
   interface GameData {
-    info: {
-      domain: string;
-      id: number;
-      name: string;
-      start: string;
-      timezone: string;
-    },
+    info: GameInfo,
     stat: {
       dataByLevels: GroupedTeamData[];
       dataByTeam: GroupedTeamData[];

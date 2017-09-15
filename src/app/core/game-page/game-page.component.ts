@@ -33,7 +33,10 @@ export class GamePageComponent implements OnInit {
   }
 
   public get changesStatus() {
-    return R.equals(this.gameData, this.serverData);
+    return R.equals(
+      R.map(R.prop('type'))(this.gameData.stat.levels),
+      R.map(R.prop('type'))(this.serverData.stat.levels)
+    );
   }
 
   public saveChanges() {

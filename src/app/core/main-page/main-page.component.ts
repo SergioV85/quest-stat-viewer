@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 import { ApiService } from './../../common/services/api.service';
@@ -11,12 +11,30 @@ import { Subject } from 'rxjs/Subject';
   templateUrl: 'main-page.component.html',
   styleUrls: ['main-page.component.scss']
 })
-export class MainPageComponent {
-  public gameData: QuestStat.GameData;
+export class MainPageComponent implements OnInit {
   public dataRequested: boolean;
-  public errorMessage: string;
+  public savedGames: QuestStat.GameInfo[];
 
-  constructor(private router: Router, private snackBar: MdSnackBar) {}
+  constructor(private apiService: ApiService, private router: Router, private snackBar: MdSnackBar) {}
+
+  public ngOnInit() {
+    this.dataRequested = true;
+    this.apiService.getSavedGames()
+      .catch((err) => {
+        this.snackBar.open('Извините, не удалось загрузить данные', 'Скрыть', {
+          politeness: 'assertive',
+          duration: 1000,
+          extraClasses: ['snack-error-message']
+        });
+        throw err;
+      })
+      .finally(() => {
+        this.dataRequested = false;
+      })
+      .subscribe((games: QuestStat.GameInfo[]) => {
+        this.savedGames = games;
+      });
+  }
 
   public searchGame(searchRequest: QuestStat.GameRequest, ) {
     this.dataRequested = true;

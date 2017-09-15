@@ -1,4 +1,3 @@
-
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -18,6 +17,7 @@ import { AppComponent } from './app.component';
 
 import { ApiService } from './common/services/api.service';
 import { SharedService } from './common/services/shared.service';
+import { UtilService } from './common/services/util.service';
 import { GameDataResolver } from './common/resolvers/game-resolver.service';
 
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
@@ -25,7 +25,9 @@ import { FormatDurationPipe } from './common/pipes/duration-transorm.pipe';
 
 import { NoContentComponent } from './core/no-content';
 import { GameTableComponent } from './core/game-table/game-table.component';
+import { TotalTableComponent } from './core/total-table/total-table.component';
 import { SearchGameComponent } from './core/search-game/search-game.component';
+import { SavedGamesComponent } from './core/saved-games/saved-games.component';
 import { MainPageComponent } from './core/main-page/main-page.component';
 import { GamePageComponent } from './core/game-page/game-page.component';
 import { TeamCardComponent } from './core/team-card/team-card.component';
@@ -40,7 +42,8 @@ import '../styles/headings.css';
 const APP_PROVIDERS = [
   GameDataResolver,
   ApiService,
-  SharedService
+  SharedService,
+  UtilService
 ];
 
 type StoreType = {
@@ -56,7 +59,9 @@ type StoreType = {
     GamePageComponent,
     HeaderComponent,
     SearchGameComponent,
+    SavedGamesComponent,
     GameTableComponent,
+    TotalTableComponent,
     TeamCardComponent,
     LevelCardComponent,
     FooterComponent,

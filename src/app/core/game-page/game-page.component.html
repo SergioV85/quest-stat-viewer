@@ -2,11 +2,14 @@
   <md-grid-list class="game-page__header" cols="3" rowHeight="40px">
     <md-grid-tile [colspan]="2">
       <md-button-toggle-group class="game-page__viewSelector" #group="mdButtonToggleGroup">
-        <md-button-toggle class="game-page__viewButton" value="level" [checked]="true">
-          Сортировать по времени закрытия уровня
+        <md-button-toggle class="game-page__viewButton" value="total" [checked]="true">
+          Сумарная статистика
+        </md-button-toggle>
+        <md-button-toggle class="game-page__viewButton" value="level">
+          Обычная статистика
         </md-button-toggle>
         <md-button-toggle class="game-page__viewButton" value="team">
-          Сортировать по командам
+          Статистика по командам
         </md-button-toggle>
       </md-button-toggle-group>
     </md-grid-tile>
@@ -23,8 +26,13 @@
     </md-grid-tile>
   </md-grid-list>
   <div class="full-width">
-    <game-table *ngIf="gameData"
-        [levels]="gameData.stat.levels"        
+    <total-table *ngIf="gameData && group.value === 'total'"
+        [levels]="gameData.stat.levels"
+        [teamStat]="gameData.stat.dataByTeam"
+        [finishResults]="gameData.stat.finishResults">
+    </total-table>
+    <game-table *ngIf="gameData && group.value !== 'total'"
+        [levels]="gameData.stat.levels"
         [levelsStat]="gameData.stat.dataByLevels"
         [finishResults]="gameData.stat.finishResults"
         [teamsStat]="gameData.stat.dataByTeam"
