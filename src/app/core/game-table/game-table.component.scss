@@ -8,11 +8,14 @@
     max-height: calc(100vh - 180px);
     overflow: auto;
   }
+  &__table-container {
+    display: table;
+  }
 
   &__levelRow {
     margin-bottom: 10px;
-    top: 0;
-    white-space: nowrap;
+    display: inline-flex;
+    flex-basis: 100%;
   }
   &__levelName {
     display: inline-block;
@@ -34,12 +37,10 @@
   &__team {
     padding: 4px;
     box-sizing: border-box;
-    min-width: 120px;
+    flex: 0 0 120px;
     white-space: normal;
     
     &--flex {
-      margin: 5px 0;
-
       &:first-child {
         margin-top: 10px;
       }
@@ -47,20 +48,22 @@
   }
   &__column-container {
     display: flex;
+    flex-basis: 100%;
   }
   &__column {
     box-sizing: border-box;
     padding: 4px;
-    min-width: 120px;
+    flex: 0 0 120px;
     
     &--noPadding {
       display: flex;
       flex-direction: column;
+      justify-content: space-around;
       padding: 0;
     }
 
     &:last-child {
-      margin-left: 30px;
+      margin-left: auto;
     }
   }
 }

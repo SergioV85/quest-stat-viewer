@@ -1,48 +1,50 @@
 <div class="gameTable">
   <div class="gameTable__container" *ngIf="selectedTab">
-    <div class="gameTable__levelRow">
-      <level-card *ngFor="let level of levels"
-          class="gameTable__levelName"
-          [levelInfo]="level"
-          (levelTypeChange)="changeLevelType.emit({ type: $event, id: level.id})"
-          (levelStateChange)="removeLevel.emit({ removed: $event, id: level.id})">
-      </level-card>
-    </div>
-    <ng-container *ngIf="selectedTab === 'team'">
-      <div class="gameTable__column-container">
-        <div class="">
-          <div class="gameTable__stat" *ngFor="let team of teamList">
-            <team-card *ngFor="let level of team.data"
-                class="gameTable__team gameTable__team--inRow"
-                [removedLevel]="isLevelRemoved(level)"
-                [teamInfo]="level">
+    <div class="gameTable__table-container">
+      <div class="gameTable__levelRow">
+        <level-card *ngFor="let level of levels"
+            class="gameTable__levelName"
+            [levelInfo]="level"
+            (levelTypeChange)="changeLevelType.emit({ type: $event, id: level.id})"
+            (levelStateChange)="removeLevel.emit({ removed: $event, id: level.id})">
+        </level-card>
+      </div>
+      <ng-container *ngIf="selectedTab === 'team'">
+        <div class="gameTable__column-container">
+          <div>
+            <div class="gameTable__stat" *ngFor="let team of teamList">
+              <team-card *ngFor="let level of team.data"
+                  class="gameTable__team gameTable__team--inRow"
+                  [removedLevel]="isLevelRemoved(level)"
+                  [teamInfo]="level">
+              </team-card>
+            </div>
+          </div>
+          <div class="gameTable__column gameTable__column--noPadding">
+            <team-card *ngFor="let team of finishList"
+                class="gameTable__team gameTable__team--flex"
+                [teamInfo]="team">
             </team-card>
           </div>
         </div>
-        <div class="gameTable__column gameTable__column--noPadding">
-          <team-card *ngFor="let team of finishList"
-              class="gameTable__team gameTable__team--flex"
-              [teamInfo]="team">
-          </team-card>
+      </ng-container>
+      <ng-container  *ngIf="selectedTab === 'level'">
+        <div class="gameTable__column-container">
+          <div class="gameTable__column" *ngFor="let level of levelsStat">
+            <team-card *ngFor="let team of level.data" 
+                class="gameTable__team"
+                [removedLevel]="isLevelRemoved(team)"
+                [teamInfo]="team">
+            </team-card>
+          </div>
+          <div class="gameTable__column">
+            <team-card *ngFor="let team of finishList"
+                class="gameTable__team"
+                [teamInfo]="team">
+            </team-card>
+          </div>
         </div>
-      </div>
-    </ng-container>
-    <ng-container  *ngIf="selectedTab === 'level'">
-      <div class="gameTable__column-container">
-        <div class="gameTable__column" *ngFor="let level of levelsStat">
-          <team-card *ngFor="let team of level.data" 
-              class="gameTable__team"
-              [removedLevel]="isLevelRemoved(team)"
-              [teamInfo]="team">
-          </team-card>
-        </div>
-        <div class="gameTable__column">
-          <team-card *ngFor="let team of finishList"
-              class="gameTable__team"
-              [teamInfo]="team">
-          </team-card>
-        </div>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>

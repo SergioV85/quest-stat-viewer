@@ -1,1 +1,54 @@
 @import '../../../styles/variables';
+
+.total-table {
+  margin-top: -20px;
+  &__icon {
+    margin-right: 5px;
+  }
+
+  &__team-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__team {
+    display: flex;
+    flex: 1 1 auto;
+    padding: 8px;
+    margin: 8px 0;
+  }
+
+  &__team-position {
+    flex: 0 1 30px;
+  }
+  &__team-total-position {
+    color: $middle-grey;
+    flex: 0 1 50px;
+  }  
+  &__team-name {
+    flex: 2 1 auto;
+  }
+  &__team-time {
+    flex: 0 1 150px;
+  }
+  &__team-prev-difference {
+    flex: 0 1 150px;
+
+    &--lessThanSecond {
+      color: $teal
+    }
+    &--lessThanMinute {
+      color: $amber;
+    }
+    &--lessThanHour {
+      color: $light-red;
+    }
+    &--moreThanHour {
+      color: $main-red;
+    }
+  }
+  &__team-leader-difference {
+    color: $light-red;
+    flex: 0 1 150px;
+  }
+}

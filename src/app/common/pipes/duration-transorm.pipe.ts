@@ -11,9 +11,10 @@ export class FormatDurationPipe implements PipeTransform {
       const days = modValue >= 86400000 ? `${moment.duration(modValue).get('d')} д ` : '';
       const hours = modValue >= 3600000 ? `${moment.duration(modValue).get('h')} ч ` : '';
       const minutes = modValue >= 60000 ? `${moment.duration(modValue).get('m')} м ` : '';
-      const seconds = `${moment.duration(modValue).get('s')} с`;
+      const seconds = modValue >= 1000 ? `${moment.duration(modValue).get('s')} с` : '';
+      const ms = `${moment.duration(modValue).get('ms')} мс`;
 
-      return `${days}${hours}${minutes}${seconds}`;
+      return value >= 1000 ? `${days}${hours}${minutes}${seconds}` : `${ms}`;
     }
     return value;
   }
