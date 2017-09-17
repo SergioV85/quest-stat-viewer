@@ -1,5 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { SharedService } from './../../common/services/shared.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UtilService } from './../../common/services/util.service';
 import { LevelType } from './../../common/services/level-type.enum';
 
@@ -8,7 +7,7 @@ import { LevelType } from './../../common/services/level-type.enum';
   templateUrl: 'level-card.component.html',
   styleUrls: ['level-card.component.scss']
 })
-export class LevelCardComponent implements OnInit {
+export class LevelCardComponent {
   @Input() public levelInfo: QuestStat.LevelData;
   @Output() public levelStateChange = new EventEmitter<boolean>();
   @Output() public levelTypeChange = new EventEmitter<number>();
@@ -46,14 +45,6 @@ export class LevelCardComponent implements OnInit {
       icon: 'fa-clock-o'
     },
   ];
-
-  constructor(private sharedService: SharedService) {}
-
-  public ngOnInit() {
-    this.sharedService.teamViewSettings.subscribe((settings) => {
-      this.viewSettings = settings;
-    });
-  }
 
   public get levelColorIcon(): string {
     return `level-card__levelType--${LevelType[this.levelInfo.type]}`;

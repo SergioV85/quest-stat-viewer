@@ -23,8 +23,6 @@ module.exports = {
      * <link> tags for a Web App Manifest
      */
     { rel: 'manifest', href: '/assets/manifest.json' },
-
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }
   ],
   meta: [
     { name: 'msapplication-TileColor', content: '#00bcd4' },
