@@ -1,3 +1,4 @@
+@import '../../../styles/mixins';
 @import '../../../styles/variables';
 
 .saved-games {
@@ -12,15 +13,43 @@
     max-width: 100%;
   }
 
+  &__header {
+    height: 72px;
+
+    /deep/ .mat-toolbar-row {
+      flex-wrap: wrap;
+
+      @include desktop {
+        flex-wrap: nowrap;
+      }
+    }
+  }
+
+  &__filter {
+    padding-top: 0;
+
+    @include desktop {
+      padding-top: 16px;
+    }
+  }
+
   &__game {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    flex-basis: 200px;
+    flex-basis: 100%;
     margin: 10px;
 
     /deep/ .mat-card-header-text {
       margin: 0;
+    }
+
+    @include tablet {
+      flex-basis: 200px;
+    }
+
+    @include desktop {
+      flex-basis: 200px;
     }
   }
 

@@ -1,8 +1,8 @@
 <div class="saved-games">
-  <md-toolbar>
-    <span>Сохраненные игры</span>
+  <md-toolbar class="saved-games__header">
+    <span class="saved-games__title">Сохраненные игры</span>
     <span class="saved-games__spacer"></span>
-    <md-select placeholder="Фильтр по домену" (change)="filterByDomain($event)">
+    <md-select class="saved-games__filter" placeholder="Фильтр по домену" (change)="filterByDomain($event)">
       <md-option>Все домены</md-option>
       <md-option *ngFor="let domain of domains"
           [value]="domain">

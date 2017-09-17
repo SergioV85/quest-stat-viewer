@@ -26,14 +26,35 @@
     flex: 0 1 50px;
   }  
   &__team-name {
-    flex: 2 1 auto;
+    flex: 2 1 calc(100% - 100px);
+
+    @include tablet {
+      flex: 2 1 auto;
+    }
+
+    @include desktop {
+      flex: 2 1 auto;
+    }
   }
-  &__team-time {
-    flex: 0 1 150px;
+  &__team-time,
+  &__team-prev-difference,
+  &__team-leader-difference {
+    flex: 0 1 33%;
+    font-size: 14px;
+    margin: 10px 0 0;
+
+    @include tablet {
+      flex: 0 1 150px;
+      font-size: 16px;
+      margin: 0;
+    }
+    @include desktop {
+      flex: 0 1 150px;
+      font-size: 16px;
+      margin: 0;
+    }
   }
   &__team-prev-difference {
-    flex: 0 1 150px;
-
     &--lessThanSecond {
       color: $teal
     }
@@ -49,6 +70,5 @@
   }
   &__team-leader-difference {
     color: $light-red;
-    flex: 0 1 150px;
   }
 }
