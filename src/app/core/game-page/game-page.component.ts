@@ -5,6 +5,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/finally';
 import * as R from 'ramda';
 import { ApiService } from './../../common/services/api.service';
+import { DeviceService } from './../../common/services/device.service';
 
 @Component({
   selector: 'game-page',
@@ -16,14 +17,27 @@ export class GamePageComponent implements OnInit {
   public dataRequested: boolean;
   public errorMessage: string;
   public disableSaveButton: boolean = false;
+  public loadData: boolean = false;
+  public cols: number = 2;
+  public buttonsColSpan: number = 2;
+  public selectedView: string = 'total';
   private serverData: QuestStat.GameData;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private snackBar: MdSnackBar) {}
+  constructor(private route: ActivatedRoute,
+              private apiService: ApiService,
+              private deviceService: DeviceService,
+              private snackBar: MdSnackBar) {}
 
   public ngOnInit() {
     const { gameData } = this.route.snapshot.data;
     this.serverData = R.clone(gameData);
     this.gameData = gameData;
+
+    this.deviceService.device
+      .subscribe((device: string) => {
+        this.cols = device === 'mobile' || device === 'tablet' ? 2 : 3;
+        this.buttonsColSpan = device === 'mobile' || device === 'tablet' ? 2 : 1;
+      });
   }
 
   public updateLevel(updatedLevel) {
@@ -63,6 +77,29 @@ export class GamePageComponent implements OnInit {
         });
         this.serverData.stat.levels = R.clone(newLevelData);
         this.gameData.stat.levels = R.clone(newLevelData);
+      });
+  }
+
+  public refreshData() {
+    this.loadData = true;
+    const request = Object.assign({}, this.route.snapshot.params as QuestStat.GameRequest, {
+      force: true
+    });
+    this.apiService.getGameStat(request)
+      .catch((err) => {
+        this.snackBar.open('Извините, не удалось обновить данные', 'Скрыть', {
+          politeness: 'assertive',
+          duration: 1000,
+          extraClasses: ['snack-error-message']
+        });
+        throw err;
+      })
+      .finally(() => {
+        this.loadData = false;
+      })
+      .subscribe((data: QuestStat.GameData) => {
+        this.serverData = R.clone(data);
+        this.gameData = data;
       });
   }
 
@@ -149,5 +186,9 @@ export class GamePageComponent implements OnInit {
     this.gameData.stat.dataByLevels = newLevelsData;
     this.gameData.stat.dataByTeam = newTeamsData;
     this.gameData.stat.finishResults = updateFinishResults;
+  }
+
+  public changeViewType({ value }) {
+    this.selectedView = value;
   }
 }

@@ -28,7 +28,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container  *ngIf="selectedTab === 'level'">
+      <ng-container *ngIf="selectedTab === 'level'">
         <div class="gameTable__column-container">
           <div class="gameTable__column" *ngFor="let level of levelsStat">
             <team-card *ngFor="let team of level.data" 

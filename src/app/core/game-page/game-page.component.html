@@ -1,7 +1,11 @@
 <div class="game-page">
-  <md-grid-list class="game-page__header" cols="3" rowHeight="40px">
+  <md-grid-list class="game-page__header" [cols]="cols" rowHeight="40px">
     <md-grid-tile [colspan]="2">
-      <md-button-toggle-group class="game-page__viewSelector" #group="mdButtonToggleGroup">
+      <md-button-toggle-group 
+          class="game-page__viewSelector game-page__viewSelector--buttons"
+          #group="mdButtonToggleGroup"
+          [value]="selectedView"
+          (change)="changeViewType($event)">
         <md-button-toggle class="game-page__viewButton" value="total" [checked]="true">
           Сумарная статистика
         </md-button-toggle>
@@ -12,8 +16,25 @@
           Статистика по командам
         </md-button-toggle>
       </md-button-toggle-group>
+      <md-select 
+          class="game-page__viewSelector game-page__viewSelector--select"
+          floatPlaceholder="never"
+          placeholder="Вид отображения"
+          [(ngModel)]="selectedView"
+          (change)="changeViewType($event)">
+        <md-option value="total">Сумарная статистика</md-option>
+        <md-option value="level">Обычная статистика</md-option>
+        <md-option value="team">Статистика по командам</md-option>
+      </md-select>
     </md-grid-tile>
-    <md-grid-tile class="game-page__changesContainer">
+    <md-grid-tile [colspan]="buttonsColSpan" class="game-page__changesContainer">
+      <button class="game-page__refreshDataButton"
+          md-raised-button 
+          color="accent"
+          (click)="refreshData()">
+        <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" mdTooltip="Обновить данные"></i>
+        <span class="game-page__changesContainer-label">Обновить данные</span>
+      </button>      
       <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
       <button class="game-page__saveChangesButton" 
           *ngIf="!changesStatus" 
@@ -21,17 +42,19 @@
           color="primary"
           [disabled]="disableSaveButton"
           (click)="saveChanges()">
-        Сохранить
+        <i class="game-page__changesContainer-icon fa fa-save fa-lg" mdTooltip="Сохранить"></i>
+        <span class="game-page__changesContainer-label">Сохранить</span>
       </button>
     </md-grid-tile>
   </md-grid-list>
   <div class="full-width">
-    <total-table *ngIf="gameData && group.value === 'total'"
+    <md-spinner class="loading" *ngIf="loadData"></md-spinner>
+    <total-table *ngIf="!loadData && gameData && selectedView === 'total'"
         [levels]="gameData.stat.levels"
         [teamStat]="gameData.stat.dataByTeam"
         [finishResults]="gameData.stat.finishResults">
     </total-table>
-    <game-table *ngIf="gameData && group.value !== 'total'"
+    <game-table *ngIf="!loadData && gameData && selectedView !== 'total'"
         [levels]="gameData.stat.levels"
         [levelsStat]="gameData.stat.dataByLevels"
         [finishResults]="gameData.stat.finishResults"

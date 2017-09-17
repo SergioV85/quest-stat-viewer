@@ -34,6 +34,7 @@
   }
 
   &__game {
+    box-sizing: border-box;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -45,7 +46,7 @@
     }
 
     @include tablet {
-      flex-basis: 200px;
+      flex-basis: calc(50% - 20px);
     }
 
     @include desktop {

@@ -18,6 +18,7 @@ import { AppComponent } from './app.component';
 import { ApiService } from './common/services/api.service';
 import { SharedService } from './common/services/shared.service';
 import { UtilService } from './common/services/util.service';
+import { DeviceService } from './common/services/device.service';
 import { GameDataResolver } from './common/resolvers/game-resolver.service';
 
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
@@ -43,7 +44,8 @@ const APP_PROVIDERS = [
   GameDataResolver,
   ApiService,
   SharedService,
-  UtilService
+  UtilService,
+  DeviceService
 ];
 
 type StoreType = {

@@ -47,6 +47,7 @@ declare namespace QuestStat {
   interface GameRequest {
     id: number | string;
     domain: string;
+    force?: boolean;
   }
 
   interface ViewSettings {
