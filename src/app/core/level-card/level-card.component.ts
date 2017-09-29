@@ -8,7 +8,13 @@ import { LevelType } from './../../common/services/level-type.enum';
   styleUrls: ['level-card.component.scss']
 })
 export class LevelCardComponent {
-  @Input() public levelInfo: QuestStat.LevelData;
+  @Input() public set levelInfo(level: QuestStat.LevelData) {
+    this.levelColorIcon = `level-card__levelType--${LevelType[level.type]}`;
+    this.levelTypeIcon = UtilService.getLevelTypeIcon(level.type);
+    this.levelTypeName = UtilService.getLevelTypeName(level.type);
+    this.levelData = level;
+  };
+  @Input() public isLastLevel: boolean;
   @Output() public levelStateChange = new EventEmitter<boolean>();
   @Output() public levelTypeChange = new EventEmitter<number>();
   public viewSettings: QuestStat.ViewSettings = {};
@@ -45,24 +51,16 @@ export class LevelCardComponent {
       icon: 'fa-clock-o'
     },
   ];
-
-  public get levelColorIcon(): string {
-    return `level-card__levelType--${LevelType[this.levelInfo.type]}`;
-  }
-
-  public get levelTypeIcon(): string {
-    return UtilService.getLevelTypeIcon(this.levelInfo.type);
-  }
-
-  public get levelTypeName(): string {
-    return UtilService.getLevelTypeName(this.levelInfo.type);
-  }
+  public levelData: QuestStat.LevelData;
+  public levelColorIcon: string;
+  public levelTypeIcon: string;
+  public levelTypeName: string;
 
   public selectLevelType(selectedType) {
     this.levelTypeChange.emit(selectedType);
   }
 
   public toggleLevelState() {
-    this.levelStateChange.emit(!this.levelInfo.removed);
+    this.levelStateChange.emit(!this.levelData.removed);
   }
 }

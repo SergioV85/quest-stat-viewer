@@ -117,12 +117,19 @@ export class TotalTableComponent {
         R.filter((stat) => R.contains(stat.levelIdx, matchedLevels)),
         R.map(R.prop('duration')),
         R.sum
+      )(team),
+      closedLevels: R.pipe(
+        R.prop('data'),
+        R.length
       )(team)
     });
 
     this.sortedTeams = R.pipe(
       R.map(calculatedStat),
-      R.sortBy(R.prop('duration'))
+      R.sortWith([
+        R.descend(R.prop('closedLevels')),
+        R.ascend(R.prop('duration'))
+      ])
     )(this.teamData);
   }
 
