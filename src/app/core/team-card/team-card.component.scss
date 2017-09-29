@@ -60,6 +60,38 @@
     width: 16px;
   }
 
+  &__teamPlace {
+    background-color: $blue;
+    border-radius: 100%;
+    border: 1px solid $blue;
+    color: $light-grey-e;
+    font-size: 12px;
+    font-weight: bold;
+    height: 16px;
+    left: -8px;
+    line-height: 16px;
+    position: absolute;
+    text-align: center;
+    top: -8px;
+    width: 16px;
+
+    &--first {
+      background-color: $amber;
+      border-color: $amber;
+      color: $main-light;
+    }
+    &--second {
+      background-color: $blue-grey;
+      border-color: $blue-grey;
+      color: $main-light;
+    }
+    &--third {
+      background-color: $brown;
+      border-color: $brown;
+      color: $main-light;
+    }
+  }
+
   &__name {
     flex: 1;
     font-size: 11px;

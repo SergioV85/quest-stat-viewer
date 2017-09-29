@@ -31,7 +31,11 @@ export class GamePageComponent implements OnInit {
   public ngOnInit() {
     const { gameData } = this.route.snapshot.data;
     this.serverData = R.clone(gameData);
-    this.gameData = gameData;
+    this.gameData = R.mergeDeepRight(gameData, {
+      stat: {
+        finishResults: this.sortFinishResults(gameData.stat.finishResults)
+      }
+    });
 
     this.deviceService.device
       .subscribe((device: string) => {
@@ -185,10 +189,27 @@ export class GamePageComponent implements OnInit {
 
     this.gameData.stat.dataByLevels = newLevelsData;
     this.gameData.stat.dataByTeam = newTeamsData;
-    this.gameData.stat.finishResults = updateFinishResults;
+    this.gameData.stat.finishResults = this.sortFinishResults(updateFinishResults);
   }
 
   public changeViewType({ value }) {
     this.selectedView = value;
+  }
+
+  private sortFinishResults(finishStat: QuestStat.TeamData[]): QuestStat.TeamData[] {
+    const closedLevels = (team: QuestStat.TeamData) => R.pipe(
+      R.find(R.propEq('id', team.id)),
+      R.prop('closedLevels')
+    )(finishStat);
+
+    const calculateFullTime = (team: QuestStat.TeamData) => R.subtract(
+      team.duration,
+      team.additionsTime
+    );
+
+    return R.sortWith([
+      R.descend(closedLevels),
+      R.ascend(calculateFullTime)
+    ])(finishStat);
   }
 }

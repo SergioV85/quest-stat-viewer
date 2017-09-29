@@ -10,9 +10,7 @@ import * as R from 'ramda';
 export class GameTableComponent {
   @Input() public levels: QuestStat.LevelData[];
   @Input() public levelsStat: QuestStat.GroupedTeamData[];
-  @Input() public set finishResults(finishResults: QuestStat.TeamData[]) {
-    this.finishList = this.sortFinishResultsColumn(finishResults);
-  };
+  @Input() public finishList: QuestStat.TeamData[];
   @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
     this.teamList = this.sortTeamList(teamSt);
   };
@@ -20,7 +18,6 @@ export class GameTableComponent {
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
-  public finishList: QuestStat.TeamData[] = [];
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
     return R.pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
@@ -61,22 +58,5 @@ export class GameTableComponent {
       R.descend(closedLevelQuantity),
       R.ascend(sumDurations)
     ])(sortingSource);
-  }
-
-  private sortFinishResultsColumn(finishResults: QuestStat.TeamData[]): QuestStat.TeamData[] {
-    const closedLevels = (team: QuestStat.TeamData) => R.pipe(
-      R.find(R.propEq('id', team.id)),
-      R.prop('closedLevels')
-    )(finishResults);
-
-    const calculateFullTime = (team: QuestStat.TeamData) => R.subtract(
-      team.duration,
-      team.additionsTime
-    );
-
-    return R.sortWith([
-      R.descend(closedLevels),
-      R.ascend(calculateFullTime)
-    ])(finishResults);
   }
 }

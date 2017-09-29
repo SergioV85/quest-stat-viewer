@@ -8,6 +8,7 @@ import { SharedService } from './../../common/services/shared.service';
 })
 export class TeamCardComponent implements OnInit {
   @Input() public teamInfo: QuestStat.TeamData;
+  @Input() public place: number;
   @Input() public removedLevel: boolean;
   public viewSettings: QuestStat.ViewSettings = {};
 

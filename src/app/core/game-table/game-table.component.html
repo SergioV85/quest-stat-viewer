@@ -21,8 +21,9 @@
             </div>
           </div>
           <div class="gameTable__column gameTable__column--noPadding">
-            <team-card *ngFor="let team of finishList"
+            <team-card *ngFor="let team of finishList; index as idx"
                 class="gameTable__team gameTable__team--flex"
+                [place]="idx + 1"
                 [teamInfo]="team">
             </team-card>
           </div>
@@ -38,8 +39,9 @@
             </team-card>
           </div>
           <div class="gameTable__column">
-            <team-card *ngFor="let team of finishList"
+            <team-card *ngFor="let team of finishList; index as idx"
                 class="gameTable__team"
+                [place]="idx + 1"
                 [teamInfo]="team">
             </team-card>
           </div>
