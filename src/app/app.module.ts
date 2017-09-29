@@ -12,6 +12,7 @@ import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 
 import { AngularMaterialModule } from './common/modules/angular-material.module';
+import { BootstrapModule } from './common/modules/bootstap.module';
 
 import { AppComponent } from './app.component';
 
@@ -79,6 +80,7 @@ type StoreType = {
     BrowserAnimationsModule,
     MaterialModule,
     AngularMaterialModule,
+    BootstrapModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
   ],
 

@@ -62,18 +62,14 @@
   }
 
   &__changesContainer {
+    padding: 0 10px;
 
-    /deep/ .mat-figure {
-      justify-content: flex-end;
-      padding: 0 10px;
-      
-          @include tablet {
-            padding: 0 10px 0 0;
-          }
-      
-          @include desktop {
-            padding: 0 10px 0 0;
-          }
+    @include tablet {
+      padding: 0 10px 0 0;
+    }
+
+    @include desktop {
+      padding: 0 10px 0 0;
     }
   }
 

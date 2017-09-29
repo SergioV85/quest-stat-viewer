@@ -1,21 +1,38 @@
 <div class="game-page">
-  <md-grid-list class="game-page__header" [cols]="cols" rowHeight="40px">
-    <md-grid-tile [colspan]="2">
-      <md-button-toggle-group 
-          class="game-page__viewSelector game-page__viewSelector--buttons"
-          #group="mdButtonToggleGroup"
-          [value]="selectedView"
-          (change)="changeViewType($event)">
-        <md-button-toggle class="game-page__viewButton" value="total" [checked]="true">
+  <div class="game-page__header row align-items-center">
+    <div class="col-8">
+      <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group">
+        <label 
+            class="btn game-page__viewButton"
+            [ngClass]="{
+              'btn-outline-primary': selectedView !== 'total',
+              'btn-primary': selectedView === 'total'
+            }"
+            [(ngModel)]="selectedView" 
+            btnRadio="total">
           Сумарная статистика
-        </md-button-toggle>
-        <md-button-toggle class="game-page__viewButton" value="level">
+        </label>
+        <label 
+            class="btn game-page__viewButton" 
+            [ngClass]="{
+              'btn-outline-primary': selectedView !== 'level',
+              'btn-primary': selectedView === 'level'
+            }"
+            [(ngModel)]="selectedView" 
+            btnRadio="level">
           Обычная статистика
-        </md-button-toggle>
-        <md-button-toggle class="game-page__viewButton" value="team">
-          Статистика по командам
-        </md-button-toggle>
-      </md-button-toggle-group>
+        </label>
+        <label 
+            class="btn game-page__viewButton"
+            [ngClass]="{
+              'btn-outline-primary': selectedView !== 'team',
+              'btn-primary': selectedView === 'team'
+            }"
+            [(ngModel)]="selectedView" 
+            btnRadio="team">
+            Статистика по командам
+        </label>
+      </div>
       <md-select 
           class="game-page__viewSelector game-page__viewSelector--select"
           floatPlaceholder="never"
@@ -26,15 +43,15 @@
         <md-option value="level">Обычная статистика</md-option>
         <md-option value="team">Статистика по командам</md-option>
       </md-select>
-    </md-grid-tile>
-    <md-grid-tile [colspan]="buttonsColSpan" class="game-page__changesContainer">
+    </div>
+    <div class="col game-page__changesContainer text-right">
       <button class="game-page__refreshDataButton"
           md-raised-button 
           color="accent"
           (click)="refreshData()">
         <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" mdTooltip="Обновить данные"></i>
         <span class="game-page__changesContainer-label">Обновить данные</span>
-      </button>      
+      </button>
       <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
       <button class="game-page__saveChangesButton" 
           *ngIf="!changesStatus" 
@@ -45,8 +62,8 @@
         <i class="game-page__changesContainer-icon fa fa-save fa-lg" mdTooltip="Сохранить"></i>
         <span class="game-page__changesContainer-label">Сохранить</span>
       </button>
-    </md-grid-tile>
-  </md-grid-list>
+    </div>
+  </div>
   <div class="full-width">
     <md-spinner class="loading" *ngIf="loadData"></md-spinner>
     <total-table *ngIf="!loadData && gameData && selectedView === 'total'"
@@ -59,7 +76,7 @@
         [levelsStat]="gameData.stat.dataByLevels"
         [finishList]="gameData.stat.finishResults"
         [teamsStat]="gameData.stat.dataByTeam"
-        [selectedTab]="group.value"
+        [selectedTab]="selectedView"
         (changeLevelType)="updateLevel($event)"
         (removeLevel)="removeLevelFromStat($event)">
     </game-table>

@@ -18,8 +18,6 @@ export class GamePageComponent implements OnInit {
   public errorMessage: string;
   public disableSaveButton: boolean = false;
   public loadData: boolean = false;
-  public cols: number = 2;
-  public buttonsColSpan: number = 2;
   public selectedView: string = 'total';
   private serverData: QuestStat.GameData;
 
@@ -36,12 +34,6 @@ export class GamePageComponent implements OnInit {
         finishResults: this.sortFinishResults(gameData.stat.finishResults)
       }
     });
-
-    this.deviceService.device
-      .subscribe((device: string) => {
-        this.cols = device === 'mobile' || device === 'tablet' ? 2 : 3;
-        this.buttonsColSpan = device === 'mobile' || device === 'tablet' ? 2 : 1;
-      });
   }
 
   public updateLevel(updatedLevel) {

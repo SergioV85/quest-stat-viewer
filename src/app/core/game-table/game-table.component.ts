@@ -1,6 +1,7 @@
 import { TeamCardComponent } from './../team-card/team-card.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as R from 'ramda';
+import { LevelType } from './../../common/services/level-type.enum';
 
 @Component({
   selector: 'game-table',
@@ -18,6 +19,7 @@ export class GameTableComponent {
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
+  public LevelType = LevelType;
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
     return R.pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);

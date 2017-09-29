@@ -19,11 +19,32 @@
     flex-basis: 100%;
   }
   &__levelName {
+    border-bottom: 3px solid transparent;
     display: inline-block;
     vertical-align: top;
 
     &:last-child {
       margin-left: 30px;
+    }
+
+    &--Logic {
+      border-bottom-color: $amber;
+    }
+    &--Search {
+      border-bottom-color: $blue;
+    }
+    &--Drive {
+      border-bottom-color: $teal;
+    }
+    &--Agent {
+      border-bottom-color: $brown;
+    }
+    &--Waiting {
+      border-bottom-color: $blue-grey;
+    } 
+    &--dismised {
+      color: $light-grey-a;
+      border-bottom-color: $light-grey-a;
     }
   }
   &__mainData {

@@ -1,38 +1,11 @@
 @import '../../../styles/variables';
 
 .level-card {
-  border-bottom: 3px solid transparent;
   box-sizing: border-box;
   color: $main-grey;
   font-size: 10px;
   margin: 0 3px;
-  min-height: 80px;
   padding: 8px;
-  text-align: center;
-  vertical-align: middle;
-  white-space: normal;
-  width: 114px;
-
-  &--Logic {
-    border-bottom-color: $amber;
-  }
-  &--Search {
-    border-bottom-color: $blue;
-  }
-  &--Drive {
-    border-bottom-color: $teal;
-  }
-  &--Agent {
-    border-bottom-color: $brown;
-  }
-  &--Waiting {
-    border-bottom-color: $blue-grey;
-  } 
-
-  &--dismised {
-    color: $light-grey-a;
-    border-bottom-color: $light-grey-a;
-  }
 
   &__typeButton {
     height: 24px;
@@ -58,6 +31,8 @@
 
   &__icon {
     flex-grow: 1;
+    position: relative;
+    min-height: 24px;
 
     &--left {
       text-align: left;
@@ -97,9 +72,5 @@
     &--dismissed {
       color: $light-grey-a;
     }
-  }
-
-  &__levelEdit {
-    color: $dark-main;
   }
 }
