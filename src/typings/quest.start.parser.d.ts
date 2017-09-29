@@ -39,6 +39,7 @@ declare namespace QuestStat {
     stat: {
       dataByLevels: GroupedTeamData[];
       dataByTeam: GroupedTeamData[];
+      dataByLevelsRow: TeamData[][];
       finishResults: TeamData[];
       levels: LevelData[];
     };

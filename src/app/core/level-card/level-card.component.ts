@@ -14,6 +14,7 @@ export class LevelCardComponent {
     this.levelTypeName = UtilService.getLevelTypeName(level.type);
     this.levelData = level;
   };
+  @Input() public isLastLevel: boolean;
   @Output() public levelStateChange = new EventEmitter<boolean>();
   @Output() public levelTypeChange = new EventEmitter<number>();
   public viewSettings: QuestStat.ViewSettings = {};
@@ -61,8 +62,5 @@ export class LevelCardComponent {
 
   public toggleLevelState() {
     this.levelStateChange.emit(!this.levelData.removed);
-  }
-  public isOpenChange(): void {
-    console.log('Dropdown state is changed');
   }
 }

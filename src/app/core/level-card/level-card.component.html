@@ -1,6 +1,6 @@
 <div class="level-card">
   <p class="level-card__iconContainer">
-    <span class="level-card__icon level-card__icon--left">
+    <span *ngIf="!isLastLevel" class="level-card__icon level-card__icon--left">
       <button class="level-card__typeButton" md-icon-button [mdMenuTriggerFor]="menu">
         <i class="level-card__levelType fa fa-lg"
             [ngClass]="[levelTypeIcon, levelColorIcon]"
@@ -20,7 +20,7 @@
         </button>
       </md-menu>
     </span>
-    <span class="level-card__icon level-card__icon--right">
+    <span *ngIf="!isLastLevel" class="level-card__icon level-card__icon--right">
       <button class="level-card__typeButton" 
           md-icon-button
           (click)="toggleLevelState()">
@@ -34,5 +34,5 @@
       </button>
     </span>
   </p>
-  <p class="mb-0">#{{ levelData.level }}: {{ levelData.name }}</p>
+  <p class="level-card__levelName mb-0">#{{ levelData.level }}: {{ levelData.name }}</p>
 </div>

@@ -1,55 +1,6 @@
 @import '../../../styles/variables';
 
 .team-card {
-  min-height: 90px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-
-  &--extended {
-    min-height: 100px;
-  }
-
-  &--dismised {
-    background-color: $light-grey-e;
-    color: $light-grey-a;
-    opacity: 0.8;
-
-    .team-card__additionalTime--bonus {
-      color: $main-green;
-    }
-    .team-card__additionalTime--penalty {
-      color: $light-red;
-    }
-  }
-
-  &--timeout {
-    &:before {
-      border-bottom: 20px solid transparent;
-      border-left: 20px solid transparent;
-      border-top: 20px solid $main-green;
-      content: "";
-      height: 0;
-      position: absolute;
-      opacity: 0.8;
-      right: 0;
-      top: 0;
-      width: 0;
-    }
-    &:after {
-      content: "T";
-      color: $main-light;
-      font-size: 10px;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-    }
-  }
-
-  &--selected {
-    background-color: $light-yellow;
-  }
-
   &__bestTimeIcon {
     color: $amber;
     font-size: 16px;

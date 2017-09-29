@@ -115,12 +115,6 @@ export class GamePageComponent implements OnInit {
       });
     };
 
-    const updatedStatByLevels = R.pipe(
-      R.find(R.propEq('id', level.position)),
-      R.prop('data'),
-      R.map(adjustBonusTime)
-    )(this.gameData.stat.dataByLevels);
-
     const updatedStatByTeams = R.pipe(
       R.map(
         R.pipe(
@@ -131,8 +125,6 @@ export class GamePageComponent implements OnInit {
       ),
       R.filter(R.complement(R.isNil))
     )(this.gameData.stat.dataByTeam);
-
-    const lvlIdx = R.findIndex(R.propEq('id', level.position))(this.gameData.stat.dataByLevels);
 
     const updateFinishResults = R.map((teamFinishResult: QuestStat.TeamData) => {
       const levelTime = R.pipe(
@@ -152,7 +144,7 @@ export class GamePageComponent implements OnInit {
 
     const replaceTeamStatInList = (teamStats) => {
       const teamId = R.prop('id', R.head(teamStats));
-      const indexInList = R.findIndex(R.propEq('levelIdx', lvlIdx))(teamStats);
+      const indexInList = R.findIndex(R.propEq('levelIdx', level.position))(teamStats);
       if (indexInList < 0) {
         return {
           id: teamId,
@@ -166,9 +158,6 @@ export class GamePageComponent implements OnInit {
       };
     };
 
-    const newLevelsData =
-      R.adjust((oldLevel) => R.merge(oldLevel, { data: updatedStatByLevels }), lvlIdx, this.gameData.stat.dataByLevels);
-
     const newTeamsData = R.pipe(
       R.map(
         R.pipe(
@@ -179,7 +168,14 @@ export class GamePageComponent implements OnInit {
       R.filter(R.complement(R.isNil))
     )(this.gameData.stat.dataByTeam);
 
-    this.gameData.stat.dataByLevels = newLevelsData;
+    const newLevelsRowData = R.map((levelRow) => {
+      if (level.position > levelRow.length) {
+        return levelRow;
+      }
+      return R.adjust(adjustBonusTime, level.position, levelRow);
+    }, this.gameData.stat.dataByLevelsRow);
+
+    this.gameData.stat.dataByLevelsRow = newLevelsRowData;
     this.gameData.stat.dataByTeam = newTeamsData;
     this.gameData.stat.finishResults = this.sortFinishResults(updateFinishResults);
   }

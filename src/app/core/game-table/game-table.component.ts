@@ -10,19 +10,39 @@ import { LevelType } from './../../common/services/level-type.enum';
 })
 export class GameTableComponent {
   @Input() public levels: QuestStat.LevelData[];
-  @Input() public levelsStat: QuestStat.GroupedTeamData[];
   @Input() public finishList: QuestStat.TeamData[];
   @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
-    this.teamList = this.sortTeamList(teamSt);
+    this.teamList = R.pipe(
+      this.sortTeamList.bind(this),
+      this.appendFinishStatToTeam.bind(this)
+    )(teamSt);
+  };
+  @Input() public set levelsStatRow(levelSt: QuestStat.TeamData[][]){
+    this.levelStatList = this.appendFinishStat(levelSt);
   };
   @Input() public selectedTab: string = 'team';
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
+  public levelStatList: QuestStat.TeamData[][] = [];
   public LevelType = LevelType;
+  private selectedTeams: number[] = [];
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
     return R.pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
+  }
+
+  public getTeamSelectionCssClass(teamStat: QuestStat.TeamData) {
+    return R.contains(teamStat.id, this.selectedTeams)
+      ? `gameTable__team--selected gameTable__team--selection-${R.indexOf(teamStat.id, this.selectedTeams) + 1}`
+      : '';
+  }
+  public toggleTeamSelection(teamStat: QuestStat.TeamData) {
+    if (R.contains(teamStat.id, this.selectedTeams)) {
+      this.selectedTeams = R.without([teamStat.id], this.selectedTeams);
+    } else {
+      this.selectedTeams.push(teamStat.id);
+    }
   }
 
   private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
@@ -60,5 +80,20 @@ export class GameTableComponent {
       R.descend(closedLevelQuantity),
       R.ascend(sumDurations)
     ])(sortingSource);
+  }
+
+  private appendFinishStatToTeam(sortedTeamStat: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
+    return R.map((team) => {
+      const finishResult = R.find(R.propEq('id', team.id), this.finishList);
+      const updatedStat = R.append(finishResult, team.data);
+      return {
+        id: team.id,
+        data: updatedStat
+      };
+    }, sortedTeamStat);
+  }
+  private appendFinishStat(levelsStat: QuestStat.TeamData[][]): QuestStat.TeamData[][] {
+    const indexedMap = R.addIndex(R.map);
+    return indexedMap((levelRow, indx) => R.append(this.finishList[indx], levelRow), levelsStat);
   }
 }

@@ -15,8 +15,8 @@
         <label 
             class="btn game-page__viewButton" 
             [ngClass]="{
-              'btn-outline-primary': selectedView !== 'level',
-              'btn-primary': selectedView === 'level'
+              'btn-outline-primary': selectedView !== 'level_new',
+              'btn-primary': selectedView === 'level_new'
             }"
             [(ngModel)]="selectedView" 
             btnRadio="level">
@@ -30,7 +30,7 @@
             }"
             [(ngModel)]="selectedView" 
             btnRadio="team">
-            Статистика по командам
+          Статистика по командам
         </label>
       </div>
       <md-select 
@@ -73,7 +73,7 @@
     </total-table>
     <game-table *ngIf="!loadData && gameData && selectedView !== 'total'"
         [levels]="gameData.stat.levels"
-        [levelsStat]="gameData.stat.dataByLevels"
+        [levelsStatRow]="gameData.stat.dataByLevelsRow"
         [finishList]="gameData.stat.finishResults"
         [teamsStat]="gameData.stat.dataByTeam"
         [selectedTab]="selectedView"
