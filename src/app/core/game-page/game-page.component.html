@@ -78,7 +78,8 @@
         [teamsStat]="gameData.stat.dataByTeam"
         [selectedTab]="selectedView"
         (changeLevelType)="updateLevel($event)"
-        (removeLevel)="removeLevelFromStat($event)">
+        (removeLevel)="removeLevelFromStat($event)"
+        (toggleComparsion)="compareTeams($event)">
     </game-table>
   </div>
 </div>

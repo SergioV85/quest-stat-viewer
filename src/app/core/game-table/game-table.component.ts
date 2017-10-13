@@ -1,7 +1,29 @@
 import { TeamCardComponent } from './../team-card/team-card.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import * as R from 'ramda';
 import { LevelType } from './../../common/services/level-type.enum';
+import {
+  add,
+  addIndex,
+  append,
+  ascend,
+  contains,
+  curry,
+  descend,
+  find,
+  head,
+  indexOf,
+  length,
+  map,
+  negate,
+  pathOr,
+  pipe,
+  prop,
+  propEq,
+  sortWith,
+  subtract,
+  sum,
+  without
+} from 'ramda';
 
 @Component({
   selector: 'game-table',
@@ -12,82 +34,92 @@ export class GameTableComponent {
   @Input() public levels: QuestStat.LevelData[];
   @Input() public finishList: QuestStat.TeamData[];
   @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
-    this.teamList = R.pipe(
+    this.teamList = pipe(
       this.sortTeamList.bind(this),
       this.appendFinishStatToTeam.bind(this)
-    )(teamSt);
-    console.log('this.teamList', this.teamList);
+    )(teamSt) as QuestStat.GroupedTeamData[];
   };
   @Input() public set levelsStatRow(levelSt: QuestStat.TeamData[][]){
     this.levelStatList = this.appendFinishStat(levelSt);
-    console.log('this.levelStatList', this.levelStatList);
   };
   @Input() public selectedTab: string = 'team';
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
+  @Output() public toggleComparsion = new EventEmitter<{}>();
   public teamList: QuestStat.GroupedTeamData[] = [];
   public levelStatList: QuestStat.TeamData[][] = [];
   public LevelType = LevelType;
   private selectedTeams: number[] = [];
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
-    return R.pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
+    return pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
   }
 
   public getTeamSelectionCssClass(teamStat: QuestStat.TeamData) {
-    return R.contains(teamStat.id, this.selectedTeams)
-      ? `gameTable__team--selected gameTable__team--selection-${R.indexOf(teamStat.id, this.selectedTeams) + 1}`
+    return contains(teamStat.id, this.selectedTeams)
+      ? `gameTable__team--selected gameTable__team--selection-${indexOf(teamStat.id, this.selectedTeams) + 1}`
       : '';
   }
   public toggleTeamSelection(teamStat: QuestStat.TeamData) {
-    if (R.contains(teamStat.id, this.selectedTeams)) {
-      this.selectedTeams = R.without([teamStat.id], this.selectedTeams);
+    if (contains(teamStat.id, this.selectedTeams)) {
+      this.selectedTeams = without([teamStat.id], this.selectedTeams);
     } else {
       this.selectedTeams.push(teamStat.id);
+    }
+    if (this.selectedTeams.length === 2) {
+      this.toggleComparsion.emit({
+        compare: true,
+        teams: this.selectedTeams
+      });
+    } else {
+      this.toggleComparsion.emit({
+        compare: false
+      });
     }
   }
 
   private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
-    const closedLevelQuantity = R.pipe(
-      R.prop('data'),
-      R.length
+    const closedLevelQuantity = pipe(
+      prop('data'),
+      length
     );
 
-    const getTeamExtraBonus = (teamSource) => {
-      const teamId = R.pipe(
-        R.head,
-        R.prop('id')
+    const getTeamExtraBonus = (teamSource): number => {
+      const teamId = pipe(
+        head,
+        prop('id')
       )(teamSource);
 
-      return R.pipe(
-        R.find(R.propEq('id', teamId)),
-        R.pathOr(0, ['extraBonus'])
+      return pipe(
+        find(propEq('id', teamId)),
+        pathOr(0, ['extraBonus'])
       )(this.finishList);
     };
 
     const calculateFullTime = (teamSource) => {
-      return R.pipe(
-        R.map((team: QuestStat.TeamData) => R.subtract(team.duration, team.additionsTime)),
-        R.sum,
-        R.add(R.negate(R.curry(getTeamExtraBonus)((teamSource))))
+      const levelsTime = pipe(
+        map((team: QuestStat.TeamData) => subtract(team.duration, team.additionsTime)),
+        sum
       )(teamSource);
+
+      return levelsTime - getTeamExtraBonus(teamSource);
     };
 
-    const sumDurations = R.pipe(
-      R.prop('data'),
+    const sumDurations = pipe(
+      prop('data'),
       calculateFullTime
     );
 
-    return R.sortWith([
-      R.descend(closedLevelQuantity),
-      R.ascend(sumDurations)
+    return sortWith([
+      descend(closedLevelQuantity),
+      ascend(sumDurations)
     ])(sortingSource);
   }
 
   private appendFinishStatToTeam(sortedTeamStat: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
-    return R.map((team) => {
-      const finishResult = R.find(R.propEq('id', team.id), this.finishList);
-      const updatedStat = R.append(finishResult, team.data);
+    return map((team) => {
+      const finishResult = find(propEq('id', team.id), this.finishList);
+      const updatedStat = append(finishResult, team.data);
       return {
         id: team.id,
         data: updatedStat
@@ -95,7 +127,7 @@ export class GameTableComponent {
     }, sortedTeamStat);
   }
   private appendFinishStat(levelsStat: QuestStat.TeamData[][]): QuestStat.TeamData[][] {
-    const indexedMap = R.addIndex(R.map);
-    return indexedMap((levelRow, indx) => R.append(this.finishList[indx], levelRow), levelsStat);
+    const indexedMap = addIndex(map);
+    return indexedMap((levelRow, indx) => append(this.finishList[indx], levelRow), levelsStat);
   }
 }

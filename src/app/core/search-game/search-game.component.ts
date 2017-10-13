@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import * as R from 'ramda';
+import { pipe, split, last, test, find } from 'ramda';
 
 const urlRegex = /(quest.ua|en.cx).*gid=\d+/;
 
@@ -31,9 +31,9 @@ export class SearchGameComponent implements OnInit {
     const gameUrl = this.urlForm.get('urlInput').value;
 
     const domain = this.getUrl(gameUrl);
-    const id = R.pipe(
-      R.split('='),
-      R.last,
+    const id = pipe(
+      split('='),
+      last,
       parseInt
     )(gameUrl);
 
@@ -44,11 +44,11 @@ export class SearchGameComponent implements OnInit {
   }
 
   private getUrl(gameUrl) {
-    const regex = new RegExp(R.test(/quest/, gameUrl) ? /quest/ : /en.cx/);
+    const regex = new RegExp(test(/quest/, gameUrl) ? /quest/ : /en.cx/);
 
-    return R.pipe(
-      R.split('/'),
-      R.find(R.test(regex))
+    return pipe(
+      split('/'),
+      find(test(regex))
     )(gameUrl);
   }
 }

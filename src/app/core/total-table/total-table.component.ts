@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MdTabChangeEvent } from '@angular/material/material';
-import * as R from 'ramda';
+import { sort, uniq, map, dropLast, pipe, prop, head, findIndex, propEq, filter, complement } from 'ramda';
 import { FormatDurationPipe } from './../../common/pipes/duration-transorm.pipe';
 import { LevelType } from './../../common/services/level-type.enum';
 import { UtilService } from './../../common/services/util.service';
@@ -19,16 +19,16 @@ declare interface MappedTeam {
 export class TotalTableComponent {
   @Input() public set levels(levels: QuestStat.LevelData[]) {
     this.levelData = levels;
-    this.availableTypes = R.pipe(
-      R.dropLast(1),
-      R.map(R.prop('type')),
-      R.uniq,
-      R.sort((a, b) => a - b)
+    this.availableTypes = pipe(
+      dropLast(1),
+      map(prop('type')),
+      uniq,
+      sort((a: number, b: number) => a - b)
     )(levels);
   };
   @Input() public set teamStat(teams: QuestStat.GroupedTeamData[]) {
     this.teamData = teams;
-    this.sortTeams(R.head(this.availableTypes));
+    this.sortTeams(head(this.availableTypes));
   };
   @Input() public finishResults: QuestStat.TeamData[];
   public levelData: QuestStat.LevelData[];
@@ -50,16 +50,16 @@ export class TotalTableComponent {
   }
 
   public getTeamTotalPosition(team: MappedTeam) {
-    return R.findIndex(R.propEq('id', team.id))(this.finishResults) + 1;
+    return findIndex(propEq('id', team.id))(this.finishResults) + 1;
   }
 
   public getLeaderDifference(team: MappedTeam, idx: number) {
     if (idx === 0) {
       return '';
     }
-    const leaderTime = R.pipe(
-      R.head,
-      R.prop('duration')
+    const leaderTime = pipe(
+      head,
+      prop('duration')
     )(this.sortedTeams);
     const diff = team.duration - leaderTime;
     return `+${this.durationFormatFilter.transform(diff)}`;
@@ -95,10 +95,10 @@ export class TotalTableComponent {
   }
 
   private sortTeams(selectedType: number) {
-    const matchedLevels = R.pipe(
-      R.filter(R.propEq('type', selectedType)),
-      R.filter(R.complement(R.prop('removed'))),
-      R.map(R.prop('position'))
+    const matchedLevels = pipe(
+      filter(propEq('type', selectedType)),
+      filter(complement(R.prop('removed'))),
+      map(prop('position'))
     )(this.levelData);
 
     const calculatedStat = (team) => ({
