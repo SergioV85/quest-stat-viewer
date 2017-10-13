@@ -16,9 +16,11 @@ export class GameTableComponent {
       this.sortTeamList.bind(this),
       this.appendFinishStatToTeam.bind(this)
     )(teamSt);
+    console.log('this.teamList', this.teamList);
   };
   @Input() public set levelsStatRow(levelSt: QuestStat.TeamData[][]){
     this.levelStatList = this.appendFinishStat(levelSt);
+    console.log('this.levelStatList', this.levelStatList);
   };
   @Input() public selectedTab: string = 'team';
   @Output() public changeLevelType = new EventEmitter<{}>();
