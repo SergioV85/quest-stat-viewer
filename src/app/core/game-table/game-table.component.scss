@@ -15,6 +15,7 @@
 
   &__levelName {
     border-bottom: 3px solid $light-grey-c;
+    max-width: 100px;
 
     &--Logic {
       border-bottom-color: $amber;
