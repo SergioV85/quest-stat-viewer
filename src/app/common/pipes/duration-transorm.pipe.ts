@@ -14,7 +14,7 @@ export class FormatDurationPipe implements PipeTransform {
       const seconds = modValue >= 1000 ? `${moment.duration(modValue).get('s')} с` : '';
       const ms = `${moment.duration(modValue).get('ms')} мс`;
 
-      return value >= 1000 ? `${days}${hours}${minutes}${seconds}` : `${ms}`;
+      return modValue >= 1000 ? `${days}${hours}${minutes}${seconds}` : `${ms}`;
     }
     return value;
   }
