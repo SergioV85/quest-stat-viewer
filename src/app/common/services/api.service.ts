@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ApiService {
-  private serverAddress: string = 'https://quest-stat-parser.herokuapp.com';
+  private serverAddress: string = 'http://quest-stat-servapp.rfh3fxkjyi.eu-central-1.elasticbeanstalk.com';
   // private serverAddress: string = 'http://localhost:4040';
 
   constructor(private http: Http) {}
