@@ -1,5 +1,4 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import * as R from 'ramda';
 import * as  moment from 'moment';
 
 @Pipe({ name: 'formatDuration' })

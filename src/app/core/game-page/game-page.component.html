@@ -33,39 +33,39 @@
           Статистика по командам
         </label>
       </div>
-      <md-select 
+      <mat-select 
           class="game-page__viewSelector game-page__viewSelector--select"
           floatPlaceholder="never"
           placeholder="Вид отображения"
           [(ngModel)]="selectedView"
           (change)="changeViewType($event)">
-        <md-option value="total">Сумарная статистика</md-option>
-        <md-option value="level">Обычная статистика</md-option>
-        <md-option value="team">Статистика по командам</md-option>
-      </md-select>
+        <mat-option value="total">Сумарная статистика</mat-option>
+        <mat-option value="level">Обычная статистика</mat-option>
+        <mat-option value="team">Статистика по командам</mat-option>
+      </mat-select>
     </div>
     <div class="col game-page__changesContainer text-right">
       <button class="game-page__refreshDataButton"
-          md-raised-button 
+          mat-raised-button 
           color="accent"
           (click)="refreshData()">
-        <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" mdTooltip="Обновить данные"></i>
+        <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" matTooltip="Обновить данные"></i>
         <span class="game-page__changesContainer-label">Обновить данные</span>
       </button>
       <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
       <button class="game-page__saveChangesButton" 
           *ngIf="!changesStatus" 
-          md-raised-button 
+          mat-raised-button 
           color="primary"
           [disabled]="disableSaveButton"
           (click)="saveChanges()">
-        <i class="game-page__changesContainer-icon fa fa-save fa-lg" mdTooltip="Сохранить"></i>
+        <i class="game-page__changesContainer-icon fa fa-save fa-lg" matTooltip="Сохранить"></i>
         <span class="game-page__changesContainer-label">Сохранить</span>
       </button>
     </div>
   </div>
   <div class="full-width">
-    <md-spinner class="loading" *ngIf="loadData"></md-spinner>
+    <mat-spinner class="loading" *ngIf="loadData"></mat-spinner>
     <total-table *ngIf="!loadData && gameData && selectedView === 'total'"
         [levels]="gameData.stat.levels"
         [teamStat]="gameData.stat.dataByTeam"

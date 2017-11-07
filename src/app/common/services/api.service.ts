@@ -1,30 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ApiService {
-  private serverAddress: string = 'https://www.quest-stat.me.uk';
-  // private serverAddress: string = 'http://localhost:4040';
+  private serverAddress = 'https://www.quest-stat.me.uk';
+  // private serverAddress = 'http://localhost:4040';
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
-  public getSavedGames(): Observable<QuestStat.GameInfo[]> {
-    return this.http
-      .get(`${this.serverAddress}/games/`)
-      .map((data: any) => data.json());
+  public getSavedGames() {
+    return this.http.get<QuestStat.GameInfo[]>(`${this.serverAddress}/games/`);
   }
 
-  public getGameStat(gameData: QuestStat.GameRequest): Observable<QuestStat.GameData> {
-    return this.http
-      .post(`${this.serverAddress}/games/`, gameData)
-      .map((data: any) => data.json());
+  public getGameStat(gameData: QuestStat.GameRequest) {
+    return this.http.post<QuestStat.GameData>(`${this.serverAddress}/games/`, gameData);
   }
 
-  public saveLevelSettings({ gameId, levelData}): Observable<QuestStat.GameData> {
-    return this.http
-      .put(`${this.serverAddress}/games/${gameId}/update-levels`, levelData)
-      .map((data: any) => data.json());
+  public saveLevelSettings({ gameId, levelData}) {
+    return this.http.put<QuestStat.LevelData[]>(`${this.serverAddress}/games/${gameId}/update-levels`, levelData);
   }
 }

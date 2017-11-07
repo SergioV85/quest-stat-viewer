@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
-import { ApiService } from './../../common/services/api.service';
+import { MatSnackBar } from '@angular/material';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/finally';
-import { Subject } from 'rxjs/Subject';
+import { ApiService } from './../../common/services/api.service';
+import { isNil } from 'ramda';
 
 @Component({
   selector: 'main-page',
@@ -15,7 +16,7 @@ export class MainPageComponent implements OnInit {
   public dataRequested: boolean;
   public savedGames: QuestStat.GameInfo[];
 
-  constructor(private apiService: ApiService, private router: Router, private snackBar: MdSnackBar) {}
+  constructor(private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {}
 
   public ngOnInit() {
     this.dataRequested = true;
@@ -34,6 +35,10 @@ export class MainPageComponent implements OnInit {
       .subscribe((games: QuestStat.GameInfo[]) => {
         this.savedGames = games;
       });
+  }
+
+  public get hasGames() {
+    return !isNil(this.savedGames);
   }
 
   public searchGame(searchRequest: QuestStat.GameRequest, ) {

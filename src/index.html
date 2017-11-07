@@ -1,26 +1,14 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
-  <title><%= htmlWebpackPlugin.options.title %></title>
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-  <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
-  <% if (webpackConfig.htmlElements.headTags) { %>
-  <!-- Configured Head Tags  -->
-  <%= webpackConfig.htmlElements.headTags %>
-  <% } %>
+  <title>Quest Statistic Parser</title>
+  <base href="/">
 
-
-  <%= htmlWebpackPlugin.files.webpackManifest %>
-
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-  <!-- Webpack Dev Server reload -->
-  <script src="/webpack-dev-server.js"></script>
-  <% } %>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96.png">
   <!-- Async Google Analytics -->
   <script>
     window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -29,18 +17,8 @@
   </script>
   <script async src="https://www.google-analytics.com/analytics.js"></script>
   <!-- End Google Analytics -->
-
-  <!-- CSS will be injected by webpack here -->
-  <!-- Preload link tags will be injected by webpack here -->
-
 </head>
-
 <body>
-
-  <app>
-    Loading...
-  </app>
-
-  <!-- Scripts will be injected by webpack here -->
+  <app-root></app-root>
 </body>
 </html>
