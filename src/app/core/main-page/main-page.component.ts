@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/finally';
 import { ApiService } from './../../common/services/api.service';
+import { isNil } from 'ramda';
 
 @Component({
   selector: 'main-page',
@@ -34,6 +35,10 @@ export class MainPageComponent implements OnInit {
       .subscribe((games: QuestStat.GameInfo[]) => {
         this.savedGames = games;
       });
+  }
+
+  public get hasGames() {
+    return !isNil(this.savedGames);
   }
 
   public searchGame(searchRequest: QuestStat.GameRequest, ) {
