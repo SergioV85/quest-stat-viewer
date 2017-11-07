@@ -1,9 +1,29 @@
 import { Component, Input } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/material';
-import * as R from 'ramda';
+
 import { FormatDurationPipe } from './../../common/pipes/duration-transorm.pipe';
 import { LevelType } from './../../common/services/level-type.enum';
 import { UtilService } from './../../common/services/util.service';
+import {
+  ascend,
+  complement,
+  contains,
+  descend,
+  dropLast,
+  filter,
+  findIndex,
+  head,
+  length,
+  map,
+  nth,
+  pipe,
+  prop,
+  propEq,
+  sort,
+  sortWith,
+  sum,
+  uniq
+} from 'ramda';
 
 declare interface MappedTeam {
   id: number;
@@ -19,16 +39,16 @@ declare interface MappedTeam {
 export class TotalTableComponent {
   @Input() public set levels(levels: QuestStat.LevelData[]) {
     this.levelData = levels;
-    this.availableTypes = R.pipe(
-      R.dropLast(1) as any,
-      R.map(R.prop('type')),
-      R.uniq,
-      R.sort((a: number, b: number) => a - b)
+    this.availableTypes = pipe(
+      dropLast(1) as any,
+      map(prop('type')),
+      uniq,
+      sort((a: number, b: number) => a - b)
     )(levels) as number[];
   }
   @Input() public set teamStat(teams: QuestStat.GroupedTeamData[]) {
     this.teamData = teams;
-    this.sortTeams(R.head(this.availableTypes));
+    this.sortTeams(head(this.availableTypes));
   }
   @Input() public finishResults: QuestStat.TeamData[];
   public levelData: QuestStat.LevelData[];
@@ -50,16 +70,16 @@ export class TotalTableComponent {
   }
 
   public getTeamTotalPosition(team: MappedTeam) {
-    return R.findIndex(R.propEq('id', team.id))(this.finishResults) + 1;
+    return findIndex(propEq('id', team.id))(this.finishResults) + 1;
   }
 
   public getLeaderDifference(team: MappedTeam, idx: number) {
     if (idx === 0) {
       return '';
     }
-    const leaderTime = R.pipe(
-      R.head as any,
-      R.prop('duration')
+    const leaderTime = pipe(
+      head as any,
+      prop('duration')
     )(this.sortedTeams) as number;
     const diff = team.duration - leaderTime;
     return `+${this.durationFormatFilter.transform(diff)}`;
@@ -95,48 +115,48 @@ export class TotalTableComponent {
   }
 
   private sortTeams(selectedType: number) {
-    const matchedLevels = R.pipe(
-      R.filter(R.propEq('type', selectedType)),
-      R.filter(R.complement(R.prop('removed'))),
-      R.map(R.prop('position'))
+    const matchedLevels = pipe(
+      filter(propEq('type', selectedType)),
+      filter(complement(prop('removed'))),
+      map(prop('position'))
     )(this.levelData);
 
     const calculatedStat = (team: QuestStat.GroupedTeamData) => ({
-      name: R.pipe(
-        R.prop('data'),
-        R.head,
-        R.prop('name')
+      name: pipe(
+        prop('data'),
+        head,
+        prop('name')
       )(team),
-      id: R.pipe(
-        R.prop('data'),
-        R.head,
-        R.prop('id')
+      id: pipe(
+        prop('data'),
+        head,
+        prop('id')
       )(team),
-      duration: R.pipe(
-        R.prop('data'),
-        R.filter((stat: QuestStat.TeamData) => R.contains(stat.levelIdx, matchedLevels)) as any,
-        R.map(R.prop('duration')),
-        R.sum
+      duration: pipe(
+        prop('data'),
+        filter((stat: QuestStat.TeamData) => contains(stat.levelIdx, matchedLevels)) as any,
+        map(prop('duration')),
+        sum
       )(team),
-      closedLevels: R.pipe(
-        R.prop('data'),
-        R.length
+      closedLevels: pipe(
+        prop('data'),
+        length
       )(team)
     });
 
-    this.sortedTeams = R.pipe(
-      R.map(calculatedStat),
-      R.sortWith([
-        R.descend(R.prop('closedLevels')),
-        R.ascend(R.prop('duration'))
+    this.sortedTeams = pipe(
+      map(calculatedStat),
+      sortWith([
+        descend(prop('closedLevels')),
+        ascend(prop('duration'))
       ])
     )(this.teamData);
   }
 
   private calculatePrevTeamDiff(team: MappedTeam, idx: number): number {
-    const prevTeamTime = R.pipe(
-      R.nth(idx - 1),
-      R.prop('duration')
+    const prevTeamTime = pipe(
+      nth(idx - 1),
+      prop('duration')
     )(this.sortedTeams) as number;
     return team.duration - prevTeamTime;
   }

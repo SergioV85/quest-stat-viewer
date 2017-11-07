@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import * as R from 'ramda';
+import { pipe, map, uniq, prop, filter, propEq } from 'ramda';
 
 @Component({
   selector: 'saved-games',
@@ -13,16 +13,16 @@ export class SavedGamesComponent implements OnInit {
   public games: QuestStat.GameInfo[] = [];
 
   public ngOnInit() {
-    this.domains = R.pipe(
-      R.map(R.prop('domain')),
-      R.uniq
+    this.domains = pipe(
+      map(prop('domain')),
+      uniq
     )(this.savedGames) as string[];
 
     this.games = [...this.savedGames];
   }
   public filterByDomain($event) {
     if ($event.value) {
-      this.games = R.filter(R.propEq('domain', $event.value))(this.savedGames);
+      this.games = filter(propEq('domain', $event.value))(this.savedGames);
     } else {
       this.games = [...this.savedGames];
     }
