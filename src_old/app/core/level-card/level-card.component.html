@@ -1,28 +1,28 @@
 <div class="level-card">
   <p class="level-card__iconContainer">
     <span *ngIf="!isLastLevel" class="level-card__icon level-card__icon--left">
-      <button class="level-card__typeButton" md-icon-button [mdMenuTriggerFor]="menu">
+      <button class="level-card__typeButton" mat-icon-button [mdMenuTriggerFor]="menu">
         <i class="level-card__levelType fa fa-lg"
             [ngClass]="[levelTypeIcon, levelColorIcon]"
-            [mdTooltip]="levelTypeName"
+            [matTooltip]="levelTypeName"
             aria-hidden="true">
         </i>
       </button>
-      <md-menu #menu="mdMenu">
+      <mat-menu #menu="mdMenu">
         <button *ngFor="let type of LevelTypeSelector"
             class="level-card__menuButton" 
-            md-menu-item 
+            mat-menu-item 
             [disabled]="levelData.type === LevelType[type.type]"
             (click)="selectLevelType(type.type)">
           <i class="level-card__levelType level-card__levelType--{{ LevelType[type.type] }} fa {{ type.icon }}" 
               aria-hidden="true"></i>
           <span>{{ type.name }}</span>
         </button>
-      </md-menu>
+      </mat-menu>
     </span>
     <span *ngIf="!isLastLevel" class="level-card__icon level-card__icon--right">
       <button class="level-card__typeButton" 
-          md-icon-button
+          mat-icon-button
           (click)="toggleLevelState()">
         <i class="level-card__levelStatus fa fa-lg" 
             [ngClass]="{
