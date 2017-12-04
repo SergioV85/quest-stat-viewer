@@ -124,14 +124,14 @@ export class TotalTableComponent {
     const calculatedStat = (team: QuestStat.GroupedTeamData) => ({
       name: pipe(
         prop('data'),
-        head,
+        nth(0),
         prop('name')
-      )(team),
+      )(team) as string,
       id: pipe(
         prop('data'),
-        head,
+        nth(0),
         prop('id')
-      )(team),
+      )(team) as number,
       duration: pipe(
         prop('data'),
         filter((stat: QuestStat.TeamData) => contains(stat.levelIdx, matchedLevels)) as any,

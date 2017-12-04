@@ -5,9 +5,14 @@ import { GamePageComponent } from './core/game-page';
 import { NoContentComponent } from './core/no-content';
 
 export const ROUTES: Routes = [
-  { path: '', component: MainPageComponent },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: MainPageComponent
+  },
   {
     path: ':domain/:id',
+    pathMatch: 'full',
     component: GamePageComponent,
     resolve: {
       gameData: GameDataResolver
