@@ -15,6 +15,7 @@ import {
   length,
   map,
   negate,
+  nth,
   pathOr,
   pipe,
   prop,
@@ -22,7 +23,7 @@ import {
   sortWith,
   subtract,
   sum,
-  without,
+  without
 } from 'ramda';
 
 @Component({
@@ -75,7 +76,7 @@ export class GameTableComponent {
 
     const getTeamExtraBonus = (teamSource): number => {
       const teamId = pipe(
-        head,
+        nth(0),
         prop('id')
       )(teamSource);
 
@@ -101,7 +102,7 @@ export class GameTableComponent {
     return sortWith([
       descend(closedLevelQuantity),
       ascend(sumDurations)
-    ])(sortingSource);
+    ])(sortingSource) as QuestStat.GroupedTeamData[];
   }
 
   private appendFinishStatToTeam(sortedTeamStat: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
