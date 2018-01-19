@@ -51,7 +51,10 @@ export class GamePageComponent implements OnInit {
               private snackBar: MatSnackBar) {}
 
   public ngOnInit() {
-    const { gameData } = this.route.snapshot.data;
+    console.log('this.route.snapshot', this.route.snapshot);
+
+    const gamesData = this.route.snapshot.data.gameData;
+    const gameData = gamesData[0];
     this.serverData = clone(gameData);
     this.gameData = mergeDeepRight(gameData, {
       stat: {

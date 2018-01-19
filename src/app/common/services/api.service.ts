@@ -5,9 +5,9 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ApiService {
-  private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
+  // private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
   // private serverAddress = 'https://www.quest-stat.me.uk';
-  // private serverAddress = 'http://localhost:4040';
+  private serverAddress = 'http://localhost:4040';
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +17,10 @@ export class ApiService {
 
   public getGameStat(gameData: QuestStat.GameRequest) {
     return this.http.get<QuestStat.GameData>(`${this.serverAddress}/game`, { params: this.convertHttpParams(gameData) });
+  }
+
+  public getGameStatNoSql(gameData: QuestStat.GameRequest) {
+    return this.http.get<QuestStat.GameData>(`${this.serverAddress}/game/nosql`, { params: this.convertHttpParams(gameData) });
   }
 
   public saveLevelSettings({ gameId, levelData}) {
