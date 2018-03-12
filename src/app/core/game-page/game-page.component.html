@@ -67,15 +67,15 @@
   <div class="full-width">
     <mat-spinner class="loading" *ngIf="loadData"></mat-spinner>
     <total-table *ngIf="!loadData && gameData && selectedView === 'total'"
-        [levels]="gameData.stat.levels"
-        [teamStat]="gameData.stat.dataByTeam"
-        [finishResults]="gameData.stat.finishResults">
+        [levels]="gameData.stat.Levels"
+        [teamStat]="gameData.stat.DataByTeam"
+        [finishResults]="gameData.stat.FinishResults">
     </total-table>
     <game-table *ngIf="!loadData && gameData && selectedView !== 'total'"
-        [levels]="gameData.stat.levels"
-        [levelsStatRow]="gameData.stat.dataByLevelsRow"
-        [finishList]="gameData.stat.finishResults"
-        [teamsStat]="gameData.stat.dataByTeam"
+        [levels]="gameData.stat.Levels"
+        [levelsStatRow]="gameData.stat.DataByLevelsRow"
+        [finishList]="gameData.stat.FinishResults"
+        [teamsStat]="gameData.stat.DataByTeam"
         [selectedTab]="selectedView"
         (changeLevelType)="updateLevel($event)"
         (removeLevel)="removeLevelFromStat($event)">

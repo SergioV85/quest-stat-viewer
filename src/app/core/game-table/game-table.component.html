@@ -13,8 +13,8 @@
               }"
               [levelInfo]="level"
               [isLastLevel]="isLast"
-              (levelTypeChange)="changeLevelType.emit({ type: $event, id: level.id})"
-              (levelStateChange)="removeLevel.emit({ removed: $event, id: level.id})">
+              (levelTypeChange)="changeLevelType.emit({ type: $event, level: level.level})"
+              (levelStateChange)="removeLevel.emit({ removed: $event, level: level.level})">
           </level-card>
         </ng-template>
       </div>

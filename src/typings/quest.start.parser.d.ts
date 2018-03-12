@@ -5,7 +5,6 @@ declare namespace QuestStat {
   }
 
   interface LevelData {
-    id: number;
     level: number;
     name: string;
     position: number;
@@ -27,21 +26,21 @@ declare namespace QuestStat {
   }
 
   interface GameInfo {
-    domain: string;
-    id: number;
-    name: string;
-    start: string;
-    timezone: string;
+    Domain: string;
+    GameId: number;
+    GameName: string;
+    StartTime: string;
+    Timezone: string;
   }
 
   interface GameData {
     info: GameInfo,
     stat: {
-      dataByLevels: GroupedTeamData[];
-      dataByTeam: GroupedTeamData[];
-      dataByLevelsRow: TeamData[][];
-      finishResults: TeamData[];
-      levels: LevelData[];
+      DataByLevels: GroupedTeamData[];
+      DataByTeam: GroupedTeamData[];
+      DataByLevelsRow: TeamData[][];
+      FinishResults: TeamData[];
+      Levels: LevelData[];
     };
   }
 

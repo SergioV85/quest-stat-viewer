@@ -13,7 +13,7 @@ export class LevelCardComponent {
     this.levelTypeIcon = UtilService.getLevelTypeIcon(level.type);
     this.levelTypeName = UtilService.getLevelTypeName(level.type);
     this.levelData = level;
-  };
+  }
   @Input() public isLastLevel: boolean;
   @Output() public levelStateChange = new EventEmitter<boolean>();
   @Output() public levelTypeChange = new EventEmitter<number>();

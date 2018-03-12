@@ -55,28 +55,28 @@ export class GamePageComponent implements OnInit {
     this.serverData = clone(gameData);
     this.gameData = mergeDeepRight(gameData, {
       stat: {
-        finishResults: this.sortFinishResults(gameData.stat.finishResults)
+        finishResults: this.sortFinishResults(gameData.stat.FinishResults)
       }
     });
   }
 
   public updateLevel(updatedLevel) {
-    const levelIdx = findIndex(propEq('id', updatedLevel.id))(this.gameData.stat.levels);
-    const newData = adjust((oldLevel) => merge(oldLevel, updatedLevel), levelIdx, this.gameData.stat.levels);
-    this.gameData.stat.levels = newData;
+    const levelIdx = findIndex(propEq('level', updatedLevel.level))(this.gameData.stat.Levels);
+    const newData = adjust((oldLevel) => merge(oldLevel, updatedLevel), levelIdx, this.gameData.stat.Levels);
+    this.gameData.stat.Levels = newData;
   }
 
   public get changesStatus() {
     return equals(
-      map(prop('type'))(this.gameData.stat.levels),
-      map(prop('type'))(this.serverData.stat.levels)
+      map(prop('type'))(this.gameData.stat.Levels),
+      map(prop('type'))(this.serverData.stat.Levels)
     );
   }
 
   public saveChanges() {
     this.disableSaveButton = true;
-    const gameId = this.gameData.info.id;
-    const levelData = difference(this.gameData.stat.levels, this.serverData.stat.levels);
+    const gameId = this.gameData.info.GameId;
+    const levelData = difference(this.gameData.stat.Levels, this.serverData.stat.Levels);
     this.apiService.saveLevelSettings({ gameId, levelData })
       .catch((err) => {
         this.snackBar.open('Извините, не удалось сохранить данные', 'Скрыть', {
@@ -95,8 +95,8 @@ export class GamePageComponent implements OnInit {
           duration: 1000,
           extraClasses: ['snack-success-message']
         });
-        this.serverData.stat.levels = clone(newLevelData) as QuestStat.LevelData[];
-        this.gameData.stat.levels = clone(newLevelData) as QuestStat.LevelData[];
+        this.serverData.stat.Levels = clone(newLevelData) as QuestStat.LevelData[];
+        this.gameData.stat.Levels = clone(newLevelData) as QuestStat.LevelData[];
       });
   }
 
@@ -123,9 +123,9 @@ export class GamePageComponent implements OnInit {
       });
   }
 
-  public removeLevelFromStat({ removed, id }) {
-    this.updateLevel({ removed, id });
-    const level = find(propEq('id', id))(this.gameData.stat.levels) as QuestStat.LevelData;
+  public removeLevelFromStat({ removed, level }) {
+    this.updateLevel({ removed, level });
+    const existedLevel = find(propEq('level', level))(this.gameData.stat.Levels) as QuestStat.LevelData;
 
     const adjustBonusTime = (teamStat) => {
       if (isNil(teamStat)) {
@@ -143,20 +143,20 @@ export class GamePageComponent implements OnInit {
       map(
         pipe(
           prop('data'),
-          find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === level.position),
+          find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === existedLevel.position),
           adjustBonusTime,
         )
       ),
       filter(complement(isNil))
-    )(this.gameData.stat.dataByTeam) as QuestStat.GroupedTeamData[];
+    )(this.gameData.stat.DataByTeam) as QuestStat.GroupedTeamData[];
 
     const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
       const levelTime = pipe(
         find(propEq('id', teamFinishResult.id)),
         prop('data'),
-        find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === level.position),
+        find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === existedLevel.position),
         pathOr(0, ['duration'])
-      )(this.gameData.stat.dataByTeam);
+      )(this.gameData.stat.DataByTeam);
       const newAdditionalTime = removed
         ? add(teamFinishResult.additionsTime, levelTime)
         : subtract(teamFinishResult.additionsTime, levelTime);
@@ -164,11 +164,11 @@ export class GamePageComponent implements OnInit {
       return merge(teamFinishResult, {
         additionsTime: newAdditionalTime
       });
-    }, this.gameData.stat.finishResults);
+    }, this.gameData.stat.FinishResults);
 
     const replaceTeamStatInList = (teamStats) => {
       const teamId = prop('id', head(teamStats));
-      const indexInList = findIndex(propEq('levelIdx', level.position))(teamStats);
+      const indexInList = findIndex(propEq('levelIdx', existedLevel.position))(teamStats);
       if (indexInList < 0) {
         return {
           id: teamId,
@@ -190,18 +190,20 @@ export class GamePageComponent implements OnInit {
         )
       ),
       filter(complement(isNil))
-    )(this.gameData.stat.dataByTeam) as QuestStat.GroupedTeamData[];
+    )(this.gameData.stat.DataByTeam) as QuestStat.GroupedTeamData[];
 
     const newLevelsRowData = map((levelRow) => {
-      if (level.position > levelRow.length) {
+      if (existedLevel.position > levelRow.length) {
         return levelRow;
       }
-      return adjust(adjustBonusTime, level.position, levelRow);
-    }, this.gameData.stat.dataByLevelsRow);
+      return adjust(adjustBonusTime, existedLevel.position, levelRow);
+    }, this.gameData.stat.DataByLevelsRow);
 
-    this.gameData.stat.dataByLevelsRow = newLevelsRowData;
-    this.gameData.stat.dataByTeam = newTeamsData;
-    this.gameData.stat.finishResults = this.sortFinishResults(updateFinishResults);
+    this.gameData.stat.DataByLevelsRow = newLevelsRowData;
+    this.gameData.stat.DataByTeam = newTeamsData;
+    console.log('FinishResults before -> ', clone(this.gameData.stat.FinishResults));
+    this.gameData.stat.FinishResults = this.sortFinishResults(updateFinishResults);
+    console.log('FinishResults after -> ', clone(this.gameData.stat.FinishResults));
   }
 
   public changeViewType({ value }) {
