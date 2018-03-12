@@ -26,6 +26,7 @@ import {
   pipe,
   prop,
   propEq,
+  propOr,
   sortWith,
   subtract,
   update
@@ -55,7 +56,7 @@ export class GamePageComponent implements OnInit {
     this.serverData = clone(gameData);
     this.gameData = mergeDeepRight(gameData, {
       stat: {
-        finishResults: this.sortFinishResults(gameData.stat.FinishResults)
+        FinishResults: this.sortFinishResults(gameData.stat.FinishResults)
       }
     });
   }
@@ -76,7 +77,7 @@ export class GamePageComponent implements OnInit {
   public saveChanges() {
     this.disableSaveButton = true;
     const gameId = this.gameData.info.GameId;
-    const levelData = difference(this.gameData.stat.Levels, this.serverData.stat.Levels);
+    const levelData =  this.gameData.stat.Levels;
     this.apiService.saveLevelSettings({ gameId, levelData })
       .catch((err) => {
         this.snackBar.open('Извините, не удалось сохранить данные', 'Скрыть', {
@@ -95,8 +96,7 @@ export class GamePageComponent implements OnInit {
           duration: 1000,
           extraClasses: ['snack-success-message']
         });
-        this.serverData.stat.Levels = clone(newLevelData) as QuestStat.LevelData[];
-        this.gameData.stat.Levels = clone(newLevelData) as QuestStat.LevelData[];
+        this.serverData.stat.Levels = clone(levelData) as QuestStat.LevelData[];
       });
   }
 
@@ -151,6 +151,7 @@ export class GamePageComponent implements OnInit {
     )(this.gameData.stat.DataByTeam) as QuestStat.GroupedTeamData[];
 
     const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
+      const existedAdditionsTime = propOr(0, 'additionsTime', teamFinishResult) as number;
       const levelTime = pipe(
         find(propEq('id', teamFinishResult.id)),
         prop('data'),
@@ -158,8 +159,8 @@ export class GamePageComponent implements OnInit {
         pathOr(0, ['duration'])
       )(this.gameData.stat.DataByTeam);
       const newAdditionalTime = removed
-        ? add(teamFinishResult.additionsTime, levelTime)
-        : subtract(teamFinishResult.additionsTime, levelTime);
+        ? add(existedAdditionsTime, levelTime)
+        : subtract(existedAdditionsTime, levelTime);
 
       return merge(teamFinishResult, {
         additionsTime: newAdditionalTime
@@ -201,9 +202,7 @@ export class GamePageComponent implements OnInit {
 
     this.gameData.stat.DataByLevelsRow = newLevelsRowData;
     this.gameData.stat.DataByTeam = newTeamsData;
-    console.log('FinishResults before -> ', clone(this.gameData.stat.FinishResults));
     this.gameData.stat.FinishResults = this.sortFinishResults(updateFinishResults);
-    console.log('FinishResults after -> ', clone(this.gameData.stat.FinishResults));
   }
 
   public changeViewType({ value }) {
@@ -217,8 +216,8 @@ export class GamePageComponent implements OnInit {
     )(finishStat);
 
     const calculateFullTime = (team: QuestStat.TeamData) => subtract(
-      team.duration,
-      team.additionsTime
+      propOr(0, 'duration', team),
+      propOr(0, 'additionsTime', team)
     );
 
     return sortWith([

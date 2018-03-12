@@ -20,6 +20,7 @@ import {
   pipe,
   prop,
   propEq,
+  propOr,
   sortWith,
   subtract,
   sum,
@@ -88,7 +89,7 @@ export class GameTableComponent {
 
     const calculateFullTime = (teamSource: QuestStat.TeamData[]) => {
       return pipe(
-        map((team: QuestStat.TeamData) => subtract(team.duration, team.additionsTime)),
+        map((team: QuestStat.TeamData) => subtract(propOr(0, 'duration', team), propOr(0, 'additionsTime', team))),
         sum,
         add(negate(curry(getTeamExtraBonus)((teamSource)) as any))
       )(teamSource);
