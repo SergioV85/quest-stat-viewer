@@ -64,7 +64,7 @@ const APP_PROVIDERS = [
     FormatDurationPipe
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'quest-stat-viewer' }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

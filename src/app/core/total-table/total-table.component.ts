@@ -43,7 +43,7 @@ export class TotalTableComponent {
       dropLast(1) as any,
       map(prop('type')),
       uniq,
-      sort((a: number, b: number) => a - b)
+      sort((a: number, b: number) => a - b) as any
     )(levels) as number[];
   }
   @Input() public set teamStat(teams: QuestStat.GroupedTeamData[]) {
@@ -135,9 +135,9 @@ export class TotalTableComponent {
       duration: pipe(
         prop('data'),
         filter((stat: QuestStat.TeamData) => contains(stat.levelIdx, matchedLevels)) as any,
-        map(prop('duration')),
+        map(prop('duration')) as any,
         sum
-      )(team),
+      )(team) as number,
       closedLevels: pipe(
         prop('data'),
         length

@@ -168,7 +168,7 @@ export class GamePageComponent implements OnInit {
     }, this.gameData.stat.FinishResults);
 
     const replaceTeamStatInList = (teamStats) => {
-      const teamId = prop('id', head(teamStats));
+      const teamId = prop('id', head(teamStats) as any);
       const indexInList = findIndex(propEq('levelIdx', existedLevel.position))(teamStats);
       if (indexInList < 0) {
         return {
