@@ -2,7 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: {  server: './server.ts' },
+  entry: {
+    server: join(__dirname, 'server.ts'),
+    start: join(__dirname, 'start.ts'),
+  },
   resolve: { extensions: ['.js', '.ts'] },
   target: 'node',
   // this makes sure we include node_modules and other 3rd party libraries
@@ -17,6 +20,11 @@ module.exports = {
     ]
   },
   plugins: [
+    new copyWebpackPlugin([
+      {from: "dist/browser/**/*"},
+      {from: "dist/server/**/*"},
+    ]),
+
     // Temporary Fix for issue: https://github.com/angular/angular/issues/11580
     // for "WARNING Critical dependency: the request of a dependency is an expression"
     new webpack.ContextReplacementPlugin(
