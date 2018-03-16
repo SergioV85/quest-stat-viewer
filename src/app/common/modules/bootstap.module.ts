@@ -17,4 +17,10 @@ import {
     BsDropdownModule
   ]
 })
-export class BootstrapModule { }
+export class BootstrapModule {
+  public static forRoot() {
+    return {
+      ngModule: BootstrapModule
+    };
+  }
+}

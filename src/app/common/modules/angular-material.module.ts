@@ -39,4 +39,10 @@ import {
     MatTooltipModule
   ]
 })
-export class AngularMaterialModule { }
+export class AngularMaterialModule {
+  public static forRoot() {
+    return {
+      ngModule: AngularMaterialModule
+    };
+  }
+}

@@ -14,7 +14,7 @@ export class SavedGamesComponent implements OnInit {
 
   public ngOnInit() {
     this.domains = pipe(
-      map(prop('domain')),
+      map(prop('Domain')),
       uniq
     )(this.savedGames) as string[];
 
@@ -22,12 +22,16 @@ export class SavedGamesComponent implements OnInit {
   }
   public filterByDomain($event) {
     if ($event.value) {
-      this.games = filter(propEq('domain', $event.value))(this.savedGames);
+      this.games = filter(propEq('Domain', $event.value))(this.savedGames);
     } else {
       this.games = [...this.savedGames];
     }
   }
   public selectGame(game: QuestStat.GameInfo) {
-    this.requestGameData.emit(game);
+    const requestedGame = {
+      id: game.GameId,
+      domain: game.Domain
+    };
+    this.requestGameData.emit(requestedGame);
   }
 }

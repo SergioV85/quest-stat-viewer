@@ -1,9 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { RouterModule, PreloadAllModules } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ROUTES } from './app.routes';
 
@@ -17,6 +16,8 @@ import { SharedService } from './common/services/shared.service';
 import { UtilService } from './common/services/util.service';
 import { DeviceService } from './common/services/device.service';
 import { GameDataResolver } from './common/resolvers/game-resolver.service';
+
+import { HttpCacheInterceptorService } from './common/services/http-interceptor.service';
 
 import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
 import { FormatDurationPipe } from './common/pipes/duration-transorm.pipe';
@@ -33,8 +34,6 @@ import { LevelCardComponent } from './core/level-card/level-card.component';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 
-import '../styles/styles.scss';
-import '../styles/headings.css';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -64,18 +63,22 @@ const APP_PROVIDERS = [
     FormatDurationPipe
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'quest-stat-viewer' }),
+    BrowserTransferStateModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-    AngularMaterialModule,
-    BootstrapModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    AngularMaterialModule.forRoot(),
+    BootstrapModule.forRoot(),
+    RouterModule.forRoot(ROUTES)
   ],
-
   providers: [
-    ...APP_PROVIDERS
+    ...APP_PROVIDERS,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCacheInterceptorService,
+      multi: true,
+    },
   ]
 })
 export class AppModule {}

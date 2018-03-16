@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import { ApiService } from './../services/api.service';
 
 @Injectable()
-export class GameDataResolver implements Resolve<QuestStat.GameData> {
+export class GameDataResolver implements Resolve<any> {
   constructor(private apiService: ApiService, private router: Router) {}
 
-  public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<QuestStat.GameData> {
+  public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     const domain = route.paramMap.get('domain');
     const id = route.paramMap.get('id');
 

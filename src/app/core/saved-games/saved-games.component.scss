@@ -25,12 +25,13 @@
     }
   }
 
-  &__filter {
-    padding-top: 0;
+  &__title {
+    flex: 2 0 auto;
+  }
 
-    @include desktop {
-      padding-top: 16px;
-    }
+  &__filter {
+    flex: 1 0 50px;
+    padding-top: 0;
   }
 
   &__game {

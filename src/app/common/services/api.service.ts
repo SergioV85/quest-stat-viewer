@@ -1,22 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { of } from 'rxjs/observable/of';
+import { map, tap } from 'rxjs/operators';
+
+const GAMES_KEY = makeStateKey<QuestStat.GameInfo[]>('games');
+const GAME_KEY = makeStateKey<QuestStat.GameData>('game');
 
 @Injectable()
 export class ApiService {
+  private isBrowser: boolean;
   private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
-  // private serverAddress = 'https://www.quest-stat.me.uk';
-  // private serverAddress = 'http://localhost:4040';
 
-  constructor(private http: HttpClient) {}
+  constructor(@Inject(PLATFORM_ID) private platformId,
+              private http: HttpClient,
+              private readonly transferState: TransferState) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   public getSavedGames() {
-    return this.http.get<QuestStat.GameInfo[]>(`${this.serverAddress}/games`);
+    if (this.isBrowser && this.transferState.hasKey(GAMES_KEY)) {
+      const games = this.transferState.get<QuestStat.GameInfo[]>(GAMES_KEY, null);
+      this.transferState.remove(GAMES_KEY);
+      return of(games);
+    }
+    return this.http.get<QuestStat.GameInfo[]>(`${this.serverAddress}/games`)
+      .pipe(
+        tap((response) => {
+          if (!this.isBrowser) {
+            this.transferState.set<QuestStat.GameInfo[]>(GAMES_KEY, response);
+          }
+        })
+      );
   }
 
   public getGameStat(gameData: QuestStat.GameRequest) {
-    return this.http.get<QuestStat.GameData>(`${this.serverAddress}/game`, { params: this.convertHttpParams(gameData) });
+    if (this.isBrowser && this.transferState.hasKey(GAME_KEY)) {
+      const singleGame = this.transferState.get<QuestStat.GameData>(GAME_KEY, null);
+      this.transferState.remove(GAME_KEY);
+      return of(singleGame);
+    }
+    return this.http.get<QuestStat.GameData>(`${this.serverAddress}/game`, { params: this.convertHttpParams(gameData) })
+      .pipe(tap((response) => {
+        if (!this.isBrowser) {
+          this.transferState.set<QuestStat.GameData>(GAME_KEY, response);
+        }
+      }));
   }
 
   public saveLevelSettings({ gameId, levelData}) {
