@@ -28,12 +28,12 @@
       }
     },
     {
-      "platform": "server",
       "root": "src",
       "outDir": "dist/server",
       "assets": [
         "assets"
       ],
+      "platform": "server",
       "index": "index.html",
       "main": "main.server.ts",
       "test": "test.ts",
@@ -78,6 +78,9 @@
   "defaults": {
     "styleExt": "scss",
     "component": {
+    },
+    "schematics": {
+      "collection": "@ngrx/schematics"
     }
   }
 }

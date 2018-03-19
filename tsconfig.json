@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -14,6 +15,13 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@app-common*": ["../src/app/common/*"],
+      "@app-core*": ["../src/app/core/*"]
+    },
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false
   }
 }

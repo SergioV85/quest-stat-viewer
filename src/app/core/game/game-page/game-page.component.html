@@ -1,0 +1,122 @@
+<div class="game-page">
+  <div class="game-page__header row align-items-center">
+    <div class="col-8">
+        <form [formGroup]="tabsForm">
+          <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group"
+              btnRadioGroup
+              formControlName="activeTab">
+            <label 
+                class="btn game-page__viewButton"
+                [ngClass]="{
+                  'btn-outline-primary': selectedView !== 'total',
+                  'btn-primary': selectedView === 'total'
+                }"
+                btnRadio="total">
+              Сумарная статистика
+            </label>
+            <label 
+                class="btn game-page__viewButton" 
+                [ngClass]="{
+                  'btn-outline-primary': selectedView !== 'level_new',
+                  'btn-primary': selectedView === 'level_new'
+                }"
+                btnRadio="level">
+              Обычная статистика
+            </label>
+            <label 
+                class="btn game-page__viewButton"
+                [ngClass]="{
+                  'btn-outline-primary': selectedView !== 'team',
+                  'btn-primary': selectedView === 'team'
+                }"
+                btnRadio="team">
+              Статистика по командам
+            </label>
+            <label 
+                class="btn game-page__viewButton"
+                [ngClass]="{
+                  'btn-outline-primary': selectedView !== 'monitoring',
+                  'btn-primary': selectedView === 'monitoring'
+                }"
+                btnRadio="monitoring">
+              Мониторинг
+            </label>
+          </div>
+          <mat-select 
+              class="game-page__viewSelector game-page__viewSelector--select"
+              floatPlaceholder="never"
+              placeholder="Вид отображения"
+              formControlName="activeTab">
+            <mat-option value="total">Сумарная статистика</mat-option>
+            <mat-option value="level">Обычная статистика</mat-option>
+            <mat-option value="team">Статистика по командам</mat-option>
+            <mat-option value="monitoring">Мониторинг</mat-option>
+          </mat-select>
+        </form>
+
+
+    </div>
+    <div class="col game-page__changesContainer text-right">
+      <button class="game-page__refreshDataButton"
+          mat-raised-button 
+          color="accent"
+          (click)="refreshData()">
+        <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" matTooltip="Обновить данные"></i>
+        <span class="game-page__changesContainer-label">Обновить данные</span>
+      </button>
+      <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
+      <button class="game-page__saveChangesButton" 
+          *ngIf="!changesStatus" 
+          mat-raised-button 
+          color="primary"
+          [disabled]="disableSaveButton"
+          (click)="saveChanges()">
+        <i class="game-page__changesContainer-icon fa fa-save fa-lg" matTooltip="Сохранить"></i>
+        <span class="game-page__changesContainer-label">Сохранить</span>
+      </button>
+    </div>
+  </div>
+  <div class="full-width">
+    <mat-spinner *ngIf="loadData" class="loading"></mat-spinner>
+    <router-outlet></router-outlet>
+    <!--div *ngIf="loadData; then loadingContainer; else dataContainer"></div>
+    <ng-template #loadingContainer>
+      <mat-spinner class="loading"></mat-spinner>
+    </ng-template>
+    <!--ng-template #dataContainer>
+      <div [ngSwitch]="selectedView">
+        <ng-template [ngSwitchCase]="'total'">
+          <total-table *ngIf="gameData"
+              [levels]="gameData.stat.Levels"
+              [teamStat]="gameData.stat.DataByTeam"
+              [finishResults]="gameData.stat.FinishResults">
+          </total-table>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'level'">
+          <game-table *ngIf="gameData"
+              [levels]="gameData.stat.Levels"
+              [levelsStatRow]="gameData.stat.DataByLevelsRow"
+              [finishList]="gameData.stat.FinishResults"
+              [teamsStat]="gameData.stat.DataByTeam"
+              [selectedTab]="selectedView"
+              (changeLevelType)="updateLevel($event)"
+              (removeLevel)="removeLevelFromStat($event)">
+          </game-table>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'team'">
+          <game-table *ngIf="gameData"
+              [levels]="gameData.stat.Levels"
+              [levelsStatRow]="gameData.stat.DataByLevelsRow"
+              [finishList]="gameData.stat.FinishResults"
+              [teamsStat]="gameData.stat.DataByTeam"
+              [selectedTab]="selectedView"
+              (changeLevelType)="updateLevel($event)"
+              (removeLevel)="removeLevelFromStat($event)">
+          </game-table>
+        </ng-template>
+        <ng-template [ngSwitchCase]="'monitoring'">
+        </ng-template>
+      </div>
+    </ng-template-->
+  </div>
+</div>

@@ -1,0 +1,173 @@
+@import './../../../../styles/mixins';
+@import './../../../../styles/variables';
+
+.gameTable {
+  text-align: center;
+
+  &__container {
+    max-width: 100%;
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+  }
+  &__table-container {
+    display: table;
+  }
+
+  &__levelName {
+    border-bottom: 3px solid $light-grey-c;
+    width: 100px;
+
+    &--Logic {
+      border-bottom-color: $amber;
+    }
+    &--Search {
+      border-bottom-color: $blue;
+    }
+    &--Drive {
+      border-bottom-color: $teal;
+    }
+    &--Agent {
+      border-bottom-color: $brown;
+    }
+    &--Waiting {
+      border-bottom-color: $blue-grey;
+    } 
+    &--dismised {
+      color: $light-grey-a;
+      border-bottom-color: $light-grey-a;
+    }
+    &--finishResult {
+      margin-left: auto !important;
+    }
+  }
+  &__mainData {
+    white-space: nowrap;
+  }
+  &__stat {
+    display: flex;
+    flex-flow: row;
+    margin: 10px 0;
+    width: 100%;
+    white-space: nowrap
+  }
+  &__team {
+    box-sizing: border-box;
+    flex: 0 0 0%;
+    padding: 4px;
+    min-width: 100px;
+    white-space: normal;
+    
+    &--flex {
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+
+    &--dismised {
+      background-color: $light-grey-e;
+      color: $light-grey-a;
+      opacity: 0.8;
+  
+      .team-card__additionalTime--bonus {
+        color: $main-green;
+      }
+      .team-card__additionalTime--penalty {
+        color: $light-red;
+      }
+    }
+  
+    &--timeout {
+      &:before {
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-top: 20px solid $main-green;
+        content: "";
+        height: 0;
+        position: absolute;
+        opacity: 0.8;
+        right: 0;
+        top: 0;
+        width: 0;
+      }
+      &:after {
+        content: "T";
+        color: $main-light;
+        font-size: 10px;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+      }
+    }
+  
+    &--selected {
+      border: 2px solid transparent;
+      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12)
+    }
+    &--selection {
+      &-1 {
+        background-color: transparentize($comparsion-color-1, 0.5);
+        border-color: transparentize($comparsion-color-1, 0.8);
+      }
+      &-2 {
+        background-color: transparentize($comparsion-color-2, 0.5);
+        border-color: transparentize($comparsion-color-2, 0.8);
+      }
+      &-3 {
+        background-color: transparentize($comparsion-color-3, 0.5);
+        border-color: transparentize($comparsion-color-3, 0.8);
+      }
+      &-4 {
+        background-color: transparentize($comparsion-color-4, 0.5);
+        border-color: transparentize($comparsion-color-4, 0.8);
+      }
+      &-5 {
+        background-color: transparentize($comparsion-color-5, 0.5);
+        border-color: transparentize($comparsion-color-5, 0.8);
+      }
+      &-6 {
+        background-color: transparentize($comparsion-color-6, 0.5);
+        border-color: transparentize($comparsion-color-6, 0.8);
+      }
+      &-7 {
+        background-color: transparentize($comparsion-color-7, 0.5);
+        border-color: transparentize($comparsion-color-7, 0.8);
+      }
+      &-8 {
+        background-color: transparentize($comparsion-color-8, 0.5);
+        border-color: transparentize($comparsion-color-8, 0.8);
+      }
+      &-9 {
+        background-color: transparentize($comparsion-color-9, 0.5);
+        border-color: transparentize($comparsion-color-9, 0.8);
+      }
+      &-10 {
+        background-color: transparentize($comparsion-color-10, 0.5);
+        border-color: transparentize($comparsion-color-10, 0.8);
+      }      
+    }
+
+    &--finishResult {
+      margin-left: auto !important;
+    }
+  }
+  &__column-container {
+    display: flex;
+    flex-basis: 100%;
+  }
+  &__column {
+    box-sizing: border-box;
+    padding: 4px;
+    flex: 0 0 120px;
+    
+    &--noPadding {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 0;
+    }
+
+    &:last-child {
+      margin-left: auto;
+    }
+  }
+}

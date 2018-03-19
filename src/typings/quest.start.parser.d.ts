@@ -54,4 +54,15 @@ declare namespace QuestStat {
     showLeaderGap?: boolean,
     showBestTime?: boolean
   }
+
+  namespace Store {
+    interface Games {
+      isLoading?: boolean;
+      games?: GameInfo[];
+    }
+
+    interface State {
+      games: Games;
+    }
+  }
 }

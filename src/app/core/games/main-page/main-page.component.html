@@ -1,0 +1,15 @@
+<div class="main-page">
+  <div class="container">
+    <div *ngIf="isGamesLoading$ | async; then loader; else games"></div>
+    <ng-template #loader>
+      <mat-spinner class="loading"></mat-spinner>
+    </ng-template>
+    <ng-template #games>
+      <search-game (requestGameData)="searchGame($event)"></search-game>
+      <saved-games *ngIf="(savedGames$ | async).length"
+          [savedGames]="savedGames$ | async"
+          (requestGameData)="searchGame($event)">
+      </saved-games>
+    </ng-template>
+  </div>
+</div>
