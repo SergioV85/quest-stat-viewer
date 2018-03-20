@@ -15,19 +15,19 @@
           <button type="button"
               class="btn game-page__viewButton" 
               [ngClass]="{
-                'btn-outline-primary': (activeTab$ | async) !== 'general-stat',
-                'btn-primary': (activeTab$ | async) === 'general-stat'
+                'btn-outline-primary': (activeTab$ | async) !== 'levels',
+                'btn-primary': (activeTab$ | async) === 'levels'
               }"
-              (click)="changeView('general-stat')">
+              (click)="changeView('levels')">
             Обычная статистика
           </button>
           <button type="button"
               class="btn game-page__viewButton"
               [ngClass]="{
-                'btn-outline-primary': (activeTab$ | async) !== 'team-stat',
-                'btn-primary': (activeTab$ | async) === 'team-stat'
+                'btn-outline-primary': (activeTab$ | async) !== 'teams',
+                'btn-primary': (activeTab$ | async) === 'teams'
               }"
-              (click)="changeView('team-stat')">
+              (click)="changeView('teams')">
             Статистика по командам
           </button>
           <button type="button"

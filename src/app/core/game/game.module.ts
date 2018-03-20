@@ -28,11 +28,11 @@ export const routes: Route[] = [
         component: TotalTableComponent
       },
       {
-        path: 'general-stat',
+        path: 'levels',
         component: GameTableComponent
       },
       {
-        path: 'team-stat',
+        path: 'teams',
         component: GameTableComponent
       },
       {

@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { takeUntil } from 'rxjs/operators';
@@ -7,33 +6,14 @@ import { Subject } from 'rxjs/Subject';
 import { Store, select } from '@ngrx/store';
 
 import {
-  add,
-  addIndex,
-  append,
-  ascend,
   contains,
-  curry,
-  descend,
-  find,
-  head,
   indexOf,
-  length,
-  map,
-  negate,
-  nth,
-  pathOr,
-  pipe,
-  prop,
-  propEq,
-  propOr,
-  sortWith,
-  subtract,
-  sum,
   without
 } from 'ramda';
 
 import * as GameDetailsActions from '@app-common/actions/game-details.actions';
 import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
+import * as RouterReducer from '@app-common/reducers/router/router.reducer';
 import { LevelType } from '@app-common/services/helpers/level-type.enum';
 
 @Component({
@@ -42,41 +22,37 @@ import { LevelType } from '@app-common/services/helpers/level-type.enum';
   styleUrls: ['game-table.component.scss']
 })
 export class GameTableComponent implements OnInit, OnDestroy {
-  @Input() public levels: QuestStat.LevelData[];
-  @Input() public finishList: QuestStat.TeamData[];
-  @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
-    this.teamList = pipe(
-      this.sortTeamList.bind(this),
-      this.appendFinishStatToTeam.bind(this)
-    )(teamSt) as QuestStat.GroupedTeamData[];
-  }
-  @Input() public set levelsStatRow(levelSt: QuestStat.TeamData[][]) {
-    this.levelStatList = this.appendFinishStat(levelSt);
-  }
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
-  public selectedTab: string;
-  public teamList: QuestStat.GroupedTeamData[] = [];
-  public levelStatList: QuestStat.TeamData[][] = [];
+  public activeTab$: Observable<string>;
+  public levels$: Observable<QuestStat.LevelData[]>;
+  public statData$: Observable<{ teams: QuestStat.TeamData[][], levels: QuestStat.TeamData[][] }>;
+
   public LevelType = LevelType;
   private selectedTeams: number[] = [];
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<QuestStat.Store.State>,
-              private route: ActivatedRoute) {}
+  constructor(private store: Store<QuestStat.Store.State>) {}
 
   public ngOnInit() {
-    this.selectedTab = this.route.snapshot.params.path;
+    this.activeTab$ = this.store.pipe(
+      select(RouterReducer.getActiveTab),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.levels$ = this.store.pipe(
+      select(GameDetailsReducer.getLevels),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.statData$ = this.store.pipe(
+      select(GameDetailsReducer.getStatData),
+      takeUntil(this.ngUnsubscribe)
+    );
   }
 
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
-    return pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
   }
 
   public getTeamSelectionCssClass(teamStat: QuestStat.TeamData) {
@@ -90,57 +66,5 @@ export class GameTableComponent implements OnInit, OnDestroy {
     } else {
       this.selectedTeams.push(teamStat.id);
     }
-  }
-
-  private sortTeamList(sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
-    const closedLevelQuantity = pipe(
-      prop('data'),
-      length
-    );
-
-    const getTeamExtraBonus = (teamSource): number => {
-      const teamId = pipe(
-        nth(0),
-        prop('id')
-      )(teamSource);
-
-      return pipe(
-        find(propEq('id', teamId)),
-        pathOr(0, ['extraBonus'])
-      )(this.finishList) as number;
-    };
-
-    const calculateFullTime = (teamSource: QuestStat.TeamData[]) => {
-      return pipe(
-        map((team: QuestStat.TeamData) => subtract(propOr(0, 'duration', team), propOr(0, 'additionsTime', team))),
-        sum,
-        add(negate(curry(getTeamExtraBonus)((teamSource)) as any))
-      )(teamSource);
-    };
-
-    const sumDurations = pipe(
-      prop('data'),
-      calculateFullTime
-    );
-
-    return sortWith([
-      descend(closedLevelQuantity),
-      ascend(sumDurations)
-    ])(sortingSource) as QuestStat.GroupedTeamData[];
-  }
-
-  private appendFinishStatToTeam(sortedTeamStat: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] {
-    return map((team) => {
-      const finishResult = find(propEq('id', team.id), this.finishList);
-      const updatedStat = append(finishResult, team.data);
-      return {
-        id: team.id,
-        data: updatedStat
-      };
-    }, sortedTeamStat);
-  }
-  private appendFinishStat(levelsStat: QuestStat.TeamData[][]): QuestStat.TeamData[][] {
-    const indexedMap = addIndex(map);
-    return indexedMap((levelRow, indx) => append(this.finishList[indx], levelRow), levelsStat);
   }
 }

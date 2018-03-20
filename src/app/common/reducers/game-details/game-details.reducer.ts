@@ -1,65 +1,28 @@
 import { createSelector } from '@ngrx/store';
 import {
   ascend,
-  complement,
-  contains,
+  curry,
   descend,
-  drop,
-  dropLast,
-  filter,
   head,
-  length,
   map,
   merge,
-  nth,
+  mergeDeepRight,
   path,
-  pick,
   pipe,
   prop,
-  propEq,
-  propOr,
-  sort,
   sortWith,
-  sum,
-  take,
   uniq
 } from 'ramda';
 import * as GameDetailsActions from '@app-common/actions/game-details.actions';
-
-const getMatchedLevels = (selectedType, state) => pipe(
-  path(['gameData', 'stat', 'Levels']),
-  filter(propEq('type', selectedType)),
-  filter(complement(prop('removed'))),
-  map(prop('position'))
-)(state);
-const getCalculatedStat = (matchedLevels, team) => ({
-  name: pipe(
-    prop('data'),
-    nth(0),
-    prop('name')
-  )(team) as string,
-  id: pipe(
-    prop('data'),
-    nth(0),
-    prop('id')
-  )(team) as number,
-  duration: pipe(
-    prop('data'),
-    filter((stat: QuestStat.TeamData) => contains(stat.levelIdx, matchedLevels)) as any,
-    map(prop('duration')) as any,
-    sum
-  )(team) as number,
-  closedLevels: pipe(
-    prop('data'),
-    length
-  )(team)
-});
-const getPossibleLevelTypes = pipe(
-  dropLast(1) as any,
-  map(prop('type')),
-  uniq,
-  sort((a: number, b: number) => a - b) as any
-);
+import {
+  appendFinishStat,
+  appendFinishStatToTeam,
+  getCalculatedStat,
+  getMatchedLevels,
+  getPossibleLevelTypes,
+  sortFinishResults,
+  sortTeamList
+} from './game-details.helpers';
 
 export const initialState: QuestStat.Store.GameDetails = {
   isLoading: false
@@ -78,7 +41,12 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
       return merge(gameDetailsState, { isLoading: true });
     }
     case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsComplete: {
-      const gameData = action.payload;
+      const serverGameData = action.payload;
+      const gameData = mergeDeepRight(serverGameData, {
+        stat: {
+          FinishResults: sortFinishResults(serverGameData.stat.FinishResults)
+        }
+      });
       const selectedTotalTab = pipe(
         path(['stat', 'Levels']),
         getPossibleLevelTypes,
@@ -109,6 +77,9 @@ export const getAvailableLevelTypes = createSelector(selectGameDetailsStore, (st
 export const getFinishResults = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   path(['gameData', 'stat', 'FinishResults'], state) as QuestStat.TeamData[]
 );
+export const getLevels = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
+  path(['gameData', 'stat', 'Levels'], state) as QuestStat.LevelData[]
+);
 export const getLoadingState = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   prop('isLoading', state)
 );
@@ -126,11 +97,24 @@ export const getSortedTeamsTotalResulst = createSelector(selectGameDetailsStore,
     ])
   )(state);
 });
+export const getStatData = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) => {
+  const levels = pipe(
+    path(['gameData', 'stat', 'DataByLevelsRow']),
+    curry(appendFinishStat)(state.gameData.stat.FinishResults)
+  )(state) as QuestStat.TeamData[][];
+  const teams = pipe(
+    path(['gameData', 'stat', 'DataByTeam']),
+    curry(sortTeamList)(state.gameData.stat.FinishResults) as any,
+    curry(appendFinishStatToTeam)(state.gameData.stat.FinishResults) as any,
+    map(prop('data'))
+  )(state) as QuestStat.TeamData[][];
+
+  return {
+    levels,
+    teams
+  };
+});
 
 export const _getGameData = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   prop('gameData', state) as QuestStat.GameData
 );
-export const _getLevels = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
-  prop('gameData', state) as QuestStat.GameData
-);
-

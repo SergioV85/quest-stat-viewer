@@ -75,15 +75,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe)
     );
 
-    /*
-    const gameData = this.route.snapshot.data.gameData;
-    this.serverData = clone(gameData);
-    this.gameData = mergeDeepRight(gameData, {
-      stat: {
-        FinishResults: this.sortFinishResults(gameData.stat.FinishResults)
-      }
-    });
-    */
     this.tabsForm = this.formBuilder.group({
       activeTabButtons: 'total',
       activeTabSelector: 'total'

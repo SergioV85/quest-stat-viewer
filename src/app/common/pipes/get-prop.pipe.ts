@@ -4,10 +4,13 @@ import { map, path, split } from 'ramda';
 @Pipe({ name: 'getProp' })
 export class GetPropertyPipe implements PipeTransform {
 
-  public transform (value: any, pathToProp: string) {
+  public transform (value: any, pathToProp: string, shouldMap: boolean = true) {
     if (value) {
       const route = split('-', pathToProp);
-      return map(path(route), value);
+      if (shouldMap) {
+        return map(path(route), value);
+      }
+      return path(route, value);
     }
     return value;
   }
