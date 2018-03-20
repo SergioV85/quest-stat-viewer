@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { GameResolverService } from './game-resolver.service';
+import { GameDataResolver } from './game-resolver.service';
 
-describe('GameResolverService', () => {
+describe('GameDataResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GameResolverService]
+      providers: [GameDataResolver]
     });
   });
 
-  it('should be created', inject([GameResolverService], (service: GameResolverService) => {
+  it('should be created', inject([GameDataResolver], (service: GameDataResolver) => {
     expect(service).toBeTruthy();
   }));
 });

@@ -1,9 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/material';
 
-import { FormatDurationPipe } from '@app-common/pipes/duration-transorm.pipe';
-import { LevelType } from '@app-common/services/helpers/level-type.enum';
-import { UtilService } from '@app-common/services/helpers/util.service';
+import { Observable } from 'rxjs/Observable';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+
+import { Store, select } from '@ngrx/store';
+
 import {
   ascend,
   complement,
@@ -24,6 +27,11 @@ import {
   sum,
   uniq
 } from 'ramda';
+import * as GameDetailsActions from '@app-common/actions/game-details.actions';
+import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
+
+import { LevelType } from '@app-common/services/helpers/level-type.enum';
+import { UtilService } from '@app-common/services/helpers/util.service';
 
 declare interface MappedTeam {
   id: number;
@@ -36,29 +44,39 @@ declare interface MappedTeam {
   templateUrl: 'total-table.component.html',
   styleUrls: ['total-table.component.scss']
 })
-export class TotalTableComponent {
-  @Input() public set levels(levels: QuestStat.LevelData[]) {
-    this.levelData = levels;
-    this.availableTypes = pipe(
-      dropLast(1) as any,
-      map(prop('type')),
-      uniq,
-      sort((a: number, b: number) => a - b) as any
-    )(levels) as number[];
-  }
-  @Input() public set teamStat(teams: QuestStat.GroupedTeamData[]) {
-    this.teamData = teams;
-    this.sortTeams(head(this.availableTypes));
-  }
-  @Input() public finishResults: QuestStat.TeamData[];
-  public levelData: QuestStat.LevelData[];
-  public teamData: QuestStat.GroupedTeamData[];
-  public availableTypes: number[];
+export class TotalTableComponent implements OnInit, OnDestroy {
+  public activeTab$: Observable<number>;
+  public availableTypes$: Observable<number[]>;
+  public finishResults$: Observable<QuestStat.TeamData[]>;
+  public sortedTeams$: Observable<MappedTeam[]>;
   public sortedTeams: MappedTeam[] = [];
-  private durationFormatFilter: FormatDurationPipe;
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor() {
-    this.durationFormatFilter = new FormatDurationPipe();
+  constructor(private store: Store<QuestStat.Store.State>) {
+  }
+
+  public ngOnInit() {
+    this.activeTab$ = this.store.pipe(
+      select(GameDetailsReducer.getActiveTabOnTotalStatState),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.availableTypes$ = this.store.pipe(
+      select(GameDetailsReducer.getAvailableLevelTypes),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.finishResults$ = this.store.pipe(
+      select(GameDetailsReducer.getFinishResults),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.sortedTeams$ = this.store.pipe(
+      select(GameDetailsReducer.getSortedTeamsTotalResulst),
+      takeUntil(this.ngUnsubscribe)
+    );
+  }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   public getLevelTypeIcon(type: number) {
@@ -69,35 +87,7 @@ export class TotalTableComponent {
     return UtilService.getLevelTypeName(type);
   }
 
-  public getTeamTotalPosition(team: MappedTeam) {
-    return findIndex(propEq('id', team.id))(this.finishResults) + 1;
-  }
-
-  public getLeaderDifference(team: MappedTeam, idx: number) {
-    if (idx === 0) {
-      return '';
-    }
-    const leaderTime = pipe(
-      head as any,
-      prop('duration')
-    )(this.sortedTeams) as number;
-    const diff = team.duration - leaderTime;
-    return `+${this.durationFormatFilter.transform(diff)}`;
-  }
-
-  public getPrevTeamDifferenceTime(team: MappedTeam, idx: number) {
-    if (idx === 0) {
-      return '';
-    }
-    const diff = this.calculatePrevTeamDiff(team, idx);
-    return `+${this.durationFormatFilter.transform(diff)}`;
-  }
-
-  public getPrevTeamDifferenceClass(team: MappedTeam, idx: number) {
-    if (idx === 0) {
-      return '';
-    }
-    const diff = this.calculatePrevTeamDiff(team, idx);
+  public getPrevTeamDifferenceClass(diff: number) {
     switch (true) {
       case diff < 1000:
         return 'total-table__team-prev-difference--lessThanSecond';
@@ -111,53 +101,11 @@ export class TotalTableComponent {
   }
 
   public changeTab($event: MatTabChangeEvent) {
-    this.sortTeams(parseInt($event.tab.textLabel, 10));
+    const newTab = parseInt($event.tab.textLabel, 10);
+    this.store.dispatch(new GameDetailsActions.ChangeTotalStatTabAction(newTab));
   }
 
-  private sortTeams(selectedType: number) {
-    const matchedLevels = pipe(
-      filter(propEq('type', selectedType)),
-      filter(complement(prop('removed'))),
-      map(prop('position'))
-    )(this.levelData);
-
-    const calculatedStat = (team: QuestStat.GroupedTeamData) => ({
-      name: pipe(
-        prop('data'),
-        nth(0),
-        prop('name')
-      )(team) as string,
-      id: pipe(
-        prop('data'),
-        nth(0),
-        prop('id')
-      )(team) as number,
-      duration: pipe(
-        prop('data'),
-        filter((stat: QuestStat.TeamData) => contains(stat.levelIdx, matchedLevels)) as any,
-        map(prop('duration')) as any,
-        sum
-      )(team) as number,
-      closedLevels: pipe(
-        prop('data'),
-        length
-      )(team)
-    });
-
-    this.sortedTeams = pipe(
-      map(calculatedStat),
-      sortWith([
-        descend(prop('closedLevels')),
-        ascend(prop('duration'))
-      ])
-    )(this.teamData);
-  }
-
-  private calculatePrevTeamDiff(team: MappedTeam, idx: number): number {
-    const prevTeamTime = pipe(
-      nth(idx - 1),
-      prop('duration')
-    )(this.sortedTeams) as number;
-    return team.duration - prevTeamTime;
+  public trackByTeamId(index, item: MappedTeam) {
+    return item.id;
   }
 }

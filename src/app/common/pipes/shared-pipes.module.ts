@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormatDurationPipe } from './duration-transorm.pipe';
 import { FormatDateTimePipe } from './date-format.pipe';
+import { FormatDurationPipe } from './duration-transorm.pipe';
+import { GetPropertyPipe } from './get-prop.pipe';
+import { TotalStatCalculationPipe } from './total-stat-calculation.pipe';
 
 @NgModule({
   imports: [
@@ -9,11 +11,15 @@ import { FormatDateTimePipe } from './date-format.pipe';
   ],
   declarations: [
     FormatDateTimePipe,
-    FormatDurationPipe
+    FormatDurationPipe,
+    GetPropertyPipe,
+    TotalStatCalculationPipe
   ],
   exports: [
     FormatDateTimePipe,
-    FormatDurationPipe
+    FormatDurationPipe,
+    GetPropertyPipe,
+    TotalStatCalculationPipe
   ]
 })
 export class SharedPipesModule { }

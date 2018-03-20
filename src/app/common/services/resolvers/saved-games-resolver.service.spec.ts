@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { SavedGamesResolverService } from './saved-games-resolver.service';
+import { SavedGamesResolver } from './saved-games-resolver.service';
 
-describe('SavedGamesResolverService', () => {
+describe('SavedGamesResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SavedGamesResolverService]
+      providers: [SavedGamesResolver]
     });
   });
 
-  it('should be created', inject([SavedGamesResolverService], (service: SavedGamesResolverService) => {
+  it('should be created', inject([SavedGamesResolver], (service: SavedGamesResolver) => {
     expect(service).toBeTruthy();
   }));
 });

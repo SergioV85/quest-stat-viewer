@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
 import { MatSnackBar } from '@angular/material';
 import { debounceTime, distinctUntilChanged, takeUntil, catchError, finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
@@ -32,6 +34,8 @@ import {
 } from 'ramda';
 import { ApiService } from '@app-common/services/api/api.service';
 import { DeviceService } from '@app-common/services/helpers/device.service';
+import { Store, select } from '@ngrx/store';
+import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
 
 @Component({
   selector: 'game-page',
@@ -40,6 +44,8 @@ import { DeviceService } from '@app-common/services/helpers/device.service';
 })
 export class GamePageComponent implements OnInit, OnDestroy {
   public tabsForm: FormGroup;
+  public isGameDataLoading$: Observable<boolean>;
+
   public gameData: QuestStat.GameData;
   public dataRequested: boolean;
   public errorMessage: string;
@@ -49,7 +55,8 @@ export class GamePageComponent implements OnInit, OnDestroy {
   private serverData: QuestStat.GameData;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute,
+  constructor(private store: Store<QuestStat.Store.State>,
+              private route: ActivatedRoute,
               private router: Router,
               private formBuilder: FormBuilder,
               private apiService: ApiService,
@@ -57,6 +64,12 @@ export class GamePageComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar) {}
 
   public ngOnInit() {
+    this.isGameDataLoading$ = this.store.pipe(
+      select(GameDetailsReducer.getLoadingState),
+      takeUntil(this.ngUnsubscribe)
+    );
+
+    /*
     const gameData = this.route.snapshot.data.gameData;
     this.serverData = clone(gameData);
     this.gameData = mergeDeepRight(gameData, {
@@ -64,20 +77,11 @@ export class GamePageComponent implements OnInit, OnDestroy {
         FinishResults: this.sortFinishResults(gameData.stat.FinishResults)
       }
     });
+    */
     this.tabsForm = this.formBuilder.group({
-      activeTab: 'total'
+      activeTabButtons: 'total',
+      activeTabSelector: 'total'
     });
-    this.tabsForm.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(({ activeTab }) => {
-        if (activeTab !== null) {
-          this.changeViewType({ value: activeTab });
-        }
-      });
   }
 
   public ngOnDestroy() {
@@ -92,10 +96,14 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   public get changesStatus() {
+
+    return true;
+    /*
     return equals(
       map(prop('type'))(this.gameData.stat.Levels),
       map(prop('type'))(this.serverData.stat.Levels)
     );
+    */
   }
 
   public saveChanges() {

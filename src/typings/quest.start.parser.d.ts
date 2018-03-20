@@ -61,8 +61,15 @@ declare namespace QuestStat {
       games?: GameInfo[];
     }
 
+    interface GameDetails {
+      isLoading?: boolean;
+      gameData?: GameData;
+      selectedTotalTab?: number;
+    }
+
     interface State {
       games: Games;
+      gameDetails: GameDetails;
     }
   }
 }

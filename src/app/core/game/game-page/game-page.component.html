@@ -1,60 +1,58 @@
 <div class="game-page">
   <div class="game-page__header row align-items-center">
     <div class="col-8">
-        <form [formGroup]="tabsForm">
-          <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group"
-              btnRadioGroup
-              formControlName="activeTab">
-            <label 
-                class="btn game-page__viewButton"
-                [ngClass]="{
-                  'btn-outline-primary': selectedView !== 'total',
-                  'btn-primary': selectedView === 'total'
-                }"
-                btnRadio="total">
-              Сумарная статистика
-            </label>
-            <label 
-                class="btn game-page__viewButton" 
-                [ngClass]="{
-                  'btn-outline-primary': selectedView !== 'level_new',
-                  'btn-primary': selectedView === 'level_new'
-                }"
-                btnRadio="level">
-              Обычная статистика
-            </label>
-            <label 
-                class="btn game-page__viewButton"
-                [ngClass]="{
-                  'btn-outline-primary': selectedView !== 'team',
-                  'btn-primary': selectedView === 'team'
-                }"
-                btnRadio="team">
-              Статистика по командам
-            </label>
-            <label 
-                class="btn game-page__viewButton"
-                [ngClass]="{
-                  'btn-outline-primary': selectedView !== 'monitoring',
-                  'btn-primary': selectedView === 'monitoring'
-                }"
-                btnRadio="monitoring">
-              Мониторинг
-            </label>
-          </div>
-          <mat-select 
-              class="game-page__viewSelector game-page__viewSelector--select"
-              floatPlaceholder="never"
-              placeholder="Вид отображения"
-              formControlName="activeTab">
-            <mat-option value="total">Сумарная статистика</mat-option>
-            <mat-option value="level">Обычная статистика</mat-option>
-            <mat-option value="team">Статистика по командам</mat-option>
-            <mat-option value="monitoring">Мониторинг</mat-option>
-          </mat-select>
-        </form>
-
-
+      <form [formGroup]="tabsForm">
+        <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group"
+            btnRadioGroup
+            formControlName="activeTabButtons">
+          <label 
+              class="btn game-page__viewButton"
+              [ngClass]="{
+                'btn-outline-primary': selectedView !== 'total',
+                'btn-primary': selectedView === 'total'
+              }"
+              btnRadio="total">
+            Сумарная статистика
+          </label>
+          <label 
+              class="btn game-page__viewButton" 
+              [ngClass]="{
+                'btn-outline-primary': selectedView !== 'level_new',
+                'btn-primary': selectedView === 'level_new'
+              }"
+              btnRadio="level">
+            Обычная статистика
+          </label>
+          <label 
+              class="btn game-page__viewButton"
+              [ngClass]="{
+                'btn-outline-primary': selectedView !== 'team',
+                'btn-primary': selectedView === 'team'
+              }"
+              btnRadio="team">
+            Статистика по командам
+          </label>
+          <label 
+              class="btn game-page__viewButton"
+              [ngClass]="{
+                'btn-outline-primary': selectedView !== 'monitoring',
+                'btn-primary': selectedView === 'monitoring'
+              }"
+              btnRadio="monitoring">
+            Мониторинг
+          </label>
+        </div>
+        <mat-select 
+            class="game-page__viewSelector game-page__viewSelector--select"
+            floatPlaceholder="never"
+            placeholder="Вид отображения"
+            formControlName="activeTabSelector">
+          <mat-option value="total">Сумарная статистика</mat-option>
+          <mat-option value="level">Обычная статистика</mat-option>
+          <mat-option value="team">Статистика по командам</mat-option>
+          <mat-option value="monitoring">Мониторинг</mat-option>
+        </mat-select>
+      </form>
     </div>
     <div class="col game-page__changesContainer text-right">
       <button class="game-page__refreshDataButton"

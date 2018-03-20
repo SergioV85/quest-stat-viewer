@@ -13,8 +13,8 @@ const GAME_MONITORING_KEY = makeStateKey<QuestStat.GameData>('game.monitoring');
 @Injectable()
 export class ApiService {
   private isBrowser: boolean;
-  // private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
-  private serverAddress = 'http://localhost:3000';
+  private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
+  // private serverAddress = 'http://localhost:3000';
 
   constructor(@Inject(PLATFORM_ID) private platformId,
               private http: HttpClient,

@@ -1,11 +1,11 @@
-import { gameReducer, initialState } from './games.reducer';
+import { gameDetailsReducer, initialState } from './game-details.reducer';
 
-describe('Games Reducer', () => {
+describe('GameDetails Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
 
-      const result = gameReducer(initialState, action);
+      const result = gameDetailsReducer(initialState, action);
 
       expect(result).toBe(initialState);
     });

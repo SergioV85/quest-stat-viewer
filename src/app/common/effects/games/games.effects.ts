@@ -3,7 +3,6 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { from } from 'rxjs/observable/from';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { catchError, exhaustMap, map, finalize } from 'rxjs/operators';
-import { pipe, transpose, fromPairs } from 'ramda';
 
 import { ApiService } from '@app-common/services/api/api.service';
 import * as GamesActions from '@app-common/actions/games.actions';

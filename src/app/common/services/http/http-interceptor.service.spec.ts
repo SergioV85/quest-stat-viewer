@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { HttpInterceptorService } from './http-interceptor.service';
+import { HttpCacheInterceptorService } from './http-interceptor.service';
 
 describe('HttpInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HttpInterceptorService]
+      providers: [HttpCacheInterceptorService]
     });
   });
 
-  it('should be created', inject([HttpInterceptorService], (service: HttpInterceptorService) => {
+  it('should be created', inject([HttpCacheInterceptorService], (service: HttpCacheInterceptorService) => {
     expect(service).toBeTruthy();
   }));
 });
