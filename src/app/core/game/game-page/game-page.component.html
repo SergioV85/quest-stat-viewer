@@ -2,45 +2,43 @@
   <div class="game-page__header row align-items-center">
     <div class="col-8">
       <form [formGroup]="tabsForm">
-        <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group"
-            btnRadioGroup
-            formControlName="activeTabButtons">
-          <label 
+        <div class="game-page__viewSelector game-page__viewSelector--buttons btn-group">
+          <button type="button"
               class="btn game-page__viewButton"
               [ngClass]="{
-                'btn-outline-primary': selectedView !== 'total',
-                'btn-primary': selectedView === 'total'
+                'btn-outline-primary': (activeTab$ | async) !== 'total',
+                'btn-primary': (activeTab$ | async) === 'total'
               }"
-              btnRadio="total">
+              (click)="changeView('total')">
             Сумарная статистика
-          </label>
-          <label 
+          </button>
+          <button type="button"
               class="btn game-page__viewButton" 
               [ngClass]="{
-                'btn-outline-primary': selectedView !== 'level_new',
-                'btn-primary': selectedView === 'level_new'
+                'btn-outline-primary': (activeTab$ | async) !== 'general-stat',
+                'btn-primary': (activeTab$ | async) === 'general-stat'
               }"
-              btnRadio="level">
+              (click)="changeView('general-stat')">
             Обычная статистика
-          </label>
-          <label 
+          </button>
+          <button type="button"
               class="btn game-page__viewButton"
               [ngClass]="{
-                'btn-outline-primary': selectedView !== 'team',
-                'btn-primary': selectedView === 'team'
+                'btn-outline-primary': (activeTab$ | async) !== 'team-stat',
+                'btn-primary': (activeTab$ | async) === 'team-stat'
               }"
-              btnRadio="team">
+              (click)="changeView('team-stat')">
             Статистика по командам
-          </label>
-          <label 
+          </button>
+          <button type="button"
               class="btn game-page__viewButton"
               [ngClass]="{
-                'btn-outline-primary': selectedView !== 'monitoring',
-                'btn-primary': selectedView === 'monitoring'
+                'btn-outline-primary': (activeTab$ | async) !== 'monitoring',
+                'btn-primary': (activeTab$ | async) === 'monitoring'
               }"
-              btnRadio="monitoring">
+              (click)="changeView('monitoring')">
             Мониторинг
-          </label>
+          </button>
         </div>
         <mat-select 
             class="game-page__viewSelector game-page__viewSelector--select"

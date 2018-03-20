@@ -36,6 +36,7 @@ import { ApiService } from '@app-common/services/api/api.service';
 import { DeviceService } from '@app-common/services/helpers/device.service';
 import { Store, select } from '@ngrx/store';
 import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
+import * as RouterReducer from '@app-common/reducers/router/router.reducer';
 
 @Component({
   selector: 'game-page',
@@ -43,9 +44,10 @@ import * as GameDetailsReducer from '@app-common/reducers/game-details/game-deta
   styleUrls: ['game-page.component.scss']
 })
 export class GamePageComponent implements OnInit, OnDestroy {
-  public tabsForm: FormGroup;
+  public activeTab$: Observable<string>;
   public isGameDataLoading$: Observable<boolean>;
 
+  public tabsForm: FormGroup;
   public gameData: QuestStat.GameData;
   public dataRequested: boolean;
   public errorMessage: string;
@@ -66,6 +68,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.isGameDataLoading$ = this.store.pipe(
       select(GameDetailsReducer.getLoadingState),
+      takeUntil(this.ngUnsubscribe)
+    );
+    this.activeTab$ = this.store.pipe(
+      select(RouterReducer.getActiveTab),
       takeUntil(this.ngUnsubscribe)
     );
 
@@ -250,6 +256,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
     if (value === 'monitoring') {
       this.getMonitoringData();
     }
+  }
+
+  public changeView(newTab) {
+    this.router.navigate(['./', newTab], { relativeTo: this.route });
   }
 
   private sortFinishResults(finishStat: QuestStat.TeamData[]): QuestStat.TeamData[] {

@@ -70,6 +70,7 @@ declare namespace QuestStat {
     interface State {
       games: Games;
       gameDetails: GameDetails;
+      router: any;
     }
   }
 }

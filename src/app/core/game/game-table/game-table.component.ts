@@ -1,6 +1,11 @@
-import { TeamCardComponent } from './../team-card/team-card.component';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LevelType } from '@app-common/services/helpers/level-type.enum';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { Observable } from 'rxjs/Observable';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+import { Store, select } from '@ngrx/store';
+
 import {
   add,
   addIndex,
@@ -27,12 +32,16 @@ import {
   without
 } from 'ramda';
 
+import * as GameDetailsActions from '@app-common/actions/game-details.actions';
+import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
+import { LevelType } from '@app-common/services/helpers/level-type.enum';
+
 @Component({
   selector: 'game-table',
   templateUrl: 'game-table.component.html',
   styleUrls: ['game-table.component.scss']
 })
-export class GameTableComponent {
+export class GameTableComponent implements OnInit, OnDestroy {
   @Input() public levels: QuestStat.LevelData[];
   @Input() public finishList: QuestStat.TeamData[];
   @Input() public set teamsStat(teamSt: QuestStat.GroupedTeamData[]) {
@@ -44,13 +53,27 @@ export class GameTableComponent {
   @Input() public set levelsStatRow(levelSt: QuestStat.TeamData[][]) {
     this.levelStatList = this.appendFinishStat(levelSt);
   }
-  @Input() public selectedTab = 'team';
   @Output() public changeLevelType = new EventEmitter<{}>();
   @Output() public removeLevel = new EventEmitter<{}>();
+  public selectedTab: string;
   public teamList: QuestStat.GroupedTeamData[] = [];
   public levelStatList: QuestStat.TeamData[][] = [];
   public LevelType = LevelType;
   private selectedTeams: number[] = [];
+
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
+
+  constructor(private store: Store<QuestStat.Store.State>,
+              private route: ActivatedRoute) {}
+
+  public ngOnInit() {
+    this.selectedTab = this.route.snapshot.params.path;
+  }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   public isLevelRemoved(teamStat: QuestStat.TeamData): boolean {
     return pathOr(false, [teamStat.levelIdx, 'removed'] , this.levels);
