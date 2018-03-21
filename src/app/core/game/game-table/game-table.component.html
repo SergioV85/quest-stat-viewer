@@ -2,41 +2,39 @@
   <div class="gameTable__container">
     <div class="gameTable__table-container">
       <div class="gameTable__stat card-deck">
-        <ng-container *ngIf="(levels$ | async) as levels">
-          <ng-template ngFor
-              [ngForOf]="levels"
-              let-level
-              let-isLast="last"
-              let-idx="index">
-            <level-card
-                class="gameTable__levelName gameTable__levelName--{{ LevelType[level.type] }} card"
-                [ngClass]="{
-                  'gameTable__levelName--dismised': level.removed,
-                  'mx-1': !isLast,
-                  'gameTable__levelName--finishResult': isLast,
-                  'mr-4': idx === (levels.length - 2)
-                }"
-                [levelInfo]="level"
-                [isLastLevel]="isLast"
-                (levelTypeChange)="changeLevelType.emit({ type: $event, level: level.level})"
-                (levelStateChange)="removeLevel.emit({ removed: $event, level: level.level})">
-            </level-card>
-          </ng-template>
-        </ng-container>
+        <ng-template ngFor
+            [ngForOf]="levels"
+            let-level
+            let-isLast="last"
+            let-idx="index">
+          <level-card
+              class="gameTable__levelName gameTable__levelName--{{ LevelType[level.type] }} card"
+              [ngClass]="{
+                'gameTable__levelName--dismised': level.removed,
+                'mx-1': !isLast,
+                'gameTable__levelName--finishResult': isLast,
+                'mr-4': idx === (levels.length - 2)
+              }"
+              [levelInfo]="level"
+              [isLastLevel]="isLast"
+              (levelTypeChange)="changeLevelType({ type: $event, level: level.level})"
+              (levelStateChange)="removeLevel({ removed: $event, level: level.level})">
+          </level-card>
+        </ng-template>
       </div>
-      <ng-container *ngIf="(statData$ | async | getProp:(activeTab$ | async):false) as rows">
+      <ng-container *ngIf="(statData | getProp:(activeTab$ | async):false) as rows">
         <ng-template ngFor
             [ngForOf]="rows"
             let-row
             let-iddx="index">
-          <div class="gameTable__stat card-deck" >
+          <div class="gameTable__stat card-deck">
             <ng-template ngFor
                 [ngForOf]="row"
                 let-team
                 let-isLast="last"
                 let-idx="index">
               <team-card class="card gameTable__team gameTable__team--inRow"
-                  [class.gameTable__team--dismised]="levels$ | async | checkLevelRemoval:team"
+                  [class.gameTable__team--dismised]="levels | checkLevelRemoval:team"
                   [class.gameTable__team--timeout]="team.timeout"
                   [class.gameTable__team--finishResult]="isLast"
                   [class.mx-1]="!isLast"

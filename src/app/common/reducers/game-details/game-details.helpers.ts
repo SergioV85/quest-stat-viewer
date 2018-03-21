@@ -1,6 +1,7 @@
 import {
   add,
   addIndex,
+  adjust,
   append,
   ascend,
   complement,
@@ -11,6 +12,9 @@ import {
   dropLast,
   filter,
   find,
+  findIndex,
+  head,
+  isNil,
   length,
   map,
   merge,
@@ -26,8 +30,36 @@ import {
   sortWith,
   subtract,
   sum,
-  uniq
+  tap,
+  uniq,
+  update
 } from 'ramda';
+
+const adjustBonusTime = (isRemoved, teamStat) => {
+  if (isNil(teamStat)) {
+    return;
+  }
+  return merge(teamStat, {
+    additionsTime: isRemoved
+      ? add(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
+      : subtract(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
+  });
+};
+const replaceTeamStatInList = (existedLevel, updatedStatByTeams, teamStats) => {
+  const teamId = prop('id', head(teamStats) as any);
+  const indexInList = findIndex(propEq('levelIdx', existedLevel.position))(teamStats);
+  if (indexInList < 0) {
+    return {
+      id: teamId,
+      data: teamStats
+    };
+  }
+  const newStat = find(propEq('id', teamId))(updatedStatByTeams);
+  return {
+    id: teamId,
+    data: update(indexInList, newStat, teamStats)
+  };
+};
 
 export const appendFinishStat = (finishList: QuestStat.TeamData[], levelsStat: QuestStat.TeamData[][]): QuestStat.TeamData[][] => {
   const indexedMap = addIndex(map);
@@ -45,7 +77,7 @@ export const appendFinishStatToTeam = (finishList: QuestStat.TeamData[], sortedT
   }, sortedTeamStat);
 };
 export const getMatchedLevels = (selectedType, state) => pipe(
-  path(['gameData', 'stat', 'Levels']),
+  prop('levels'),
   filter(propEq('type', selectedType)),
   filter(complement(prop('removed'))),
   map(prop('position'))
@@ -95,6 +127,8 @@ export const sortFinishResults = (finishStat: QuestStat.TeamData[]): QuestStat.T
   ])(finishStat);
 };
 export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] => {
+  console.log('call sortTeamList');
+
   const closedLevelQuantity = pipe(
     prop('data'),
     length
@@ -113,10 +147,12 @@ export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamDat
   };
 
   const calculateFullTime = (teamSource: QuestStat.TeamData[]) => {
+    console.log('teamSource', teamSource);
     return pipe(
       map((team: QuestStat.TeamData) => subtract(propOr(0, 'duration', team), propOr(0, 'additionsTime', team))),
       sum,
-      add(negate(curry(getTeamExtraBonus)((teamSource)) as any))
+      add(negate(curry(getTeamExtraBonus)((teamSource)) as any)),
+      tap((data) => console.log('data after add data', data))
     )(teamSource);
   };
 
@@ -130,4 +166,58 @@ export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamDat
     ascend(sumDurations)
   ])(sortingSource) as QuestStat.GroupedTeamData[];
 };
+export const updateLevels = (updatedLevel, currentLevels: QuestStat.LevelData[]): QuestStat.LevelData[] => {
+  const levelIdx = findIndex(propEq('level', updatedLevel.level), currentLevels);
+  return adjust((oldLevel) => merge(oldLevel, updatedLevel), levelIdx, currentLevels);
+};
+export const updateStatByLevel = (removedLevel, currentStat) => {
+  return map((levelRow) => {
+    if (removedLevel.position > levelRow.length) {
+      return levelRow;
+    }
+    return adjust(curry(adjustBonusTime)(removedLevel.removed), removedLevel.position, levelRow);
+  }, currentStat);
+};
+export const updateStatByTeams = (removedLevel, currentTeamStat) => {
+  const updatedStatByTeams = pipe(
+    map(
+      pipe(
+        prop('data'),
+        find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === removedLevel.position),
+        curry(adjustBonusTime)(removedLevel.removed),
+      )
+    ),
+    filter(complement(isNil))
+  )(currentTeamStat) as QuestStat.GroupedTeamData[];
 
+  return pipe(
+    map(
+      pipe(
+        prop('data'),
+        curry(replaceTeamStatInList)(removedLevel)(updatedStatByTeams)
+      )
+    ),
+    filter(complement(isNil))
+  )(currentTeamStat) as QuestStat.GroupedTeamData[];
+};
+export const updateFinishStat = (removedLevel, dataByTeams, finishResults) => {
+  console.log('here');
+  const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
+    const existedAdditionsTime = propOr(0, 'additionsTime', teamFinishResult) as number;
+    const levelTime = pipe(
+      find(propEq('id', teamFinishResult.id)),
+      prop('data'),
+      find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === removedLevel.position),
+      pathOr(0, ['duration'])
+    )(dataByTeams);
+    const newAdditionalTime = removedLevel.removed
+      ? add(existedAdditionsTime, levelTime)
+      : subtract(existedAdditionsTime, levelTime);
+
+    return merge(teamFinishResult, {
+      additionsTime: newAdditionalTime
+    });
+  }, finishResults) as QuestStat.TeamData[];
+
+  return sortFinishResults(updateFinishResults);
+};

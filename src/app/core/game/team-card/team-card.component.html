@@ -1,4 +1,4 @@
-<i *ngIf="viewSettings.showBestTime && bestTime"
+<i *ngIf="bestTime"
     class="team-card__bestTimeIcon fa fa-trophy fa-lg"
     matTooltip="Лучший результат на уровне">
 </i>
@@ -17,9 +17,6 @@
   Таймаут
 </p>
 <p class="team-card__duration"> {{ duration | formatDuration }} </p>
-<p *ngIf="viewSettings.showLeaderGap" class="team-card__time">
-  {{ levelTime | formatDateTime: 'time' }}
-</p>
 <p class="team-card__time"> {{ levelTime | formatDateTime: 'time' }} </p>
 <p *ngIf="additionsTime" class="team-card__additionalTime"
     [ngClass]="{

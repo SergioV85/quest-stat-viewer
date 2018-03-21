@@ -46,6 +46,7 @@ import * as RouterReducer from '@app-common/reducers/router/router.reducer';
 export class GamePageComponent implements OnInit, OnDestroy {
   public activeTab$: Observable<string>;
   public isGameDataLoading$: Observable<boolean>;
+  public hasPendingChanges$: Observable<boolean>;
 
   public tabsForm: FormGroup;
   public gameData: QuestStat.GameData;
@@ -74,6 +75,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
       select(RouterReducer.getActiveTab),
       takeUntil(this.ngUnsubscribe)
     );
+    this.hasPendingChanges$ = this.store.pipe(
+      select(GameDetailsReducer.hasPendingChanges),
+      takeUntil(this.ngUnsubscribe)
+    );
 
     this.tabsForm = this.formBuilder.group({
       activeTabButtons: 'total',
@@ -84,23 +89,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  public updateLevel(updatedLevel) {
-    const levelIdx = findIndex(propEq('level', updatedLevel.level))(this.gameData.stat.Levels);
-    const newData = adjust((oldLevel) => merge(oldLevel, updatedLevel), levelIdx, this.gameData.stat.Levels);
-    this.gameData.stat.Levels = newData;
-  }
-
-  public get changesStatus() {
-
-    return true;
-    /*
-    return equals(
-      map(prop('type'))(this.gameData.stat.Levels),
-      map(prop('type'))(this.serverData.stat.Levels)
-    );
-    */
   }
 
   public saveChanges() {
@@ -158,88 +146,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
       });
   }
 
-  public removeLevelFromStat({ removed, level }) {
-    this.updateLevel({ removed, level });
-    const existedLevel = find(propEq('level', level))(this.gameData.stat.Levels) as QuestStat.LevelData;
-
-    const adjustBonusTime = (teamStat) => {
-      if (isNil(teamStat)) {
-        return;
-      }
-
-      return merge(teamStat, {
-        additionsTime: removed
-          ? add(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
-          : subtract(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
-      });
-    };
-
-    const updatedStatByTeams = pipe(
-      map(
-        pipe(
-          prop('data'),
-          find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === existedLevel.position),
-          adjustBonusTime,
-        )
-      ),
-      filter(complement(isNil))
-    )(this.gameData.stat.DataByTeam) as QuestStat.GroupedTeamData[];
-
-    const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
-      const existedAdditionsTime = propOr(0, 'additionsTime', teamFinishResult) as number;
-      const levelTime = pipe(
-        find(propEq('id', teamFinishResult.id)),
-        prop('data'),
-        find((teamStat: QuestStat.TeamData) => teamStat.levelIdx === existedLevel.position),
-        pathOr(0, ['duration'])
-      )(this.gameData.stat.DataByTeam);
-      const newAdditionalTime = removed
-        ? add(existedAdditionsTime, levelTime)
-        : subtract(existedAdditionsTime, levelTime);
-
-      return merge(teamFinishResult, {
-        additionsTime: newAdditionalTime
-      });
-    }, this.gameData.stat.FinishResults);
-
-    const replaceTeamStatInList = (teamStats) => {
-      const teamId = prop('id', head(teamStats) as any);
-      const indexInList = findIndex(propEq('levelIdx', existedLevel.position))(teamStats);
-      if (indexInList < 0) {
-        return {
-          id: teamId,
-          data: teamStats
-        };
-      }
-      const newStat = find(propEq('id', teamId))(updatedStatByTeams);
-      return {
-        id: teamId,
-        data: update(indexInList, newStat, teamStats)
-      };
-    };
-
-    const newTeamsData = pipe(
-      map(
-        pipe(
-          prop('data'),
-          replaceTeamStatInList
-        )
-      ),
-      filter(complement(isNil))
-    )(this.gameData.stat.DataByTeam) as QuestStat.GroupedTeamData[];
-
-    const newLevelsRowData = map((levelRow) => {
-      if (existedLevel.position > levelRow.length) {
-        return levelRow;
-      }
-      return adjust(adjustBonusTime, existedLevel.position, levelRow);
-    }, this.gameData.stat.DataByLevelsRow);
-
-    this.gameData.stat.DataByLevelsRow = newLevelsRowData;
-    this.gameData.stat.DataByTeam = newTeamsData;
-    this.gameData.stat.FinishResults = this.sortFinishResults(updateFinishResults);
-  }
-
   public changeViewType({ value }) {
     this.selectedView = value;
     console.log('changeViewType', value);
@@ -253,22 +159,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.router.navigate(['./', newTab], { relativeTo: this.route });
   }
 
-  private sortFinishResults(finishStat: QuestStat.TeamData[]): QuestStat.TeamData[] {
-    const closedLevels = (team: QuestStat.TeamData) => pipe(
-      find(propEq('id', team.id)),
-      prop('closedLevels')
-    )(finishStat);
-
-    const calculateFullTime = (team: QuestStat.TeamData) => subtract(
-      propOr(0, 'duration', team),
-      propOr(0, 'additionsTime', team)
-    );
-
-    return sortWith([
-      descend(closedLevels),
-      ascend(calculateFullTime)
-    ])(finishStat);
-  }
 
   private getMonitoringData() {
     const request = Object.assign({}, this.route.snapshot.params as QuestStat.GameRequest);

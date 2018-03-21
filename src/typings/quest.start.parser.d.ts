@@ -63,8 +63,12 @@ declare namespace QuestStat {
 
     interface GameDetails {
       isLoading?: boolean;
-      gameData?: GameData;
+      levels?: LevelData[];
+      dataByTeam?: GroupedTeamData[];
+      dataByLevels?: TeamData[][];
+      finishResults?: TeamData[];
       selectedTotalTab?: number;
+      originalData?: GameData
     }
 
     interface State {

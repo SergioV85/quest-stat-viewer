@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { takeUntil } from 'rxjs/operators';
@@ -19,15 +19,18 @@ import { LevelType } from '@app-common/services/helpers/level-type.enum';
 @Component({
   selector: 'game-table',
   templateUrl: 'game-table.component.html',
-  styleUrls: ['game-table.component.scss']
+  styleUrls: ['game-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameTableComponent implements OnInit, OnDestroy {
-  @Output() public changeLevelType = new EventEmitter<{}>();
-  @Output() public removeLevel = new EventEmitter<{}>();
+  // @Output() public changeLevelType = new EventEmitter<{}>();
+  // @Output() public removeLevel = new EventEmitter<{}>();
   public activeTab$: Observable<string>;
   public levels$: Observable<QuestStat.LevelData[]>;
   public statData$: Observable<{ teams: QuestStat.TeamData[][], levels: QuestStat.TeamData[][] }>;
 
+  public levels: QuestStat.LevelData[];
+  public statData: { teams: QuestStat.TeamData[][], levels: QuestStat.TeamData[][] };
   public LevelType = LevelType;
   private selectedTeams: number[] = [];
 
@@ -44,10 +47,16 @@ export class GameTableComponent implements OnInit, OnDestroy {
       select(GameDetailsReducer.getLevels),
       takeUntil(this.ngUnsubscribe)
     );
+    this.levels$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((levels) => this.levels = levels);
     this.statData$ = this.store.pipe(
       select(GameDetailsReducer.getStatData),
       takeUntil(this.ngUnsubscribe)
     );
+    this.statData$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => this.statData = data);
   }
 
   public ngOnDestroy() {
@@ -66,5 +75,12 @@ export class GameTableComponent implements OnInit, OnDestroy {
     } else {
       this.selectedTeams.push(teamStat.id);
     }
+  }
+
+  public changeLevelType({ type, level }: { type: number, level: number }) {
+    this.store.dispatch(new GameDetailsActions.ChangeLevelTypeAction({ type, level }));
+  }
+  public removeLevel({ removed, level }: { removed: boolean, level: number }) {
+    this.store.dispatch(new GameDetailsActions.RemoveLevelFromStatAction({ removed, level }));
   }
 }

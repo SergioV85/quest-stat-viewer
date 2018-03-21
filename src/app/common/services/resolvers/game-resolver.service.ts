@@ -29,11 +29,11 @@ export class GameDataResolver implements Resolve<any> {
       .pipe(
         select('gameDetails'),
         tap((data: QuestStat.Store.GameDetails) => {
-          if (isNil(prop('gameData', data)) && !data.isLoading) {
+          if (isNil(prop('finishResults', data)) && !data.isLoading) {
             this.store.dispatch(new GameDetailsActions.RequestGameDetailsAction({ domain, id }));
           }
         }),
-        filter((data: QuestStat.Store.GameDetails) => !isNil(prop('gameData', data))),
+        filter((data: QuestStat.Store.GameDetails) => !isNil(prop('finishResults', data))),
         take(1)
       );
   }

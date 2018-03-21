@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { SharedService } from './../../../common/services/shared.service';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'team-card',
@@ -7,7 +6,7 @@ import { SharedService } from './../../../common/services/shared.service';
   styleUrls: ['team-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TeamCardComponent implements OnInit {
+export class TeamCardComponent  {
   @Input() public additionsTime: number;
   @Input() public bestTime: boolean;
   @Input() public duration: number;
@@ -16,13 +15,4 @@ export class TeamCardComponent implements OnInit {
   @Input() public timeout: boolean;
   @Input() public place: number;
   @Input() public removedLevel: boolean;
-  public viewSettings: QuestStat.ViewSettings = {};
-
-  constructor(private sharedService: SharedService) {}
-
-  public ngOnInit() {
-    this.sharedService.teamViewSettings.subscribe((settings) => {
-      this.viewSettings = settings;
-    });
-  }
 }

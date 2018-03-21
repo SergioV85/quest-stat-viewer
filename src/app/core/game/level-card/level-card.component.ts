@@ -1,11 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { UtilService } from '@app-common/services/helpers/util.service';
 import { LevelType } from '@app-common/services/helpers/level-type.enum';
 
 @Component({
   selector: 'level-card',
   templateUrl: 'level-card.component.html',
-  styleUrls: ['level-card.component.scss']
+  styleUrls: ['level-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LevelCardComponent {
   @Input() public set levelInfo(level: QuestStat.LevelData) {

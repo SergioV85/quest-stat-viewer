@@ -60,9 +60,9 @@
         <i class="game-page__changesContainer-icon fa fa-refresh fa-lg" matTooltip="Обновить данные"></i>
         <span class="game-page__changesContainer-label">Обновить данные</span>
       </button>
-      <span class="game-page__changesStatus" *ngIf="!changesStatus">Изменения не сохраненны</span>
+      <span class="game-page__changesStatus" *ngIf="hasPendingChanges$ | async">Изменения не сохраненны</span>
       <button class="game-page__saveChangesButton" 
-          *ngIf="!changesStatus" 
+          *ngIf="hasPendingChanges$ | async" 
           mat-raised-button 
           color="primary"
           [disabled]="disableSaveButton"
