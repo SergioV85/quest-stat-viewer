@@ -85,7 +85,7 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
         head
       )(levels);
       return merge(gameDetailsState,
-        { levels, dataByTeam, dataByLevels, finishResults, isLoading: false, selectedTotalTab, originalData: serverGameData }
+        { levels, dataByTeam, dataByLevels, finishResults, isLoading: false, selectedTotalTab, originalLevels: levels }
       );
     }
     case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsError: {
@@ -152,6 +152,6 @@ export const getStatData = createSelector(selectGameDetailsStore, (state: QuestS
 export const hasPendingChanges = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   !equals(
     map(prop('type'))(state.levels),
-    map(prop('type'))(state.originalData.stat.Levels)
+    map(prop('type'))(state.originalLevels)
   )
 );

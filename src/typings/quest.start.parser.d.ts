@@ -68,7 +68,7 @@ declare namespace QuestStat {
       dataByLevels?: TeamData[][];
       finishResults?: TeamData[];
       selectedTotalTab?: number;
-      originalData?: GameData
+      originalLevels?: LevelData[]
     }
 
     interface State {
