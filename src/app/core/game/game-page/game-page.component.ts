@@ -147,27 +147,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   public changeViewType({ value }) {
-    this.selectedView = value;
-    console.log('changeViewType', value);
     this.router.navigate(['./', value], { relativeTo: this.route });
-    if (value === 'monitoring') {
-      this.getMonitoringData();
-    }
   }
 
   public changeView(newTab) {
     this.router.navigate(['./', newTab], { relativeTo: this.route });
-  }
-
-
-  private getMonitoringData() {
-    const request = Object.assign({}, this.route.snapshot.params as QuestStat.GameRequest);
-    this.apiService.getMonitoringData(request)
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe((data) => {
-        console.log('Monitoring data', data);
-      });
   }
 }

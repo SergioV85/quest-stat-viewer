@@ -5,11 +5,13 @@ import { SharedServicesModule } from '@app-common/services/shared-services.modul
 import { GamesEffects } from './games/games.effects';
 import { GameDetailsEffects } from './game-details/game-details.effects';
 import { NotificationEffects } from './notification/notification.effects';
+import { MonitoringEffects } from './monitoring/monitoring.effects';
 
 const effects = [
   GamesEffects,
   GameDetailsEffects,
-  NotificationEffects
+  NotificationEffects,
+  MonitoringEffects
 ];
 
 @NgModule({

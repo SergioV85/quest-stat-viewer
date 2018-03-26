@@ -7,6 +7,7 @@ import { SharedServicesModule } from '@app-common/services/shared-services.modul
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
 
 import { GameDataResolver } from '@app-common/services/resolvers/game-resolver.service';
+import { GameMonitoringResolver } from '@app-common/services/resolvers/monitoring-resolver.service';
 
 import { GamePageComponent } from './game-page';
 import { TotalTableComponent } from './total-table';
@@ -37,7 +38,10 @@ export const routes: Route[] = [
       },
       {
         path: 'monitoring',
-        component: MonitoringComponent
+        component: MonitoringComponent,
+        resolve: {
+          monitoring: GameMonitoringResolver
+        },
       },
       {
         path: '',

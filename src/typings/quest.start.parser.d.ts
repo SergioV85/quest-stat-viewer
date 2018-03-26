@@ -55,6 +55,36 @@ declare namespace QuestStat {
     showBestTime?: boolean
   }
 
+  namespace Monitoring {
+    interface CodeEntry {
+      code: string;
+      isRemovedLevel: boolean;
+      isSuccess: boolean;
+      isTimeout: boolean;
+      level: number;
+      team: string;
+      time: string;
+      user: string;
+    }
+    interface GroupedEntries {
+      allEntries: number;
+      codes: CodeEntry[];
+      correct: number;
+      percent: number;
+    }
+    interface TeamData {
+      [key: string]: GroupedEntries[];
+    }
+    interface TotalStat {
+      team: string;
+      data: GroupedEntries[];
+    }
+    interface Response {
+      byTeams?: TeamData;
+      totalStat?: TeamData;
+    }
+  }
+
   namespace Store {
     interface Games {
       isLoading?: boolean;
@@ -71,9 +101,17 @@ declare namespace QuestStat {
       originalLevels?: LevelData[]
     }
 
+    interface Monitoring {
+      isLoading?: boolean;
+      dataLoaded: boolean;
+      totalStat?: Monitoring.TotalStat;
+      byTeams?: Monitoring.TeamData;
+    }
+
     interface State {
       games: Games;
       gameDetails: GameDetails;
+      monitoring: Monitoring
       router: any;
     }
   }

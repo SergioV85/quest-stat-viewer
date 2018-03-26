@@ -13,8 +13,8 @@ const GAME_MONITORING_KEY = makeStateKey<QuestStat.GameData>('game.monitoring');
 @Injectable()
 export class ApiService {
   private isBrowser: boolean;
-  private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
-  // private serverAddress = 'http://localhost:3000';
+  // private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
+  private serverAddress = 'http://localhost:3000';
 
   constructor(@Inject(PLATFORM_ID) private platformId,
               private http: HttpClient,
@@ -62,14 +62,15 @@ export class ApiService {
 
   public getMonitoringData(gameData: QuestStat.GameRequest) {
     if (this.isBrowser && this.transferState.hasKey(GAME_MONITORING_KEY)) {
-      const singleGame = this.transferState.get<QuestStat.GameData>(GAME_MONITORING_KEY, null);
+      const gameMonitoring = this.transferState.get<QuestStat.Monitoring.Response>(GAME_MONITORING_KEY, null);
       this.transferState.remove(GAME_MONITORING_KEY);
-      return of(singleGame);
+      return of(gameMonitoring);
     }
-    return this.http.get<QuestStat.GameData>(`${this.serverAddress}/monitoring`, { params: this.convertHttpParams(gameData) })
+    return this.http
+      .get<QuestStat.Monitoring.Response>(`${this.serverAddress}/game-monitoring`, { params: this.convertHttpParams(gameData) })
       .pipe(tap((response) => {
         if (!this.isBrowser) {
-          this.transferState.set<QuestStat.GameData>(GAME_MONITORING_KEY, response);
+          this.transferState.set<QuestStat.Monitoring.Response>(GAME_MONITORING_KEY, response);
         }
       }));
   }
