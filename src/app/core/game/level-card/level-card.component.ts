@@ -24,32 +24,32 @@ export class LevelCardComponent {
     {
       type: 0,
       name: 'Неопределен',
-      icon: 'fa-question'
+      icon: 'fas fa-question'
     },
     {
       type: 1,
       name: 'Поиск',
-      icon: 'fa-search'
+      icon: 'fas fa-search'
     },
     {
       type: 2,
       name: 'Логика',
-      icon: 'fa-lightbulb-o'
+      icon: 'far fa-lightbulb'
     },
     {
       type: 3,
       name: 'Доезд',
-      icon: 'fa-car'
+      icon: 'fas fa-car'
     },
     {
       type: 4,
       name: 'Агентский',
-      icon: 'fa-user'
+      icon: 'far fa-user'
     },
     {
       type: 5,
       name: 'Заглушка',
-      icon: 'fa-clock-o'
+      icon: 'far fa-clock'
     },
   ];
   public levelData: QuestStat.LevelData;

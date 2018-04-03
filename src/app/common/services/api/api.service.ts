@@ -52,7 +52,7 @@ export class ApiService {
       }));
   }
 
-  public saveLevelSettings({ gameId, levelData}) {
+  public saveLevelSettings({ gameId, levelData }) {
     return this.http.put<QuestStat.LevelData[]>(`${this.serverAddress}/games/${gameId}/update-levels`, levelData, {
       headers: {
         Authorization: 'quest'

@@ -5,23 +5,23 @@ export class UtilService {
     let icon = '';
     switch (type) {
       case LevelType.Search:
-        icon = 'fa-search';
+        icon = 'fas fa-search';
         break;
       case LevelType.Logic:
-        icon = 'fa-lightbulb-o';
+        icon = 'far fa-lightbulb';
         break;
       case LevelType.Drive:
-        icon = 'fa-car';
+        icon = 'fas fa-car';
         break;
       case LevelType.Agent:
-        icon = 'fa-user';
+        icon = 'far fa-user';
         break;
       case LevelType.Waiting:
-        icon = 'fa-clock-o';
+        icon = 'far fa-clock';
         break;
       case LevelType.General:
       default:
-        icon = 'fa-question';
+        icon = 'fas fa-question';
         break;
     }
     return icon;

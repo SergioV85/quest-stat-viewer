@@ -36,9 +36,8 @@ declare namespace QuestStat {
   interface GameData {
     info: GameInfo,
     stat: {
-      DataByLevels: GroupedTeamData[];
       DataByTeam: GroupedTeamData[];
-      DataByLevelsRow: TeamData[][];
+      DataByLevels: TeamData[][];
       FinishResults: TeamData[];
       Levels: LevelData[];
     };
@@ -93,6 +92,7 @@ declare namespace QuestStat {
 
     interface GameDetails {
       isLoading?: boolean;
+      gameInfo?: GameInfo;
       levels?: LevelData[];
       dataByTeam?: GroupedTeamData[];
       dataByLevels?: TeamData[][];

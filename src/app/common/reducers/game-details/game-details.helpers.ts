@@ -127,8 +127,6 @@ export const sortFinishResults = (finishStat: QuestStat.TeamData[]): QuestStat.T
   ])(finishStat);
 };
 export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamData[]): QuestStat.GroupedTeamData[] => {
-  console.log('call sortTeamList');
-
   const closedLevelQuantity = pipe(
     prop('data'),
     length
@@ -146,15 +144,12 @@ export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamDat
     )(finishList) as number;
   };
 
-  const calculateFullTime = (teamSource: QuestStat.TeamData[]) => {
-    console.log('teamSource', teamSource);
-    return pipe(
+  const calculateFullTime = (teamSource: QuestStat.TeamData[]) =>
+    pipe(
       map((team: QuestStat.TeamData) => subtract(propOr(0, 'duration', team), propOr(0, 'additionsTime', team))),
       sum,
-      add(negate(curry(getTeamExtraBonus)((teamSource)) as any)),
-      tap((data) => console.log('data after add data', data))
+      add(negate(curry(getTeamExtraBonus)((teamSource)) as any))
     )(teamSource);
-  };
 
   const sumDurations = pipe(
     prop('data'),
@@ -201,7 +196,6 @@ export const updateStatByTeams = (removedLevel, currentTeamStat) => {
   )(currentTeamStat) as QuestStat.GroupedTeamData[];
 };
 export const updateFinishStat = (removedLevel, dataByTeams, finishResults) => {
-  console.log('here');
   const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
     const existedAdditionsTime = propOr(0, 'additionsTime', teamFinishResult) as number;
     const levelTime = pipe(

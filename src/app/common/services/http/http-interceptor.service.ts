@@ -13,7 +13,7 @@ export class HttpCacheInterceptorService implements HttpInterceptor {
   constructor() {}
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method !== 'GET' || req.params.has('forceRefresh')) {
+    if (req.method !== 'GET' || req.params.has('force')) {
       return next.handle(req);
     }
 

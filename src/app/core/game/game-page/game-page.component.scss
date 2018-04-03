@@ -20,32 +20,6 @@
   &__viewSelector {
     margin: 0 5px;
     width: 100%;
-
-    &--buttons {
-      display: none;
-
-      @include tablet {
-        display: inline-flex;
-      }
-
-      @include desktop {
-        display: inline-flex;
-      }
-    }
-
-    &--select {
-      box-sizing: border-box;
-      padding: 0 10px;
-      display: inline-block;
-
-      @include tablet {
-        display: none;
-      }
-
-      @include desktop {
-        display: none;
-      }
-    }    
   }
 
   &__viewButton {

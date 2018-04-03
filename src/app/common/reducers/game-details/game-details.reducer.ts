@@ -52,6 +52,16 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
     case GameDetailsActions.GameDetailsActionTypes.CleanGameData: {
       return initialState;
     }
+    case GameDetailsActions.GameDetailsActionTypes.GetLatestDataFromEn: {
+      const emptyGameData = {
+        originalLevels: [],
+        levels: [],
+        dataByTeam: [],
+        dataByLevels: [],
+        finishResults: []
+      };
+      return merge(gameDetailsState, emptyGameData);
+    }
     case GameDetailsActions.GameDetailsActionTypes.RemoveLevelFromStat: {
       const removedLevel = action.payload;
 
@@ -70,14 +80,16 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
 
       return merge(gameDetailsState, { levels, dataByLevels, dataByTeam, finishResults });
     }
-    case GameDetailsActions.GameDetailsActionTypes.RequestGameDetails: {
+    case GameDetailsActions.GameDetailsActionTypes.RequestGameDetails:
+    case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypes: {
       return merge(gameDetailsState, { isLoading: true });
     }
     case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsComplete: {
       const serverGameData = action.payload;
+      const gameInfo = path(['info'], serverGameData);
       const levels = path(['stat', 'Levels'], serverGameData);
       const dataByTeam = path(['stat', 'DataByTeam'], serverGameData);
-      const dataByLevels = path(['stat', 'DataByLevelsRow'], serverGameData);
+      const dataByLevels = path(['stat', 'DataByLevels'], serverGameData);
       const finishResults = sortFinishResults(serverGameData.stat.FinishResults);
 
       const selectedTotalTab = pipe(
@@ -85,10 +97,12 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
         head
       )(levels);
       return merge(gameDetailsState,
-        { levels, dataByTeam, dataByLevels, finishResults, isLoading: false, selectedTotalTab, originalLevels: levels }
+        { gameInfo, levels, dataByTeam, dataByLevels, finishResults, isLoading: false, selectedTotalTab, originalLevels: levels }
       );
     }
-    case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsError: {
+    case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsError:
+    case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypesComplete:
+    case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypesError: {
       return merge(gameDetailsState, { isLoading: false });
     }
     default:
@@ -101,6 +115,12 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
 export const selectGameDetailsStore = (state: QuestStat.Store.State) => state.gameDetails;
 export const getActiveTabOnTotalStatState = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   prop('selectedTotalTab', state)
+);
+export const getGameId = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
+  path(['gameInfo', 'GameId'], state) as number
+);
+export const getGameDomain = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
+  path(['gameInfo', 'Domain'], state) as string
 );
 export const getAvailableLevelTypes = createSelector(selectGameDetailsStore, (state: QuestStat.Store.GameDetails) =>
   pipe(
@@ -142,7 +162,6 @@ export const getStatData = createSelector(selectGameDetailsStore, (state: QuestS
     curry(appendFinishStatToTeam)(state.finishResults) as any,
     map(prop('data'))
   )(state) as QuestStat.TeamData[][];
-  console.log('here');
 
   return {
     levels,

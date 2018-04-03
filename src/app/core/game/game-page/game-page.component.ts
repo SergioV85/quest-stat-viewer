@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { MatSnackBar } from '@angular/material';
-import { debounceTime, distinctUntilChanged, takeUntil, catchError, finalize } from 'rxjs/operators';
+import { takeUntil, catchError, finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import {
   add,
@@ -32,9 +32,9 @@ import {
   subtract,
   update
 } from 'ramda';
-import { ApiService } from '@app-common/services/api/api.service';
 import { DeviceService } from '@app-common/services/helpers/device.service';
 import { Store, select } from '@ngrx/store';
+import * as GameDetailsActions from '@app-common/actions/game-details.actions';
 import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
 import * as RouterReducer from '@app-common/reducers/router/router.reducer';
 
@@ -62,7 +62,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router,
               private formBuilder: FormBuilder,
-              private apiService: ApiService,
               private deviceService: DeviceService,
               private snackBar: MatSnackBar) {}
 
@@ -81,7 +80,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
     );
 
     this.tabsForm = this.formBuilder.group({
-      activeTabButtons: 'total',
       activeTabSelector: 'total'
     });
   }
@@ -92,58 +90,11 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   public saveChanges() {
-    this.disableSaveButton = true;
-    const gameId = this.gameData.info.GameId;
-    const levelData =  this.gameData.stat.Levels;
-    this.apiService.saveLevelSettings({ gameId, levelData })
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        catchError((err) => {
-          this.snackBar.open('Извините, не удалось сохранить данные', 'Скрыть', {
-            politeness: 'assertive',
-            duration: 1000,
-            extraClasses: ['snack-error-message']
-          });
-          throw err;
-        }),
-        finalize(() => {
-          this.disableSaveButton = false;
-        })
-      )
-      .subscribe((newLevelData) => {
-        this.snackBar.open('Данные сохраненны', 'Скрыть', {
-          politeness: 'assertive',
-          duration: 1000,
-          extraClasses: ['snack-success-message']
-        });
-        this.serverData.stat.Levels = clone(levelData) as QuestStat.LevelData[];
-      });
+    this.store.dispatch(new GameDetailsActions.SaveLevelsTypesAction());
   }
 
   public refreshData() {
-    this.loadData = true;
-    const request = Object.assign({}, this.route.snapshot.params as QuestStat.GameRequest, {
-      force: true
-    });
-    this.apiService.getGameStat(request)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        catchError((err) => {
-          this.snackBar.open('Извините, не удалось обновить данные', 'Скрыть', {
-            politeness: 'assertive',
-            duration: 1000,
-            extraClasses: ['snack-error-message']
-          });
-          throw err;
-        }),
-        finalize(() => {
-          this.loadData = false;
-        })
-      )
-      .subscribe((data: QuestStat.GameData) => {
-        this.serverData = clone(data);
-        this.gameData = data;
-      });
+    this.store.dispatch(new GameDetailsActions.GetLatestDataFromEnAction());
   }
 
   public changeViewType({ value }) {
