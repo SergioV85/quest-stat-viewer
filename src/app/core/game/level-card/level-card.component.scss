@@ -61,6 +61,9 @@
     &--Waiting {
       color: $blue-grey;
     }
+    &--Combined {
+      color: $deep-orange;
+    } 
   }
 
   &__levelStatus {

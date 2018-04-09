@@ -74,13 +74,31 @@ declare namespace QuestStat {
     interface TeamData {
       [key: string]: GroupedEntries[];
     }
+    interface TotalData {
+      codesCounts: number;
+      correctCodesPercent: number;
+      correctCodesQuantity: number;
+      _id: {
+        teamId: number;
+        teamName: string;
+      }
+    }
     interface TotalStat {
       team: string;
       data: GroupedEntries[];
     }
+    interface DetailedMonitoring {
+      gameId: number;
+      teamId: number;
+      detailsLevel: string;
+    }
     interface Response {
-      byTeams?: TeamData;
-      totalStat?: TeamData;
+      GameId?: number;
+      pageSaved?: number;
+      parsed: boolean;
+      totalPages?: number;
+      _id?: number;
+      totalData?: TotalData[];
     }
   }
 
@@ -104,8 +122,12 @@ declare namespace QuestStat {
     interface Monitoring {
       isLoading?: boolean;
       dataLoaded: boolean;
-      totalStat?: Monitoring.TotalStat;
-      byTeams?: Monitoring.TeamData;
+      parsed?: boolean;
+      pagesLeft?: number;
+      parsedPages?: number;
+      totalPages?: number;
+      totalData?: Monitoring.TotalData[];
+      teamData?: Monitoring.TotalData[];
     }
 
     interface State {

@@ -4,9 +4,18 @@ import * as  moment from 'moment';
 @Pipe({ name: 'formatDuration' })
 export class FormatDurationPipe implements PipeTransform {
 
-  public transform (value: number) {
+  public transform (value: number, countType = 'ms') {
     if (value) {
-      const modValue = Math.abs(value);
+      let modValue;
+
+      switch (countType) {
+        case 's':
+          modValue = Math.abs(value) * 1000;
+          break;
+        case 'ms':
+        default:
+          modValue = Math.abs(value);
+      }
       const days = modValue >= 86400000 ? `${moment.duration(modValue).get('d')} д ` : '';
       const hours = modValue >= 3600000 ? `${moment.duration(modValue).get('h')} ч ` : '';
       const minutes = modValue >= 60000 ? `${moment.duration(modValue).get('m')} м ` : '';

@@ -75,7 +75,17 @@ export class ApiService {
       }));
   }
 
-  private convertHttpParams(gameData: QuestStat.GameRequest) {
+  public getMonitoringDetails(request: QuestStat.Monitoring.DetailedMonitoring) {
+    return this.http
+      .get<QuestStat.Monitoring.Response>(`${this.serverAddress}/game-monitoring-details`, { params: this.convertHttpParams(request) })
+      .pipe(tap((response) => {
+        if (!this.isBrowser) {
+          this.transferState.set<QuestStat.Monitoring.Response>(GAME_MONITORING_KEY, response);
+        }
+      }));
+  }
+
+  private convertHttpParams(gameData: QuestStat.GameRequest | QuestStat.Monitoring.DetailedMonitoring) {
     return JSON.parse(JSON.stringify(gameData));
   }
 }

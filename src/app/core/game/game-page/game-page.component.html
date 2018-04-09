@@ -52,6 +52,7 @@
     </div>
     <div class="col game-page__changesContainer text-right">
       <button class="game-page__refreshDataButton"
+          *ngIf="(activeTab$ | async) !== 'monitoring'"
           mat-raised-button 
           color="accent"
           (click)="refreshData()">
@@ -60,7 +61,7 @@
       </button>
       <span class="game-page__changesStatus" *ngIf="hasPendingChanges$ | async">Изменения не сохраненны</span>
       <button class="game-page__saveChangesButton" 
-          *ngIf="hasPendingChanges$ | async" 
+          *ngIf="hasPendingChanges$ | async"
           mat-raised-button 
           color="primary"
           [disabled]="disableSaveButton"

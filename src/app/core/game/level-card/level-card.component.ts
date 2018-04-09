@@ -51,6 +51,11 @@ export class LevelCardComponent {
       name: 'Заглушка',
       icon: 'far fa-clock'
     },
+    {
+      type: 6,
+      name: 'Точка',
+      icon: 'fas fa-map-pin'
+    },
   ];
   public levelData: QuestStat.LevelData;
   public levelColorIcon: string;

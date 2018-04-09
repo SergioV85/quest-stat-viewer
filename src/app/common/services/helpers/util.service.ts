@@ -19,6 +19,9 @@ export class UtilService {
       case LevelType.Waiting:
         icon = 'far fa-clock';
         break;
+      case LevelType.Combined:
+        icon = 'fas fa-map-pin';
+        break;
       case LevelType.General:
       default:
         icon = 'fas fa-question';
@@ -44,6 +47,9 @@ export class UtilService {
         break;
       case LevelType.Waiting:
         name = 'Заглушка';
+        break;
+      case LevelType.Combined:
+        name = 'Точка';
         break;
       case LevelType.General:
       default:

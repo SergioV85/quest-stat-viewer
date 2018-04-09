@@ -21,8 +21,8 @@ export class GameMonitoringResolver implements Resolve<boolean> {
   }
 
   private getGameMonitoring(route: ActivatedRouteSnapshot) {
-    const domain = route.parent.paramMap.get('domain');
-    const id = route.parent.paramMap.get('id');
+    const domain = route.parent.parent.paramMap.get('domain');
+    const id = route.parent.parent.paramMap.get('id');
 
     return this.store
       .pipe(

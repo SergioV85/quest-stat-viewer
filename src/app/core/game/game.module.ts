@@ -12,7 +12,6 @@ import { GameMonitoringResolver } from '@app-common/services/resolvers/monitorin
 import { GamePageComponent } from './game-page';
 import { TotalTableComponent } from './total-table';
 import { GameTableComponent } from './game-table';
-import { MonitoringComponent } from './monitoring';
 import { TeamCardComponent } from './team-card/team-card.component';
 import { LevelCardComponent } from './level-card/level-card.component';
 
@@ -38,10 +37,7 @@ export const routes: Route[] = [
       },
       {
         path: 'monitoring',
-        component: MonitoringComponent,
-        resolve: {
-          monitoring: GameMonitoringResolver
-        },
+        loadChildren: './../monitoring#MonitoringModule'
       },
       {
         path: '',
@@ -63,7 +59,6 @@ export const routes: Route[] = [
     GamePageComponent,
     TotalTableComponent,
     GameTableComponent,
-    MonitoringComponent,
     LevelCardComponent,
     TeamCardComponent
   ]

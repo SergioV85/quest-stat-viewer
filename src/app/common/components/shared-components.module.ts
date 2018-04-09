@@ -10,6 +10,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatMenuModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatRippleModule,
@@ -21,7 +22,8 @@ import {
 } from '@angular/material';
 import {
   ButtonsModule,
-  BsDropdownModule
+  BsDropdownModule,
+  ProgressbarModule
 } from 'ngx-bootstrap';
 
 const angularMaterialComponents = [
@@ -33,6 +35,7 @@ const angularMaterialComponents = [
   MatIconModule,
   MatInputModule,
   MatMenuModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatRippleModule,
@@ -53,14 +56,16 @@ const ngxBootstrapComponents = [
     FormsModule,
     ReactiveFormsModule,
     ...angularMaterialComponents,
-    ...ngxBootstrapComponents
+    ...ngxBootstrapComponents,
+    ProgressbarModule.forRoot()
   ],
   declarations: [],
   exports: [
     FormsModule,
     ReactiveFormsModule,
     ...angularMaterialComponents,
-    ...ngxBootstrapComponents
+    ...ngxBootstrapComponents,
+    ProgressbarModule
   ]
 })
 export class SharedComponentsModule {

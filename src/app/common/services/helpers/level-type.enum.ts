@@ -4,5 +4,6 @@ export enum LevelType {
   Logic,
   Drive,
   Agent,
-  Waiting
+  Waiting,
+  Combined
 }
