@@ -44,13 +44,41 @@ export class MonitoringEffects {
       gameId: GameDetailsReducer.getGameId(state),
       ...action.payload
     })),
-    exhaustMap(({ gameId, teamId, detailsLevel }) =>
-      this.apiService.getMonitoringDetails({ gameId, teamId, detailsLevel })
+    exhaustMap(({ gameId, playerId, teamId, detailsLevel }) =>
+      this.apiService.getMonitoringDetails({ gameId, playerId, teamId, detailsLevel })
         .pipe(
-          map((monitoringData) => new MonitoringActions.GetMonitoringDetailsSuccessAction({ teamId, monitoringData})),
+          map((monitoringData) => new MonitoringActions.GetMonitoringDetailsSuccessAction({
+            detailsLevel,
+            playerId,
+            teamId,
+            monitoringData
+          })),
           catchError((err) => {
             const actions = [
               new MonitoringActions.GetMonitoringDetailsFailedAction(err.error),
+              new NotificationActions.ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' })
+            ];
+            return from(actions);
+          })
+        )
+    )
+  );
+
+  @Effect()
+  public $getCodesList = this.actions$.pipe(
+    ofType(MonitoringActions.MonitoringActionTypes.RequestCodes),
+    withLatestFrom(this.store$),
+    map(([action, state]: ([MonitoringActions.RequestCodesAction, QuestStat.Store.State])) => ({
+      gameId: GameDetailsReducer.getGameId(state),
+      ...action.payload
+    })),
+    exhaustMap(({ gameId, playerId, teamId, levelId, type }) =>
+      this.apiService.getListOfCodes({ gameId, playerId, teamId, levelId, type })
+        .pipe(
+          map((codes) => new MonitoringActions.RequestCodesSuccessAction({ playerId, teamId, levelId, codes, type })),
+          catchError((err) => {
+            const actions = [
+              new MonitoringActions.RequestCodesFailedAction(err.error),
               new NotificationActions.ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' })
             ];
             return from(actions);

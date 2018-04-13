@@ -56,40 +56,59 @@ declare namespace QuestStat {
 
   namespace Monitoring {
     interface CodeEntry {
-      code: string;
+      GameId: number;
+      code: string | number;
       isRemovedLevel: boolean;
       isSuccess: boolean;
       isTimeout: boolean;
+      isDuplicate: boolean;
       level: number;
-      team: string;
+      teamId: number;
+      teamName: string;
       time: string;
-      user: string;
+      timeDiff: number;
+      userId: number;
+      userName: string;
+      _id: string;
     }
-    interface GroupedEntries {
-      allEntries: number;
-      codes: CodeEntry[];
-      correct: number;
-      percent: number;
-    }
-    interface TeamData {
-      [key: string]: GroupedEntries[];
-    }
-    interface TotalData {
+    interface GroupData {
       codesCounts: number;
       correctCodesPercent: number;
       correctCodesQuantity: number;
+    }
+    interface LevelData extends GroupData {
+      _id: {
+        level: number;
+        teamId: number;
+      }
+    }
+    interface TeamGroupedData extends GroupData {
       _id: {
         teamId: number;
         teamName: string;
       }
     }
-    interface TotalStat {
-      team: string;
-      data: GroupedEntries[];
+    interface TeamDetailedData {
+      parsed: boolean;
+      dataByLevel?: LevelData[];
+      dataByUser?: PlayerGroupedData[];
+    }
+    interface PlayerGroupedData extends GroupData {
+      _id: {
+        userId: number;
+        userName: string;
+      }
+    }
+    interface PlayerLevelData extends GroupData {
+      _id: {
+        level: number;
+        userId: number;
+      }
     }
     interface DetailedMonitoring {
       gameId: number;
-      teamId: number;
+      playerId?: number;
+      teamId?: number;
       detailsLevel: string;
     }
     interface Response {
@@ -98,8 +117,18 @@ declare namespace QuestStat {
       parsed: boolean;
       totalPages?: number;
       _id?: number;
-      totalData?: TotalData[];
+      totalData?: TeamData[] | PlayerLevelData[];
+      dataByLevel?: LevelData[];
+      dataByUser?: PlayerGroupedData[];
     }
+    interface CodesListRequest {
+      gameId?: number;
+      playerId?: number;
+      teamId?: number;
+      levelId: number;
+      type: string;
+    }
+    type CodesListResponse = CodeEntry[];
   }
 
   namespace Store {
@@ -126,8 +155,19 @@ declare namespace QuestStat {
       pagesLeft?: number;
       parsedPages?: number;
       totalPages?: number;
-      totalData?: Monitoring.TotalData[];
-      teamData?: Monitoring.TotalData[];
+      totalData?: Monitoring.TeamGroupedData[];
+      teamData?: {
+        [key: number]: Monitoring.TeamDetailedData;
+      };
+      playerData?: {
+        [key: number]: {
+          parsed: boolean;
+          totalData?: Monitoring.PlayerLevelData;
+        };
+      };
+      codes?: {
+        [key: number]: Monitoring.CodesListResponse
+      };
     }
 
     interface State {

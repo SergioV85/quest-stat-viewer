@@ -2,6 +2,7 @@ import { createSelector } from '@ngrx/store';
 import {
   adjust,
   ascend,
+  clone,
   curry,
   descend,
   equals,
@@ -100,8 +101,11 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
         { gameInfo, levels, dataByTeam, dataByLevels, finishResults, isLoading: false, selectedTotalTab, originalLevels: levels }
       );
     }
+    case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypesComplete: {
+      const originalLevels = clone(gameDetailsState.levels);
+      return merge(gameDetailsState, { isLoading: false, originalLevels });
+    }
     case GameDetailsActions.GameDetailsActionTypes.RequestGameDetailsError:
-    case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypesComplete:
     case GameDetailsActions.GameDetailsActionTypes.SaveLevelsTypesError: {
       return merge(gameDetailsState, { isLoading: false });
     }

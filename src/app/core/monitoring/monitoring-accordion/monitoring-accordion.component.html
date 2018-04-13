@@ -19,6 +19,15 @@
           <ng-container *ngSwitchCase="'team'">
             <monitoring-by-team [id]="getTeamId(row)"></monitoring-by-team>
           </ng-container>
+          <ng-container *ngSwitchCase="'player'">
+            <monitoring-by-user [id]="getPlayerId(row)"></monitoring-by-user>
+          </ng-container>
+          <ng-container *ngSwitchCase="'level'">
+            <codes-list [uniqueId]="getTeamId(row)" [levelId]="getLevelId(row)" type="byLevel"></codes-list>
+          </ng-container>
+          <ng-container *ngSwitchCase="'playerCode'">
+            <codes-list [uniqueId]="getPlayerId(row)" [levelId]="getLevelId(row)" type="byPlayer"></codes-list>
+          </ng-container>
         </ng-container>
       </ng-template>
     </mat-expansion-panel>

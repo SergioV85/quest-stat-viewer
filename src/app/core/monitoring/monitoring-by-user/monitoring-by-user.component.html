@@ -1,0 +1,6 @@
+<monitoring-accordion [data]="playerData$ | async | filterByProp:id | getProp:'totalData':false"
+    labelPrefix="Уровень"
+    [pathToLabel]="pathToLevelId"
+    [levels]="levels$ | async"
+    groupBy="playerCode">
+</monitoring-accordion>

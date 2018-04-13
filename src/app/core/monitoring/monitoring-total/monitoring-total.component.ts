@@ -12,7 +12,7 @@ import * as MonitoringReducer from '@app-common/reducers/monitoring/monitoring.r
   styleUrls: ['./monitoring-total.component.scss']
 })
 export class MonitoringTotalComponent implements OnInit, OnDestroy {
-  public totalData$: Observable<QuestStat.Monitoring.TotalData[]>;
+  public totalData$: Observable<QuestStat.Monitoring.TeamGroupedData[]>;
   public pathToTeamName = ['_id', 'teamName'];
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 

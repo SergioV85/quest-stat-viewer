@@ -10,6 +10,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatMenuModule,
+  MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
@@ -17,6 +18,7 @@ import {
   MatSelectModule,
   MatSnackBarModule,
   MatTabsModule,
+  MatTableModule,
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -35,6 +37,7 @@ const angularMaterialComponents = [
   MatIconModule,
   MatInputModule,
   MatMenuModule,
+  MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
@@ -42,6 +45,7 @@ const angularMaterialComponents = [
   MatSelectModule,
   MatSnackBarModule,
   MatTabsModule,
+  MatTableModule,
   MatToolbarModule,
   MatTooltipModule
 ];

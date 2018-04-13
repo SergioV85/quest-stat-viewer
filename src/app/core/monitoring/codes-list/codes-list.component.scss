@@ -1,0 +1,33 @@
+@import './../../../../styles/variables';
+
+.c-monitoring-codes {
+  .mat-column-code {
+    flex: 4;
+  }
+  .mat-column-player {
+    flex: 1;
+  }
+  &__playerName {
+    color: $main-grey
+  }
+  &__code {
+    color: $main-dark;
+
+    &--success {
+      color: $main-green;
+    }
+    &--timeout {
+      color: $deep-orange;
+    }
+    &--duplicate {
+      color: $light-grey-a;
+      font-style: italic;
+    }
+  }
+  &__time {
+    color: $middle-grey
+  }
+  &__timeDiff {
+    color: $middle-grey
+  }
+}

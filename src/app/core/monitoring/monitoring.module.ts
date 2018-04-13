@@ -12,6 +12,8 @@ import { MonitoringLoaderComponent } from './monitoring-loader/monitoring-loader
 import { MonitoringTotalComponent } from './monitoring-total/monitoring-total.component';
 import { MonitoringByTeamComponent } from './monitoring-by-team/monitoring-by-team.component';
 import { MonitoringAccordionComponent } from './monitoring-accordion/monitoring-accordion.component';
+import { MonitoringByUserComponent } from './monitoring-by-user/monitoring-by-user.component';
+import { CodesListComponent } from './codes-list/codes-list.component';
 
 
 export const routes: Route[] = [
@@ -37,7 +39,9 @@ export const routes: Route[] = [
     MonitoringLoaderComponent,
     MonitoringTotalComponent,
     MonitoringByTeamComponent,
-    MonitoringAccordionComponent
+    MonitoringAccordionComponent,
+    MonitoringByUserComponent,
+    CodesListComponent
   ]
 })
 export class MonitoringModule { }

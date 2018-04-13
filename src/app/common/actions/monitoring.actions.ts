@@ -4,6 +4,9 @@ export enum MonitoringActionTypes {
   GetMonitoringDetails = '[Monitoring] Request detailed monitoring',
   GetMonitoringDetailsComplete = '[Monitoring] Detailed monitoring saved to store',
   GetMonitoringDetailsError = '[Monitoring] Request detailed game monitoring failed',
+  RequestCodes = '[Monitoring] Request list of codes',
+  RequestCodesComplete = '[Monitoring] Codes saved to store',
+  RequestCodesError = '[Monitoring] Request list of codes failed',
   RequestMonitoring = '[Monitoring] Request game monitoring',
   RequestMonitoringComplete = '[Monitoring] Game monitoring saved to store',
   RequestMonitoringError = '[Monitoring] Request game monitoring failed'
@@ -11,17 +14,37 @@ export enum MonitoringActionTypes {
 
 export class GetMonitoringDetailsAction implements Action {
   readonly type = MonitoringActionTypes.GetMonitoringDetails;
-  constructor(public payload: Partial<{ teamId: number, detailsLevel: string }>) {}
+  constructor(public payload: Partial<{ teamId: number, playerId: number, detailsLevel: string }>) {}
 }
 export class GetMonitoringDetailsSuccessAction implements Action {
   readonly type = MonitoringActionTypes.GetMonitoringDetailsComplete;
   constructor(public payload: {
-    teamId: number,
+    detailsLevel: string,
+    playerId?: number,
+    teamId?: number,
     monitoringData: QuestStat.Monitoring.Response
   }) {}
 }
 export class GetMonitoringDetailsFailedAction implements Action {
   readonly type = MonitoringActionTypes.GetMonitoringDetailsError;
+  constructor(public payload: { message: string }) {}
+}
+export class RequestCodesAction implements Action {
+  readonly type = MonitoringActionTypes.RequestCodes;
+  constructor(public payload: QuestStat.Monitoring.CodesListRequest) {}
+}
+export class RequestCodesSuccessAction implements Action {
+  readonly type = MonitoringActionTypes.RequestCodesComplete;
+  constructor(public payload: {
+    levelId: number;
+    playerId?: number;
+    teamId?: number;
+    type: string;
+    codes: QuestStat.Monitoring.CodesListResponse;
+  }) {}
+}
+export class RequestCodesFailedAction implements Action {
+  readonly type = MonitoringActionTypes.RequestCodesError;
   constructor(public payload: { message: string }) {}
 }
 export class RequestMonitoringAction implements Action {
@@ -41,6 +64,9 @@ export type MonitoringActions
   = GetMonitoringDetailsAction
   | GetMonitoringDetailsSuccessAction
   | GetMonitoringDetailsFailedAction
+  | RequestCodesAction
+  | RequestCodesSuccessAction
+  | RequestCodesFailedAction
   | RequestMonitoringAction
   | RequestMonitoringSuccessAction
   | RequestMonitoringFailedAction;

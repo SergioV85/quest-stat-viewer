@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { createSelector } from '@ngrx/store';
-import { flip, ifElse, map, merge, of, pick, pipe, prop, propEq, propOr, subtract, toPairs } from 'ramda';
+import { flip, ifElse, isNil, map, merge, mergeDeepRight, of, pick, pipe, prop, propEq, propOr, subtract, toPairs } from 'ramda';
 import * as MonitoringActions from '@app-common/actions/monitoring.actions';
 
 export const initialState: QuestStat.Store.Monitoring = {
@@ -10,6 +10,7 @@ export const initialState: QuestStat.Store.Monitoring = {
 export function monitoringReducer(monitoringState = initialState, action: MonitoringActions.MonitoringActions): QuestStat.Store.Monitoring {
   switch (action.type) {
     case MonitoringActions.MonitoringActionTypes.RequestMonitoring:
+    case MonitoringActions.MonitoringActionTypes.RequestCodes:
     case MonitoringActions.MonitoringActionTypes.GetMonitoringDetails: {
       return merge(monitoringState, { isLoading: true });
     }
@@ -29,13 +30,37 @@ export function monitoringReducer(monitoringState = initialState, action: Monito
       return merge(monitoringState, { isLoading: false, dataLoaded: true, ...parsingStat, totalData });
     }
     case MonitoringActions.MonitoringActionTypes.GetMonitoringDetailsComplete: {
-      const data = {
-        [action.payload.teamId]: action.payload.monitoringData
-      };
-      const teamData = merge(monitoringState.teamData, data);
-      return merge(monitoringState, { isLoading: true, teamData });
+      const groupType = action.payload.detailsLevel;
+      let monitoringData;
+      switch (groupType) {
+        case 'byPlayer':
+          monitoringData = { playerData: merge(monitoringState.playerData, {
+              [action.payload.playerId]: action.payload.monitoringData
+            })
+          };
+          break;
+        case 'byTeam':
+        default:
+          monitoringData = { teamData: merge(monitoringState.teamData, {
+              [action.payload.teamId]: action.payload.monitoringData
+            })
+          };
+      }
+      return merge(monitoringState, { isLoading: true, ...monitoringData });
+    }
+    case MonitoringActions.MonitoringActionTypes.RequestCodesComplete: {
+
+      const type = action.payload.type;
+      const propertyName = type === 'byLevel' ? action.payload.teamId : action.payload.playerId;
+      const codes = mergeDeepRight(monitoringState.codes, {
+        [propertyName]: {
+          [action.payload.levelId]: action.payload.codes
+        }
+      });
+      return merge(monitoringState, { isLoading: false, codes });
     }
     case MonitoringActions.MonitoringActionTypes.GetMonitoringDetailsError:
+    case MonitoringActions.MonitoringActionTypes.RequestCodesError:
     case MonitoringActions.MonitoringActionTypes.RequestMonitoringError: {
       return merge(monitoringState, { isLoading: false });
     }
@@ -57,6 +82,15 @@ export const getTotalData = createSelector(selectMonitoringStore, (state: QuestS
 );
 export const getTeamData = createSelector(selectMonitoringStore, (state: QuestStat.Store.Monitoring) =>
   prop('teamData', state)
+);
+export const getPlayerData = createSelector(selectMonitoringStore, (state: QuestStat.Store.Monitoring) =>
+  prop('playerData', state)
+);
+export const getCodesByTeam = createSelector(selectMonitoringStore, (state: QuestStat.Store.Monitoring) =>
+  prop('codes', state)
+);
+export const getCodesByPlayer = createSelector(selectMonitoringStore, (state: QuestStat.Store.Monitoring) =>
+  prop('codes', state)
 );
 export const getLoadingState = createSelector(selectMonitoringStore, (state: QuestStat.Store.Monitoring) =>
   prop('isLoading', state)

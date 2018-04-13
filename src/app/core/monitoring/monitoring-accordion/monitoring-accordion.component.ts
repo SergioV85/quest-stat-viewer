@@ -37,11 +37,18 @@ export class MonitoringAccordionComponent implements OnInit {
       (number: Number) => number.toFixed(2)
     )(row);
 
-    return `Введено кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)}, из них правильных ${prop('correctCodesQuantity', row)}.
+    return `Введено уникальных кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)},
+    из них правильных ${prop('correctCodesQuantity', row)}.
     Процент "успешности" ${percentFull}%`;
   }
 
   public getTeamId(row): number {
     return path(['_id', 'teamId'], row);
+  }
+  public getPlayerId(row): number {
+    return path(['_id', 'userId'], row);
+  }
+  public getLevelId(row): number {
+    return path(['_id', 'level'], row);
   }
 }

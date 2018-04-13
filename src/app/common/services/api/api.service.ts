@@ -85,7 +85,19 @@ export class ApiService {
       }));
   }
 
-  private convertHttpParams(gameData: QuestStat.GameRequest | QuestStat.Monitoring.DetailedMonitoring) {
+  public getListOfCodes(request: QuestStat.Monitoring.CodesListRequest) {
+    return this.http
+      .get<QuestStat.Monitoring.CodesListResponse>(`${this.serverAddress}/game-monitoring-codes-list`,
+        { params: this.convertHttpParams(request) })
+      .pipe(tap((response) => {
+        if (!this.isBrowser) {
+          this.transferState.set<QuestStat.Monitoring.CodesListResponse>(GAME_MONITORING_KEY, response);
+        }
+      }));
+  }
+
+  private convertHttpParams(gameData:
+      QuestStat.GameRequest | QuestStat.Monitoring.DetailedMonitoring | QuestStat.Monitoring.CodesListRequest) {
     return JSON.parse(JSON.stringify(gameData));
   }
 }
