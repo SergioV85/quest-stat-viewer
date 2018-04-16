@@ -1,7 +1,7 @@
 <div class="c-monitoring-loader container">
   <h5>Данные обрабатываются.</h5>
   <p>
-    Обработано {{ parsingStat$ | async | getProp:'pageSaved':false }} страни{{ parsingStat$ | async | getProp:'pageSaved':false | formatEnding:'страница' }} из {{ parsingStat$ | async | getProp:'totalPages':false }}. Приблизительно осталось: {{ parsingStat$ | async | getProp:'pagesLeft':false | multiplyNumber:1.25 | formatDuration:'s' }}
+    Обработано {{ parsingStat$ | async | getProp:'pageSaved':false }} страни{{ parsingStat$ | async | getProp:'pageSaved':false | formatEnding:'страница' }} из {{ parsingStat$ | async | getProp:'totalPages':false }}. Приблизительно осталось: {{ parsingStat$ | async | getProp:'pagesLeft':false | multiplyNumber:1.75 | formatDuration:'s' }}
   </p>
   <progressbar [max]="(parsingStat$ | async)?.totalPages"
       [value]="(parsingStat$ | async)?.pageSaved"
