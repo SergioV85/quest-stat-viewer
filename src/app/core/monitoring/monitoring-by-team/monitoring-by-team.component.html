@@ -1,0 +1,17 @@
+<mat-tab-group>
+  <mat-tab label="По игрокам">
+    <monitoring-accordion [data]="teamData$ | async | filterByProp:id | getProp:'dataByUser':false"
+        descriptionPrefix="игроком"
+        [pathToLabel]="pathToUserName"
+        groupBy="player">
+    </monitoring-accordion>
+  </mat-tab>
+  <mat-tab label="По уровням">
+    <monitoring-accordion [data]="teamData$ | async | filterByProp:id | getProp:'dataByLevel':false"
+        labelPrefix="Уровень"
+        [pathToLabel]="pathToLevelId"
+        [levels]="levels$ | async"
+        groupBy="level">
+    </monitoring-accordion>
+  </mat-tab>
+</mat-tab-group>

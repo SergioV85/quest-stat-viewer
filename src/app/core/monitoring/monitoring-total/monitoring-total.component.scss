@@ -1,0 +1,13 @@
+.c-monitoring-total {
+  &__accordion {
+    &-title, 
+    &-description {
+      flex-basis: 0;
+    }
+    
+    &-description {
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

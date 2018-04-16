@@ -1,0 +1,86 @@
+@import './../../../../styles/mixins';
+@import './../../../../styles/variables';
+
+.game-page {
+  box-sizing: border-box;
+  padding-top: 70px;
+
+  @include tablet {
+    padding-top: 100px;
+  }
+
+  @include desktop {
+    padding-top: 100px;
+  }
+
+  &__header {
+    margin: 0 0 30px;
+  }
+
+  &__viewSelector {
+    margin: 0 5px;
+    width: 100%;
+  }
+
+  &__viewButton {
+    width: 100%;
+    text-align: center;
+
+    @include tablet {
+      width: 34%;
+    }
+
+    @include desktop {
+      width: 34%;
+    }
+  }
+
+  &__changesContainer {
+    padding: 0 10px;
+
+    @include tablet {
+      padding: 0 10px 0 0;
+    }
+
+    @include desktop {
+      padding: 0 10px 0 0;
+    }
+  }
+
+  &__changesContainer-icon {
+    @include tablet {
+      display: none;
+    }
+
+    @include desktop {
+      display: none;
+    }
+  }
+
+  &__changesContainer-label {
+    display: none;
+
+    @include tablet {
+      display: inline;
+    }
+
+    @include desktop {
+      display: inline;
+    }
+  }
+
+  &__changesStatus {
+    color: $main-red;
+    font-size: 11px;
+    margin: 0 10px;
+  }
+
+  &__saveChangesButton {
+    margin-right: 5px;
+  }
+}
+
+.full-width {
+  margin: 0 5px;
+  width: calc(100% - 10px);
+}

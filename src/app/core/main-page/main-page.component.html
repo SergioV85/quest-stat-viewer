@@ -1,7 +1,0 @@
-<div class="main-page">
-  <div class="container">
-    <search-game *ngIf="!dataRequested" (requestGameData)="searchGame($event)"></search-game>
-    <saved-games *ngIf="!dataRequested && hasGames" [savedGames]="savedGames" (requestGameData)="searchGame($event)"></saved-games>
-    <mat-spinner class="loading" *ngIf="dataRequested"></mat-spinner>
-  </div>
-</div>

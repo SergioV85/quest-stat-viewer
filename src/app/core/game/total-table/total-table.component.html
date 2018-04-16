@@ -1,0 +1,48 @@
+<div class="total-table">
+  <mat-tab-group (selectChange)="changeTab($event)">
+    <ng-template ngFor
+        [ngForOf]="availableTypes$ | async"
+        let-type>
+      <mat-tab [label]="type">
+        <ng-template mat-tab-label>
+          <i class="total-table__icon fa-lg"
+              [ngClass]="[getLevelTypeIcon(type)]"
+              [matTooltip]="getLevelTypeName(type)"
+              aria-hidden="true">
+          </i>
+          {{ getLevelTypeName(type) }}
+        </ng-template>
+      </mat-tab>
+    </ng-template>
+  </mat-tab-group>
+  <div class="total-table__team-container">
+    <ng-template ngFor
+        [ngForOf]="sortedTeams$ | async"
+        let-team
+        let-idx="index"
+        [ngForTrackBy]="trackByTeamId">
+      <mat-card class="total-table__team">
+        <span class="total-table__team-position">{{ idx + 1 }}. </span>
+        <span class="total-table__team-total-position" matTooltip="Позиция в общей статистике">
+          ({{ finishResults$ | async | getProp:'id' | totalStatCalculation:'teamTotalPosition':team.id }})
+        </span>
+        <span class="total-table__team-name">{{ team.name }}</span>
+        <span class="total-table__team-time">{{ team.duration | formatDuration }}</span>
+        <span *ngIf="(sortedTeams$ | async | getProp:'duration' | totalStatCalculation:'prevTeamDifference':team:idx) as diff"
+            class="total-table__team-prev-difference"
+            [ngClass]="getPrevTeamDifferenceClass(diff)"
+            matTooltip="Отставание от предыдущей команды">
+          <span *ngIf="idx !== 0">
+              +{{ diff | formatDuration }}
+          </span>
+        </span>
+        <span class="total-table__team-leader-difference" 
+            matTooltip="Отставание от лидера">
+          <span *ngIf="idx !== 0">
+            {{ sortedTeams$ | async | getProp:'duration' | totalStatCalculation:'leaderDifference':team | formatDuration }}
+          </span>
+        </span>
+      </mat-card>
+    </ng-template>
+  </div>
+</div>

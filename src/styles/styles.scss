@@ -3,7 +3,6 @@
 @import 'variables';
 @import 'mixins';
 @import 'reset';
-@import 'font-awesome/font-awesome';
 @import '~bootstrap/scss/bootstrap';
 @import '~@angular/material/_theming';
 
@@ -76,4 +75,23 @@ body {
 
 .snack-success-message {
   background: $main-green !important;
+}
+
+/* Fix for material accordion inside mat-tab-control */
+div.mat-expansion-panel-content:not(.mat-expanded) {
+  height: 0px;
+  visibility: hidden;
+}
+
+.mat-expansion-panel-header:not(.mat-expanded)  {
+  height: 48px;
+}
+
+.mat-expansion-panel-header  {
+  height: 64px;
+  &.mat-expanded {
+    .mat-expansion-indicator {
+      transform: rotate(180deg);
+    }
+  }
 }

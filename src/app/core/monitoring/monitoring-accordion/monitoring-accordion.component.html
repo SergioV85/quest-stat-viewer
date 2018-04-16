@@ -1,0 +1,35 @@
+<mat-accordion class="c-monitoring-accordion">
+  <ng-template ngFor
+      [ngForOf]="data"
+      let-row>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="c-monitoring-accordion__title">
+          {{ getLabel(row) }}
+          <ng-container *ngIf="groupBy === 'level'">
+            {{ getLevelDescription(row) }}
+          </ng-container>
+        </mat-panel-title>
+        <mat-panel-description class="c-monitoring-accordion__description">
+          {{ getDescription(row) }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <ng-container [ngSwitch]="groupBy">
+          <ng-container *ngSwitchCase="'team'">
+            <monitoring-by-team [id]="getTeamId(row)"></monitoring-by-team>
+          </ng-container>
+          <ng-container *ngSwitchCase="'player'">
+            <monitoring-by-user [id]="getPlayerId(row)"></monitoring-by-user>
+          </ng-container>
+          <ng-container *ngSwitchCase="'level'">
+            <codes-list [uniqueId]="getTeamId(row)" [levelId]="getLevelId(row)" type="byLevel"></codes-list>
+          </ng-container>
+          <ng-container *ngSwitchCase="'playerCode'">
+            <codes-list [uniqueId]="getPlayerId(row)" [levelId]="getLevelId(row)" type="byPlayer"></codes-list>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </mat-expansion-panel>
+  </ng-template>
+</mat-accordion>

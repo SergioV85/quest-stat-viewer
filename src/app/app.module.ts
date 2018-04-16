@@ -1,84 +1,52 @@
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 
-import { ROUTES } from './app.routes';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 
-import { AngularMaterialModule } from './common/modules/angular-material.module';
-import { BootstrapModule } from './common/modules/bootstap.module';
+import { SharedComponentsModule } from '@app-common/components/shared-components.module';
+import { SharedEffectsModule } from '@app-common/effects/shared-effects.module';
+import { CustomRouterStateSerializer } from '@app-commonserializers/router-state/custom-router-state-serializer';
+
+import { reducers } from '@app-common/reducers';
+import { environment } from '../environments/environment';
+
+import { ROUTES } from './app.routes';
 
 import { AppComponent } from './app.component';
 
-import { ApiService } from './common/services/api.service';
-import { SharedService } from './common/services/shared.service';
-import { UtilService } from './common/services/util.service';
-import { DeviceService } from './common/services/device.service';
-import { GameDataResolver } from './common/resolvers/game-resolver.service';
-
-import { HttpCacheInterceptorService } from './common/services/http-interceptor.service';
-
-import { FormatDateTimePipe } from './common/pipes/date-format.pipe';
-import { FormatDurationPipe } from './common/pipes/duration-transorm.pipe';
-
 import { NoContentComponent } from './core/no-content';
-import { GameTableComponent } from './core/game-table/game-table.component';
-import { TotalTableComponent } from './core/total-table/total-table.component';
-import { SearchGameComponent } from './core/search-game/search-game.component';
-import { SavedGamesComponent } from './core/saved-games/saved-games.component';
-import { MainPageComponent } from './core/main-page/main-page.component';
-import { GamePageComponent } from './core/game-page/game-page.component';
-import { TeamCardComponent } from './core/team-card/team-card.component';
-import { LevelCardComponent } from './core/level-card/level-card.component';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
-
-
-// Application wide providers
-const APP_PROVIDERS = [
-  GameDataResolver,
-  ApiService,
-  SharedService,
-  UtilService,
-  DeviceService
-];
 
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    MainPageComponent,
-    GamePageComponent,
     HeaderComponent,
-    SearchGameComponent,
-    SavedGamesComponent,
-    GameTableComponent,
-    TotalTableComponent,
-    TeamCardComponent,
-    LevelCardComponent,
     FooterComponent,
     NoContentComponent,
-    FormatDateTimePipe,
-    FormatDurationPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'quest-stat-viewer' }),
     BrowserTransferStateModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AngularMaterialModule.forRoot(),
-    BootstrapModule.forRoot(),
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router'
+    }),
+    SharedEffectsModule.forRoot(),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
-    ...APP_PROVIDERS,
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpCacheInterceptorService,
-      multi: true,
-    },
+      provide: RouterStateSerializer,
+      useClass: CustomRouterStateSerializer
+    }
   ]
 })
 export class AppModule {}

@@ -18,9 +18,15 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles/styles.scss"
+        "styles/styles.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-brands.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/@fortawesome/fontawesome/index.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -28,12 +34,12 @@
       }
     },
     {
-      "platform": "server",
       "root": "src",
       "outDir": "dist/server",
       "assets": [
         "assets"
       ],
+      "platform": "server",
       "index": "index.html",
       "main": "main.server.ts",
       "test": "test.ts",
@@ -41,9 +47,15 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles/styles.scss"
+        "styles/styles.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss",
+        "../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-brands.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/@fortawesome/fontawesome/index.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -78,6 +90,9 @@
   "defaults": {
     "styleExt": "scss",
     "component": {
+    },
+    "schematics": {
+      "collection": "@ngrx/schematics"
     }
   }
 }
