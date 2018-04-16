@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { map, tap } from 'rxjs/operators';
+import { environment } from './../../../../environments/environment';
 
 const GAMES_KEY = makeStateKey<QuestStat.GameInfo[]>('games');
 const GAME_STAT_KEY = makeStateKey<QuestStat.GameData>('game.stat');
@@ -13,8 +14,7 @@ const GAME_MONITORING_KEY = makeStateKey<QuestStat.GameData>('game.monitoring');
 @Injectable()
 export class ApiService {
   private isBrowser: boolean;
-  private serverAddress = 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod';
-  // private serverAddress = 'http://localhost:3000';
+  private serverAddress = environment.serverAddress;
 
   constructor(@Inject(PLATFORM_ID) private platformId,
               private http: HttpClient,
