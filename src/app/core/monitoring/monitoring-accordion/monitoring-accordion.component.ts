@@ -37,9 +37,9 @@ export class MonitoringAccordionComponent implements OnInit {
       (number: Number) => number.toFixed(2)
     )(row);
 
-    return `Введено уникальных кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)},
-    из них правильных ${prop('correctCodesQuantity', row)}.
-    Процент "успешности" ${percentFull}%`;
+    return `Уникальных кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)},
+    правильных: ${prop('correctCodesQuantity', row)}.
+    "Успешность": ${percentFull}%`;
   }
 
   public getTeamId(row): number {

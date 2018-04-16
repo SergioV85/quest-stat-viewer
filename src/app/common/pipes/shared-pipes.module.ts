@@ -7,6 +7,7 @@ import { GetPropertyPipe } from './get-prop.pipe';
 import { TotalStatCalculationPipe } from './total-stat-calculation.pipe';
 import { FormatEndingPipe } from './format-ending.pipe';
 import { FilterByPropPipe } from './filter-by-prop.pipe';
+import { MultiplyNumberPipe } from './multiply-number.pipe';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { FilterByPropPipe } from './filter-by-prop.pipe';
     FormatDurationPipe,
     FormatEndingPipe,
     GetPropertyPipe,
+    MultiplyNumberPipe,
     TotalStatCalculationPipe
   ],
   exports: [
@@ -28,6 +30,7 @@ import { FilterByPropPipe } from './filter-by-prop.pipe';
     FormatDurationPipe,
     FormatEndingPipe,
     GetPropertyPipe,
+    MultiplyNumberPipe,
     TotalStatCalculationPipe
   ]
 })

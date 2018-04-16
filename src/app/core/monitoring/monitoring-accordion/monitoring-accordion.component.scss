@@ -1,11 +1,38 @@
+@import './../../../../styles/mixins';
+
 .c-monitoring-accordion {
   &__title, 
   &__description {
     flex-basis: 0;
+    font-size: 12px;
+
+    @include desktop {
+      font-size: 14px;
+    }
+  }
+  &__title {
+    align-items: center;
   }
   
   &__description {
     justify-content: space-between;
     align-items: center;
+    flex-grow: 3;
+  }
+
+  ::ng-deep .mat-expansion-panel-header {
+    padding: 0 6px;
+
+    @include desktop {
+      padding: 0 24px;
+    }
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 6px 8px;
+
+    @include desktop {
+      padding: 0 12px 16px;
+    }
   }
 }

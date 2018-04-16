@@ -27,7 +27,7 @@
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="timeDiff">
-        <mat-header-cell *matHeaderCellDef class="c-monitoring-codes__timeDiff-header"> Разница с предыдушим кодом </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="c-monitoring-codes__timeDiff-header"> Интервал </mat-header-cell>
         <mat-cell *matCellDef="let element"
             class="c-monitoring-codes__timeDiff">
           {{ element.timeDiff | formatDuration }}
