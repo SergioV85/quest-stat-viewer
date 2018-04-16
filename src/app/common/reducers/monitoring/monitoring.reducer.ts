@@ -64,6 +64,9 @@ export function monitoringReducer(monitoringState = initialState, action: Monito
     case MonitoringActions.MonitoringActionTypes.RequestMonitoringError: {
       return merge(monitoringState, { isLoading: false });
     }
+    case MonitoringActions.MonitoringActionTypes.CleanMonitoringData: {
+      return initialState;
+    }
     default:
       return monitoringState;
   }

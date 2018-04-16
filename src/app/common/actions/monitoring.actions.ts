@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 export enum MonitoringActionTypes {
+  CleanMonitoringData = '[Monitoring] Clean monitoring data',
   GetMonitoringDetails = '[Monitoring] Request detailed monitoring',
   GetMonitoringDetailsComplete = '[Monitoring] Detailed monitoring saved to store',
   GetMonitoringDetailsError = '[Monitoring] Request detailed game monitoring failed',
@@ -11,7 +12,9 @@ export enum MonitoringActionTypes {
   RequestMonitoringComplete = '[Monitoring] Game monitoring saved to store',
   RequestMonitoringError = '[Monitoring] Request game monitoring failed'
 }
-
+export class CleanMonitoringDataAction implements Action {
+  readonly type = MonitoringActionTypes.CleanMonitoringData;
+}
 export class GetMonitoringDetailsAction implements Action {
   readonly type = MonitoringActionTypes.GetMonitoringDetails;
   constructor(public payload: Partial<{ teamId: number, playerId: number, detailsLevel: string }>) {}
@@ -61,7 +64,8 @@ export class RequestMonitoringFailedAction implements Action {
 }
 
 export type MonitoringActions
-  = GetMonitoringDetailsAction
+  = CleanMonitoringDataAction
+  | GetMonitoringDetailsAction
   | GetMonitoringDetailsSuccessAction
   | GetMonitoringDetailsFailedAction
   | RequestCodesAction

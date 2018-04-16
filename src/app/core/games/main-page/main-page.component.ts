@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { Store, select } from '@ngrx/store';
 import * as GameDetailsAction from '@app-common/actions/game-details.actions';
+import * as MonitoringAction from '@app-common/actions/monitoring.actions';
 import * as GamesReducer from '@app-common/reducers/games/games.reducer';
 
 @Component({
@@ -30,6 +31,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe)
     );
     this.store.dispatch(new GameDetailsAction.CleanGameDataAction());
+    this.store.dispatch(new MonitoringAction.CleanMonitoringDataAction());
   }
 
   public ngOnDestroy() {
