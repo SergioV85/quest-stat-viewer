@@ -1,11 +1,11 @@
 {
   "name": "quest-stat-viewer",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run build:ssr",
     "build:prod": "ng build --prod",
     "build:prod:universal": "ng run quest-stat-viewer:server:production",
     "build:all": "npm run build:prod && npm run build:prod:universal",
