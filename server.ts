@@ -3,11 +3,6 @@ import 'reflect-metadata';
 import { join } from 'path';
 import * as fs from 'fs';
 
-const PORT = process.env.PORT || 4200;
-const DIST_FOLDER = join(process.cwd(), 'dist');
-
-const template = fs.readFileSync(join(DIST_FOLDER, 'browser', 'index.html')).toString();
-
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
@@ -19,6 +14,8 @@ enableProdMode();
 
 // Express server
 const app = express();
+const PORT = process.env.PORT || 4000;
+const DIST_FOLDER = join(process.cwd(), 'dist');
 
 const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
 

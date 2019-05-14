@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run build:ssr && npm run start:heroku",
+    "build": "npm run build:ssr",
     "build:prod": "ng build --prod",
     "build:prod:universal": "ng run quest-stat-viewer:server:production",
     "build:all": "npm run build:prod && npm run build:prod:universal",
