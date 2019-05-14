@@ -15,15 +15,14 @@ import { MonitoringAccordionComponent } from './monitoring-accordion/monitoring-
 import { MonitoringByUserComponent } from './monitoring-by-user/monitoring-by-user.component';
 import { CodesListComponent } from './codes-list/codes-list.component';
 
-
 export const routes: Route[] = [
   {
     path: '',
     component: MonitoringComponent,
     resolve: {
-      gameData: GameMonitoringResolver
-    }
-  }
+      gameData: GameMonitoringResolver,
+    },
+  },
 ];
 
 @NgModule({
@@ -32,7 +31,7 @@ export const routes: Route[] = [
     RouterModule.forChild(routes),
     SharedComponentsModule,
     SharedServicesModule,
-    SharedPipesModule
+    SharedPipesModule,
   ],
   declarations: [
     MonitoringComponent,
@@ -41,7 +40,7 @@ export const routes: Route[] = [
     MonitoringByTeamComponent,
     MonitoringAccordionComponent,
     MonitoringByUserComponent,
-    CodesListComponent
-  ]
+    CodesListComponent,
+  ],
 })
-export class MonitoringModule { }
+export class MonitoringModule {}

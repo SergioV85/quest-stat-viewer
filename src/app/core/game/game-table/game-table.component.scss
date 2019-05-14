@@ -31,10 +31,10 @@
     }
     &--Waiting {
       border-bottom-color: $blue-grey;
-    } 
+    }
     &--Combined {
       border-bottom-color: $deep-orange;
-    } 
+    }
     &--dismised {
       color: $light-grey-a;
       border-bottom-color: $light-grey-a;
@@ -51,7 +51,7 @@
     flex-flow: row;
     margin: 10px 0;
     width: 100%;
-    white-space: nowrap
+    white-space: nowrap;
   }
   &__team {
     box-sizing: border-box;
@@ -59,7 +59,7 @@
     padding: 4px;
     min-width: 100px;
     white-space: normal;
-    
+
     &--flex {
       &:first-child {
         margin-top: 10px;
@@ -70,7 +70,7 @@
       background-color: $light-grey-e;
       color: $light-grey-a;
       opacity: 0.8;
-  
+
       .team-card__additionalTime--bonus {
         color: $main-green;
       }
@@ -78,13 +78,13 @@
         color: $light-red;
       }
     }
-  
+
     &--timeout {
       &:before {
         border-bottom: 20px solid transparent;
         border-left: 20px solid transparent;
         border-top: 20px solid $main-green;
-        content: "";
+        content: '';
         height: 0;
         position: absolute;
         opacity: 0.8;
@@ -93,7 +93,7 @@
         width: 0;
       }
       &:after {
-        content: "T";
+        content: 'T';
         color: $main-light;
         font-size: 10px;
         position: absolute;
@@ -101,10 +101,10 @@
         right: 2px;
       }
     }
-  
+
     &--selected {
       border: 2px solid transparent;
-      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12)
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     }
     &--selection {
       &-1 {
@@ -146,7 +146,7 @@
       &-10 {
         background-color: transparentize($comparsion-color-10, 0.5);
         border-color: transparentize($comparsion-color-10, 0.8);
-      }      
+      }
     }
 
     &--finishResult {
@@ -161,7 +161,7 @@
     box-sizing: border-box;
     padding: 4px;
     flex: 0 0 120px;
-    
+
     &--noPadding {
       display: flex;
       flex-direction: column;

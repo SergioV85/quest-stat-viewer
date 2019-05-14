@@ -26,7 +26,7 @@
   &__team-total-position {
     color: $middle-grey;
     flex: 0 1 50px;
-  }  
+  }
   &__team-name {
     flex: 2 1 calc(100% - 80px);
 
@@ -59,7 +59,7 @@
   }
   &__team-prev-difference {
     &--lessThanSecond {
-      color: $teal
+      color: $teal;
     }
     &--lessThanMinute {
       color: $amber;

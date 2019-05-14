@@ -17,10 +17,10 @@ export const routes: Route[] = [
     path: '',
     component: MainPageComponent,
     resolve: {
-      games: SavedGamesResolver
+      games: SavedGamesResolver,
     },
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
@@ -29,12 +29,8 @@ export const routes: Route[] = [
     RouterModule.forChild(routes),
     SharedComponentsModule,
     SharedServicesModule,
-    SharedPipesModule
+    SharedPipesModule,
   ],
-  declarations: [
-    MainPageComponent,
-    SavedGamesComponent,
-    SearchGameComponent
-  ]
+  declarations: [MainPageComponent, SavedGamesComponent, SearchGameComponent],
 })
-export class GamesModule { }
+export class GamesModule {}

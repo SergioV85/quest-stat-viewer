@@ -4,8 +4,7 @@ import { propOr } from 'ramda';
 
 @Injectable()
 export class NotificationsService {
-
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) {}
 
   public showNotification(type, message) {
     const text = propOr('Error occurred', 'message', message) as string;
@@ -14,8 +13,7 @@ export class NotificationsService {
     this.snackBar.open(text, 'Скрыть', {
       politeness: 'assertive',
       duration: 2000,
-      panelClass: cssClass
+      panelClass: cssClass,
     });
   }
-
 }

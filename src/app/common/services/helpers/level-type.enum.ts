@@ -5,5 +5,9 @@ export enum LevelType {
   Drive,
   Agent,
   Waiting,
-  Combined
+  Combined,
+  Run,
+  Rally,
+  LogicalSearch,
+  Rockets,
 }

@@ -3,8 +3,7 @@ import { head, indexOf, nth, propEq } from 'ramda';
 
 @Pipe({ name: 'totalStatCalculation' })
 export class TotalStatCalculationPipe implements PipeTransform {
-
-  public transform (value: number[], pipeType: string, additionalParam: number | QuestStat.TeamData, idx: number) {
+  public transform(value: number[], pipeType: string, additionalParam: number | QuestStat.TeamData, idx: number) {
     if (value) {
       const team = additionalParam as QuestStat.TeamData;
       switch (pipeType) {

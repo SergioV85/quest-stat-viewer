@@ -5,7 +5,7 @@ import { SavedGamesResolver } from './saved-games-resolver.service';
 describe('SavedGamesResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SavedGamesResolver]
+      providers: [SavedGamesResolver],
     });
   });
 

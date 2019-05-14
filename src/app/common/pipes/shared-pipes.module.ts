@@ -10,9 +10,7 @@ import { FilterByPropPipe } from './filter-by-prop.pipe';
 import { MultiplyNumberPipe } from './multiply-number.pipe';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [
     CheckLevelRemovalPipe,
     FilterByPropPipe,
@@ -21,7 +19,7 @@ import { MultiplyNumberPipe } from './multiply-number.pipe';
     FormatEndingPipe,
     GetPropertyPipe,
     MultiplyNumberPipe,
-    TotalStatCalculationPipe
+    TotalStatCalculationPipe,
   ],
   exports: [
     CheckLevelRemovalPipe,
@@ -31,7 +29,7 @@ import { MultiplyNumberPipe } from './multiply-number.pipe';
     FormatEndingPipe,
     GetPropertyPipe,
     MultiplyNumberPipe,
-    TotalStatCalculationPipe
-  ]
+    TotalStatCalculationPipe,
+  ],
 })
-export class SharedPipesModule { }
+export class SharedPipesModule {}

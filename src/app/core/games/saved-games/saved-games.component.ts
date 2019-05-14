@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { pipe, map, uniq, prop, filter, propEq } from 'ramda';
+import { pipe, uniq, filter, propEq, pluck } from 'ramda';
 
 @Component({
   selector: 'saved-games',
   templateUrl: 'saved-games.component.html',
-  styleUrls: ['saved-games.component.scss']
+  styleUrls: ['saved-games.component.scss'],
 })
 export class SavedGamesComponent implements OnInit {
   @Input() public savedGames: QuestStat.GameInfo[];
@@ -14,8 +14,8 @@ export class SavedGamesComponent implements OnInit {
 
   public ngOnInit() {
     this.domains = pipe(
-      map(prop('Domain')),
-      uniq
+      pluck('Domain'),
+      uniq,
     )(this.savedGames) as string[];
 
     this.games = [...this.savedGames];
@@ -30,7 +30,7 @@ export class SavedGamesComponent implements OnInit {
   public selectGame(game: QuestStat.GameInfo) {
     const requestedGame = {
       id: game.GameId,
-      domain: game.Domain
+      domain: game.Domain,
     };
     this.requestGameData.emit(requestedGame);
   }

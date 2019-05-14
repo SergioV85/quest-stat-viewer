@@ -9,6 +9,8 @@ if (environment.production) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic().bootstrapModule(AppBrowserModule)
+  platformBrowserDynamic()
+    .bootstrapModule(AppBrowserModule)
+    // tslint:disable-next-line: no-console
     .catch(err => console.log(err));
 });

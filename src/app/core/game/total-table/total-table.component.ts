@@ -1,12 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 import { Store, select } from '@ngrx/store';
 
-import * as GameDetailsActions from '@app-common/actions/game-details.actions';
-import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
+import { ChangeTotalStatTabAction } from '@app-common/actions/game-details.actions';
+import {
+  getActiveTabOnTotalStatState,
+  getAvailableLevelTypes,
+  getFinishResults,
+  getSortedTeamsTotalResulst,
+} from '@app-common/reducers/game-details/game-details.reducer';
 
 import { UtilService } from '@app-common/services/helpers/util.service';
 
@@ -19,7 +23,7 @@ declare interface MappedTeam {
 @Component({
   selector: 'total-table',
   templateUrl: 'total-table.component.html',
-  styleUrls: ['total-table.component.scss']
+  styleUrls: ['total-table.component.scss'],
 })
 export class TotalTableComponent implements OnInit, OnDestroy {
   public activeTab$: Observable<number>;
@@ -28,25 +32,24 @@ export class TotalTableComponent implements OnInit, OnDestroy {
   public sortedTeams$: Observable<MappedTeam[]>;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<QuestStat.Store.State>) {
-  }
+  constructor(private readonly store: Store<QuestStat.Store.State>) {}
 
   public ngOnInit() {
     this.activeTab$ = this.store.pipe(
-      select(GameDetailsReducer.getActiveTabOnTotalStatState),
-      takeUntil(this.ngUnsubscribe)
+      select(getActiveTabOnTotalStatState),
+      takeUntil(this.ngUnsubscribe),
     );
     this.availableTypes$ = this.store.pipe(
-      select(GameDetailsReducer.getAvailableLevelTypes),
-      takeUntil(this.ngUnsubscribe)
+      select(getAvailableLevelTypes),
+      takeUntil(this.ngUnsubscribe),
     );
     this.finishResults$ = this.store.pipe(
-      select(GameDetailsReducer.getFinishResults),
-      takeUntil(this.ngUnsubscribe)
+      select(getFinishResults),
+      takeUntil(this.ngUnsubscribe),
     );
     this.sortedTeams$ = this.store.pipe(
-      select(GameDetailsReducer.getSortedTeamsTotalResulst),
-      takeUntil(this.ngUnsubscribe)
+      select(getSortedTeamsTotalResulst),
+      takeUntil(this.ngUnsubscribe),
     );
   }
 
@@ -78,10 +81,10 @@ export class TotalTableComponent implements OnInit, OnDestroy {
 
   public changeTab($event: MatTabChangeEvent) {
     const newTab = parseInt($event.tab.textLabel, 10);
-    this.store.dispatch(new GameDetailsActions.ChangeTotalStatTabAction(newTab));
+    this.store.dispatch(new ChangeTotalStatTabAction(newTab));
   }
 
-  public trackByTeamId(index, item: MappedTeam) {
+  public trackByTeamId(index: number, item: MappedTeam) {
     return item.id;
   }
 }

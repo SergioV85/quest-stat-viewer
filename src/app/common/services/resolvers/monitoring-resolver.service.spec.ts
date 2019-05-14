@@ -5,7 +5,7 @@ import { GameMonitoringResolver } from './monitoring-resolver.service';
 describe('MonitoringResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GameMonitoringResolver]
+      providers: [GameMonitoringResolver],
     });
   });
 

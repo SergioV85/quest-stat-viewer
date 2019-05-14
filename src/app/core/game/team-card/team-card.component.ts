@@ -4,9 +4,9 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
   selector: 'team-card',
   templateUrl: 'team-card.component.html',
   styleUrls: ['team-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TeamCardComponent  {
+export class TeamCardComponent {
   @Input() public additionsTime: number;
   @Input() public bestTime: boolean;
   @Input() public duration: number;

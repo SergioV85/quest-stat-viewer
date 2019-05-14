@@ -7,7 +7,6 @@ import { SharedServicesModule } from '@app-common/services/shared-services.modul
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
 
 import { GameDataResolver } from '@app-common/services/resolvers/game-resolver.service';
-import { GameMonitoringResolver } from '@app-common/services/resolvers/monitoring-resolver.service';
 
 import { GamePageComponent } from './game-page';
 import { TotalTableComponent } from './total-table';
@@ -20,31 +19,31 @@ export const routes: Route[] = [
     path: '',
     component: GamePageComponent,
     resolve: {
-      gameData: GameDataResolver
+      gameData: GameDataResolver,
     },
     children: [
       {
         path: 'total',
-        component: TotalTableComponent
+        component: TotalTableComponent,
       },
       {
         path: 'levels',
-        component: GameTableComponent
+        component: GameTableComponent,
       },
       {
         path: 'teams',
-        component: GameTableComponent
+        component: GameTableComponent,
       },
       {
         path: 'monitoring',
-        loadChildren: './../monitoring#MonitoringModule'
+        loadChildren: './../monitoring#MonitoringModule',
       },
       {
         path: '',
         redirectTo: 'total',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -53,14 +52,8 @@ export const routes: Route[] = [
     RouterModule.forChild(routes),
     SharedComponentsModule,
     SharedServicesModule,
-    SharedPipesModule
+    SharedPipesModule,
   ],
-  declarations: [
-    GamePageComponent,
-    TotalTableComponent,
-    GameTableComponent,
-    LevelCardComponent,
-    TeamCardComponent
-  ]
+  declarations: [GamePageComponent, TotalTableComponent, GameTableComponent, LevelCardComponent, TeamCardComponent],
 })
-export class GameViewModule { }
+export class GameViewModule {}

@@ -27,6 +27,7 @@ declare namespace QuestStat {
 
   interface GameInfo {
     Domain: string;
+    FinishTime: string;
     GameId: number;
     GameName: string;
     StartTime: string;

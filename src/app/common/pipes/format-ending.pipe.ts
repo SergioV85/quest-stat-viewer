@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'formatEnding'
+  name: 'formatEnding',
 })
 export class FormatEndingPipe implements PipeTransform {
-
+  // tslint:disable-next-line: no-any
   public transform(value: any, word?: string): string {
     if (value) {
       let ending;
@@ -23,5 +23,4 @@ export class FormatEndingPipe implements PipeTransform {
     }
     return value;
   }
-
 }

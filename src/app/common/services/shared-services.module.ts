@@ -16,11 +16,7 @@ import { SavedGamesResolver } from './resolvers/saved-games-resolver.service';
 import { SharedService } from './shared.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    SharedComponentsModule
-  ],
+  imports: [CommonModule, HttpClientModule, SharedComponentsModule],
   declarations: [],
   providers: [
     GameDataResolver,
@@ -36,6 +32,6 @@ import { SharedService } from './shared.service';
       useClass: HttpCacheInterceptorService,
       multi: true,
     },
-  ]
+  ],
 })
-export class SharedServicesModule { }
+export class SharedServicesModule {}

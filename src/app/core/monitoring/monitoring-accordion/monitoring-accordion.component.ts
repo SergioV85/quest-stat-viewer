@@ -1,24 +1,19 @@
-import { Component, Input, Output, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { find, path, pipe, prop, propEq } from 'ramda';
-import { LevelType } from '@app-common/services/helpers/level-type.enum';
 import { UtilService } from '@app-common/services/helpers/util.service';
 
 @Component({
   selector: 'monitoring-accordion',
   templateUrl: './monitoring-accordion.component.html',
-  styleUrls: ['./monitoring-accordion.component.scss']
+  styleUrls: ['./monitoring-accordion.component.scss'],
 })
-export class MonitoringAccordionComponent implements OnInit {
+export class MonitoringAccordionComponent {
   @Input() public data;
   @Input() public labelPrefix = '';
   @Input() public descriptionPrefix = 'на уровне';
   @Input() public pathToLabel: string[];
   @Input() public levels: QuestStat.LevelData[];
   @Input() public groupBy: string;
-
-  constructor() {}
-
-  public ngOnInit() {}
 
   public getLabel(row): string {
     return `${this.labelPrefix} ${path(this.pathToLabel, row)}`;
@@ -34,7 +29,7 @@ export class MonitoringAccordionComponent implements OnInit {
   public getDescription(row): string {
     const percentFull = pipe(
       prop('correctCodesPercent'),
-      (number: Number) => number.toFixed(2)
+      (num: number) => num.toFixed(2),
     )(row);
 
     return `Уникальных кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)},

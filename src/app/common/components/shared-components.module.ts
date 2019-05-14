@@ -20,13 +20,9 @@ import {
   MatTabsModule,
   MatTableModule,
   MatToolbarModule,
-  MatTooltipModule
+  MatTooltipModule,
 } from '@angular/material';
-import {
-  ButtonsModule,
-  BsDropdownModule,
-  ProgressbarModule
-} from 'ngx-bootstrap';
+import { ButtonsModule, BsDropdownModule, ProgressbarModule } from 'ngx-bootstrap';
 
 const angularMaterialComponents = [
   MatButtonModule,
@@ -47,12 +43,9 @@ const angularMaterialComponents = [
   MatTabsModule,
   MatTableModule,
   MatToolbarModule,
-  MatTooltipModule
+  MatTooltipModule,
 ];
-const ngxBootstrapComponents = [
-  ButtonsModule,
-  BsDropdownModule
-];
+const ngxBootstrapComponents = [ButtonsModule, BsDropdownModule];
 
 @NgModule({
   imports: [
@@ -61,7 +54,7 @@ const ngxBootstrapComponents = [
     ReactiveFormsModule,
     ...angularMaterialComponents,
     ...ngxBootstrapComponents,
-    ProgressbarModule.forRoot()
+    ProgressbarModule.forRoot(),
   ],
   declarations: [],
   exports: [
@@ -69,13 +62,13 @@ const ngxBootstrapComponents = [
     ReactiveFormsModule,
     ...angularMaterialComponents,
     ...ngxBootstrapComponents,
-    ProgressbarModule
-  ]
+    ProgressbarModule,
+  ],
 })
 export class SharedComponentsModule {
   public static forRoot() {
     return {
-      ngModule: SharedComponentsModule
+      ngModule: SharedComponentsModule,
     };
   }
 }

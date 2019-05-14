@@ -1,10 +1,5 @@
 import { Params, RouterStateSnapshot } from '@angular/router';
-import {
-  StoreRouterConnectingModule,
-  routerReducer,
-  RouterReducerState,
-  RouterStateSerializer
-} from '@ngrx/router-store';
+import { RouterReducerState, RouterStateSerializer } from '@ngrx/router-store';
 
 export interface RouterStateUrl {
   url: string;
@@ -24,7 +19,10 @@ export class CustomRouterStateSerializer implements RouterStateSerializer<Router
       route = route.firstChild;
     }
 
-    const { url, root: { queryParams } } = routerState;
+    const {
+      url,
+      root: { queryParams },
+    } = routerState;
     const { params } = route;
 
     return { url, params, queryParams };
