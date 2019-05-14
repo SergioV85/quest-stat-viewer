@@ -1,7 +1,6 @@
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
 import { join } from 'path';
-import * as fs from 'fs';
 
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
