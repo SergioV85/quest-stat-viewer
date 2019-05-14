@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run build:ssr",
+    "build": "npm run build:ssr && npm run start:heroku",
     "build:prod": "ng build --prod",
     "build:prod:universal": "ng run quest-stat-viewer:server:production",
     "build:all": "npm run build:prod && npm run build:prod:universal",
@@ -16,7 +16,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start:heroku": "node dist/server.js",
-    "postinstall": "npm run build:ssr",
     "prettier": "prettier --config ./.prettierrc --list-different \"./src/app/**/*.{ts,js,scss,css,json}\"",
     "precommit": "npm run prettier && npm run lint"
   },
