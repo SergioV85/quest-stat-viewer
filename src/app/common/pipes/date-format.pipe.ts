@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import * as  moment from 'moment';
+import * as moment from 'moment';
 
 @Pipe({ name: 'formatDateTime' })
 export class FormatDateTimePipe implements PipeTransform {
@@ -9,7 +9,7 @@ export class FormatDateTimePipe implements PipeTransform {
   private readonly shortFormat = 'DD MMM YYYY';
   private readonly timeOnly = 'HH:mm:ss';
 
-  public transform (value: string | Date, type: string, parseFromString?: boolean) {
+  public transform(value: string | Date, type: string, parseFromString?: boolean) {
     if (value) {
       const date = parseFromString ? moment(value, this.serverFormat) : moment(value);
       if (date.isValid()) {

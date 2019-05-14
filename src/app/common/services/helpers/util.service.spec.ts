@@ -5,7 +5,7 @@ import { UtilService } from './util.service';
 describe('UtilService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UtilService]
+      providers: [UtilService],
     });
   });
 

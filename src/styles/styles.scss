@@ -5,13 +5,17 @@
 @import 'reset';
 @import '~bootstrap/scss/bootstrap';
 @import '~@angular/material/_theming';
+@import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
+@import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
+@import "@fortawesome/fontawesome-free-webfonts/css/fa-regular.css";
+@import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 // NOTE: Theming is currently experimental and not yet publicly released!
 
 @include mat-core();
 
 $primary: mat-palette($mat-deep-purple);
-$accent:  mat-palette($mat-amber, A200, A100, A400);
+$accent: mat-palette($mat-amber, A200, A100, A400);
 
 $theme: mat-light-theme($primary, $accent);
 
@@ -19,8 +23,8 @@ $theme: mat-light-theme($primary, $accent);
 
 .m2app-dark {
   $dark-primary: mat-palette($mat-pink, 700, 500, 900);
-  $dark-accent:  mat-palette($mat-blue-grey, A200, A100, A400);
-  $dark-warn:    mat-palette($mat-deep-orange);
+  $dark-accent: mat-palette($mat-blue-grey, A200, A100, A400);
+  $dark-warn: mat-palette($mat-deep-orange);
 
   $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
@@ -83,11 +87,11 @@ div.mat-expansion-panel-content:not(.mat-expanded) {
   visibility: hidden;
 }
 
-.mat-expansion-panel-header:not(.mat-expanded)  {
+.mat-expansion-panel-header:not(.mat-expanded) {
   height: 48px;
 }
 
-.mat-expansion-panel-header  {
+.mat-expansion-panel-header {
   height: 64px;
   &.mat-expanded {
     .mat-expansion-indicator {

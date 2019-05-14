@@ -1,7 +1,7 @@
 @import './../../../../styles/mixins';
 
 .c-monitoring-accordion {
-  &__title, 
+  &__title,
   &__description {
     flex-basis: 0;
     font-size: 12px;
@@ -13,7 +13,7 @@
   &__title {
     align-items: center;
   }
-  
+
   &__description {
     justify-content: space-between;
     align-items: center;

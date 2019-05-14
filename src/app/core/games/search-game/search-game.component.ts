@@ -7,7 +7,7 @@ const urlRegex = /(quest.ua|en.cx).*gid=\d+/;
 @Component({
   selector: 'search-game',
   templateUrl: 'search-game.component.html',
-  styleUrls: ['search-game.component.scss']
+  styleUrls: ['search-game.component.scss'],
 })
 export class SearchGameComponent implements OnInit {
   @Output() public requestGameData = new EventEmitter<QuestStat.GameRequest>();
@@ -18,10 +18,7 @@ export class SearchGameComponent implements OnInit {
 
   public ngOnInit() {
     this.urlForm = this.fb.group({
-      urlInput: [null, [
-        Validators.required,
-        Validators.pattern(urlRegex)
-      ]]
+      urlInput: [null, [Validators.required, Validators.pattern(urlRegex)]],
     });
   }
 
@@ -34,12 +31,12 @@ export class SearchGameComponent implements OnInit {
     const id = pipe(
       split('='),
       last,
-      parseInt
+      parseInt,
     )(gameUrl);
 
     this.requestGameData.emit({
       domain,
-      id
+      id,
     });
   }
 
@@ -48,7 +45,7 @@ export class SearchGameComponent implements OnInit {
 
     return pipe(
       split('/'),
-      find(test(regex))
+      find(test(regex)),
     )(gameUrl);
   }
 }

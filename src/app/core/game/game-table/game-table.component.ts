@@ -1,62 +1,51 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 import { Store, select } from '@ngrx/store';
 
-import {
-  contains,
-  indexOf,
-  without
-} from 'ramda';
+import { contains, indexOf, without } from 'ramda';
 
-import * as GameDetailsActions from '@app-common/actions/game-details.actions';
-import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
-import * as RouterReducer from '@app-common/reducers/router/router.reducer';
+import { ChangeLevelTypeAction, RemoveLevelFromStatAction } from '@app-common/actions/game-details.actions';
+import { getLevels, getStatData } from '@app-common/reducers/game-details/game-details.reducer';
+import { getActiveTab } from '@app-common/reducers/router/router.reducer';
 import { LevelType } from '@app-common/services/helpers/level-type.enum';
 
 @Component({
   selector: 'game-table',
   templateUrl: 'game-table.component.html',
   styleUrls: ['game-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameTableComponent implements OnInit, OnDestroy {
-  // @Output() public changeLevelType = new EventEmitter<{}>();
-  // @Output() public removeLevel = new EventEmitter<{}>();
   public activeTab$: Observable<string>;
-  public levels$: Observable<QuestStat.LevelData[]>;
-  public statData$: Observable<{ teams: QuestStat.TeamData[][], levels: QuestStat.TeamData[][] }>;
 
   public levels: QuestStat.LevelData[];
-  public statData: { teams: QuestStat.TeamData[][], levels: QuestStat.TeamData[][] };
+  public statData: { teams: QuestStat.TeamData[][]; levels: QuestStat.TeamData[][] };
   public LevelType = LevelType;
   private selectedTeams: number[] = [];
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<QuestStat.Store.State>) {}
+  constructor(private readonly store: Store<QuestStat.Store.State>) {}
 
   public ngOnInit() {
     this.activeTab$ = this.store.pipe(
-      select(RouterReducer.getActiveTab),
-      takeUntil(this.ngUnsubscribe)
+      select(getActiveTab),
+      takeUntil(this.ngUnsubscribe),
     );
-    this.levels$ = this.store.pipe(
-      select(GameDetailsReducer.getLevels),
-      takeUntil(this.ngUnsubscribe)
-    );
-    this.levels$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((levels) => this.levels = levels);
-    this.statData$ = this.store.pipe(
-      select(GameDetailsReducer.getStatData),
-      takeUntil(this.ngUnsubscribe)
-    );
-    this.statData$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => this.statData = data);
+    this.store
+      .pipe(
+        select(getLevels),
+        takeUntil(this.ngUnsubscribe),
+      )
+      .subscribe(levels => (this.levels = levels));
+    this.store
+      .pipe(
+        select(getStatData),
+        takeUntil(this.ngUnsubscribe),
+      )
+      .subscribe(data => (this.statData = data));
   }
 
   public ngOnDestroy() {
@@ -77,10 +66,10 @@ export class GameTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public changeLevelType({ type, level }: { type: number, level: number }) {
-    this.store.dispatch(new GameDetailsActions.ChangeLevelTypeAction({ type, level }));
+  public changeLevelType({ type, level }: { type: number; level: number }) {
+    this.store.dispatch(new ChangeLevelTypeAction({ type, level }));
   }
-  public removeLevel({ removed, level }: { removed: boolean, level: number }) {
-    this.store.dispatch(new GameDetailsActions.RemoveLevelFromStatAction({ removed, level }));
+  public removeLevel({ removed, level }: { removed: boolean; level: number }) {
+    this.store.dispatch(new RemoveLevelFromStatAction({ removed, level }));
   }
 }

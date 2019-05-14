@@ -1,47 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 
-import { MatSnackBar } from '@angular/material';
-import { takeUntil, catchError, finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
-import {
-  add,
-  adjust,
-  ascend,
-  clone,
-  complement,
-  descend,
-  difference,
-  equals,
-  filter,
-  find,
-  findIndex,
-  head,
-  isNil,
-  map,
-  merge,
-  mergeDeepRight,
-  pathOr,
-  pipe,
-  prop,
-  propEq,
-  propOr,
-  sortWith,
-  subtract,
-  update
-} from 'ramda';
-import { DeviceService } from '@app-common/services/helpers/device.service';
+import { takeUntil } from 'rxjs/operators';
+
 import { Store, select } from '@ngrx/store';
-import * as GameDetailsActions from '@app-common/actions/game-details.actions';
-import * as GameDetailsReducer from '@app-common/reducers/game-details/game-details.reducer';
-import * as RouterReducer from '@app-common/reducers/router/router.reducer';
+import { SaveLevelsTypesAction, GetLatestDataFromEnAction } from '@app-common/actions/game-details.actions';
+import { getLoadingState, hasPendingChanges } from '@app-common/reducers/game-details/game-details.reducer';
+import { getActiveTab } from '@app-common/reducers/router/router.reducer';
 
 @Component({
   selector: 'game-page',
   templateUrl: 'game-page.component.html',
-  styleUrls: ['game-page.component.scss']
+  styleUrls: ['game-page.component.scss'],
 })
 export class GamePageComponent implements OnInit, OnDestroy {
   public activeTab$: Observable<string>;
@@ -55,32 +27,31 @@ export class GamePageComponent implements OnInit, OnDestroy {
   public disableSaveButton = false;
   public loadData = false;
   public selectedView = 'total';
-  private serverData: QuestStat.GameData;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<QuestStat.Store.State>,
-              private route: ActivatedRoute,
-              private router: Router,
-              private formBuilder: FormBuilder,
-              private deviceService: DeviceService,
-              private snackBar: MatSnackBar) {}
+  constructor(
+    private readonly store: Store<QuestStat.Store.State>,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly formBuilder: FormBuilder,
+  ) {}
 
   public ngOnInit() {
     this.isGameDataLoading$ = this.store.pipe(
-      select(GameDetailsReducer.getLoadingState),
-      takeUntil(this.ngUnsubscribe)
+      select(getLoadingState),
+      takeUntil(this.ngUnsubscribe),
     );
     this.activeTab$ = this.store.pipe(
-      select(RouterReducer.getActiveTab),
-      takeUntil(this.ngUnsubscribe)
+      select(getActiveTab),
+      takeUntil(this.ngUnsubscribe),
     );
     this.hasPendingChanges$ = this.store.pipe(
-      select(GameDetailsReducer.hasPendingChanges),
-      takeUntil(this.ngUnsubscribe)
+      select(hasPendingChanges),
+      takeUntil(this.ngUnsubscribe),
     );
 
     this.tabsForm = this.formBuilder.group({
-      activeTabSelector: 'total'
+      activeTabSelector: 'total',
     });
   }
 
@@ -90,11 +61,11 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   public saveChanges() {
-    this.store.dispatch(new GameDetailsActions.SaveLevelsTypesAction());
+    this.store.dispatch(new SaveLevelsTypesAction());
   }
 
   public refreshData() {
-    this.store.dispatch(new GameDetailsActions.GetLatestDataFromEnAction());
+    this.store.dispatch(new GetLatestDataFromEnAction());
   }
 
   public changeViewType({ value }) {

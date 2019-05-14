@@ -21,7 +21,4 @@ export class ErrorNotificationAction implements Action {
   constructor(public payload: { message?: string }) {}
 }
 
-export type NotificationActions
-  = SuccessNotificationAction
-  | WarningNotificationAction
-  | ErrorNotificationAction;
+export type NotificationActions = SuccessNotificationAction | WarningNotificationAction | ErrorNotificationAction;

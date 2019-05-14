@@ -1,34 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { from } from 'rxjs/observable/from';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { catchError, exhaustMap, map, finalize } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { ApiService } from '@app-common/services/api/api.service';
-import * as GamesActions from '@app-common/actions/games.actions';
-import * as NotificationActions from '@app-common/actions/notification.actions';
+import {
+  GamesActionTypes,
+  RequestGamesSuccessAction,
+  RequestGamesFailedAction,
+} from '@app-common/actions/games.actions';
+import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
 
 @Injectable()
 export class GamesEffects {
-
-  constructor(private actions$: Actions,
-              private apiService: ApiService) {}
+  constructor(private readonly actions$: Actions, private readonly apiService: ApiService) {}
 
   @Effect()
-  public $getGames = this.actions$.pipe(
-    ofType(GamesActions.GamesActionTypes.RequestGames),
+  public getGames$ = this.actions$.pipe(
+    ofType(GamesActionTypes.RequestGames),
     exhaustMap(() =>
-      this.apiService.getSavedGames()
-        .pipe(
-          map((games) => new GamesActions.RequestGamesSuccessAction(games)),
-          catchError((err) => {
-            const actions = [
-              new GamesActions.RequestGamesFailedAction(err.error),
-              new NotificationActions.ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' })
-            ];
-            return from(actions);
-          })
-        )
-    )
+      this.apiService.getSavedGames().pipe(
+        map(games => new RequestGamesSuccessAction(games)),
+        catchError(err => {
+          const actions = [
+            new RequestGamesFailedAction(err.error),
+            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
+          ];
+          return from(actions);
+        }),
+      ),
+    ),
   );
 }

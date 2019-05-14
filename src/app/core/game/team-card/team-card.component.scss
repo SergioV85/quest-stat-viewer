@@ -57,21 +57,21 @@
     margin: 4px 0 0;
     text-align: center;
     word-break: break-word;
-  }  
+  }
   &__additionalTime {
     &--bonus {
       color: $main-green;
       &:before {
-        content: "бонус"
+        content: 'бонус';
       }
     }
     &--penalty {
       color: $main-red;
 
       &:before {
-        content: "штраф"
+        content: 'штраф';
       }
-    }    
+    }
   }
   &__timeout {
     color: $main-green;

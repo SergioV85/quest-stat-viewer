@@ -3,10 +3,9 @@ import { pathOr } from 'ramda';
 
 @Pipe({ name: 'checkLevelRemoval' })
 export class CheckLevelRemovalPipe implements PipeTransform {
-
-  public transform (levels: QuestStat.LevelData[], team: QuestStat.TeamData) {
+  public transform(levels: QuestStat.LevelData[], team: QuestStat.TeamData) {
     if (levels) {
-        return pathOr(false, [team.levelIdx, 'removed'] , levels);
+      return pathOr(false, [team.levelIdx, 'removed'], levels);
     }
     return false;
   }

@@ -1,10 +1,9 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import * as  moment from 'moment';
+import * as moment from 'moment';
 
 @Pipe({ name: 'formatDuration' })
 export class FormatDurationPipe implements PipeTransform {
-
-  public transform (value: number, countType = 'ms') {
+  public transform(value: number, countType = 'ms') {
     if (value) {
       let modValue;
 

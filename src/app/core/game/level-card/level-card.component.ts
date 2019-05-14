@@ -6,7 +6,7 @@ import { LevelType } from '@app-common/services/helpers/level-type.enum';
   selector: 'level-card',
   templateUrl: 'level-card.component.html',
   styleUrls: ['level-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LevelCardComponent {
   @Input() public set levelInfo(level: QuestStat.LevelData) {
@@ -24,37 +24,58 @@ export class LevelCardComponent {
     {
       type: 0,
       name: 'Неопределен',
-      icon: 'fas fa-question'
+      icon: 'fas fa-question',
     },
     {
       type: 1,
       name: 'Поиск',
-      icon: 'fas fa-search'
+      icon: 'fas fa-search',
     },
     {
       type: 2,
       name: 'Логика',
-      icon: 'far fa-lightbulb'
+      icon: 'far fa-lightbulb',
     },
     {
       type: 3,
       name: 'Доезд',
-      icon: 'fas fa-car'
+      icon: 'fas fa-car',
     },
     {
       type: 4,
       name: 'Агентский',
-      icon: 'far fa-user'
+      icon: 'far fa-user',
     },
     {
       type: 5,
       name: 'Заглушка',
-      icon: 'far fa-clock'
+      icon: 'far fa-clock',
     },
     {
       type: 6,
       name: 'Точка',
-      icon: 'fas fa-map-pin'
+      icon: 'fas fa-map-pin',
+    },
+    {
+      type: 7,
+      name: 'Добег',
+      icon: 'fas fa-walking',
+    },
+    {
+      type: 8,
+      name: 'Ралийка',
+      icon: 'fas fa-road',
+    },
+    {
+      type: 9,
+      name: 'Лог.Поиск',
+      icon: 'fas fa-user-graduate',
+    },
+
+    {
+      type: 10,
+      name: 'Ракеты',
+      icon: 'fas fa-rocket',
     },
   ];
   public levelData: QuestStat.LevelData;

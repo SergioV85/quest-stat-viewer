@@ -5,7 +5,7 @@ import { HttpCacheInterceptorService } from './http-interceptor.service';
 describe('HttpInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HttpCacheInterceptorService]
+      providers: [HttpCacheInterceptorService],
     });
   });
 

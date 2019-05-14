@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject, fromEvent } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { fromEvent } from 'rxjs/observable/fromEvent';
 
 export type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'fullResolution';
 
@@ -11,16 +9,12 @@ export class DeviceService {
   public device: Observable<DeviceType>;
 
   constructor() {
-    const checkDevice = new BehaviorSubject<DeviceType>(this.getWindowSize());
-    this.device = checkDevice.pipe(
-      distinctUntilChanged()
-    );
+    const checkDevice$ = new BehaviorSubject<DeviceType>(this.getWindowSize());
+    this.device = checkDevice$.pipe(distinctUntilChanged());
 
     fromEvent(window, 'resize')
-      .pipe(
-        map(this.getWindowSize)
-      )
-      .subscribe(checkDevice);
+      .pipe(map(this.getWindowSize))
+      .subscribe(checkDevice$);
   }
 
   public isMobileDevice(): boolean {

@@ -9,5 +9,5 @@ export const reducers: ActionReducerMap<QuestStat.Store.State> = {
   games: gameReducer,
   gameDetails: gameDetailsReducer,
   monitoring: monitoringReducer,
-  router: routerReducer
+  router: routerReducer,
 };

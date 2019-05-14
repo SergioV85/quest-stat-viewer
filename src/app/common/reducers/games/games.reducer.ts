@@ -1,20 +1,20 @@
 import { createSelector } from '@ngrx/store';
-import { drop, merge, pick, prop, propOr, take } from 'ramda';
+import { merge, prop, propOr, pipe, sortWith, descend } from 'ramda';
 
-import * as GamesActions from '@app-common/actions/games.actions';
+import { GamesActions, GamesActionTypes } from '@app-common/actions/games.actions';
 
 export const initialState: QuestStat.Store.Games = {};
 
-export function gameReducer(gamesState = initialState, action: GamesActions.GamesActions): QuestStat.Store.Games {
+export function gameReducer(gamesState = initialState, action: GamesActions): QuestStat.Store.Games {
   switch (action.type) {
-    case GamesActions.GamesActionTypes.RequestGames: {
+    case GamesActionTypes.RequestGames: {
       return merge(gamesState, { isLoading: true });
     }
-    case GamesActions.GamesActionTypes.RequestGamesComplete: {
+    case GamesActionTypes.RequestGamesComplete: {
       const games = action.payload;
       return merge(gamesState, { games, isLoading: false });
     }
-    case GamesActions.GamesActionTypes.RequestGamesError: {
+    case GamesActionTypes.RequestGamesError: {
       return merge(gamesState, { isLoading: false });
     }
     default:
@@ -23,9 +23,14 @@ export function gameReducer(gamesState = initialState, action: GamesActions.Game
 }
 
 export const selectGamesStore = (state: QuestStat.Store.State) => state.games;
-export const getLoadingState = createSelector(selectGamesStore, (state: QuestStat.Store.Games) =>
-  prop('isLoading', state)
+export const getLoadingState = createSelector(
+  selectGamesStore,
+  (state: QuestStat.Store.Games) => prop('isLoading', state),
 );
-export const getGames = createSelector(selectGamesStore, (state: QuestStat.Store.Games) =>
-  propOr([], 'games', state) as QuestStat.GameInfo[]
+export const getGames = createSelector(
+  selectGamesStore,
+  pipe(
+    propOr([], 'games'),
+    sortWith([descend(prop('StartTime')), descend(prop('FinishTime'))]),
+  ) as (data: QuestStat.Store.Games) => QuestStat.GameInfo[],
 );

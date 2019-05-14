@@ -22,6 +22,18 @@ export class UtilService {
       case LevelType.Combined:
         icon = 'fas fa-map-pin';
         break;
+      case LevelType.Run:
+        icon = 'fas fa-walking';
+        break;
+      case LevelType.Rally:
+        icon = 'fas fa-road';
+        break;
+      case LevelType.LogicalSearch:
+        icon = 'fas fa-user-graduate';
+        break;
+      case LevelType.Rockets:
+        icon = 'fas fa-rocket';
+        break;
       case LevelType.General:
       default:
         icon = 'fas fa-question';
@@ -50,6 +62,18 @@ export class UtilService {
         break;
       case LevelType.Combined:
         name = 'Точка';
+        break;
+      case LevelType.Run:
+        name = 'Добег';
+        break;
+      case LevelType.Rally:
+        name = 'Ралийка';
+        break;
+      case LevelType.LogicalSearch:
+        name = 'Лог.Поиск';
+        break;
+      case LevelType.Rockets:
+        name = 'Ракеты';
         break;
       case LevelType.General:
       default:

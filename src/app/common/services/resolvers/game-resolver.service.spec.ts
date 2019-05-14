@@ -5,7 +5,7 @@ import { GameDataResolver } from './game-resolver.service';
 describe('GameDataResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GameDataResolver]
+      providers: [GameDataResolver],
     });
   });
 
