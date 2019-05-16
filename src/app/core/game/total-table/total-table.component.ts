@@ -32,22 +32,22 @@ export class TotalTableComponent implements OnInit, OnDestroy {
   public sortedTeams$: Observable<MappedTeam[]>;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private readonly store: Store<QuestStat.Store.State>) {}
+  constructor(private readonly store$: Store<QuestStat.Store.State>) {}
 
   public ngOnInit() {
-    this.activeTab$ = this.store.pipe(
+    this.activeTab$ = this.store$.pipe(
       select(getActiveTabOnTotalStatState),
       takeUntil(this.ngUnsubscribe),
     );
-    this.availableTypes$ = this.store.pipe(
+    this.availableTypes$ = this.store$.pipe(
       select(getAvailableLevelTypes),
       takeUntil(this.ngUnsubscribe),
     );
-    this.finishResults$ = this.store.pipe(
+    this.finishResults$ = this.store$.pipe(
       select(getFinishResults),
       takeUntil(this.ngUnsubscribe),
     );
-    this.sortedTeams$ = this.store.pipe(
+    this.sortedTeams$ = this.store$.pipe(
       select(getSortedTeamsTotalResulst),
       takeUntil(this.ngUnsubscribe),
     );
@@ -81,7 +81,7 @@ export class TotalTableComponent implements OnInit, OnDestroy {
 
   public changeTab($event: MatTabChangeEvent) {
     const newTab = parseInt($event.tab.textLabel, 10);
-    this.store.dispatch(new ChangeTotalStatTabAction(newTab));
+    this.store$.dispatch(new ChangeTotalStatTabAction(newTab));
   }
 
   public trackByTeamId(index: number, item: MappedTeam) {

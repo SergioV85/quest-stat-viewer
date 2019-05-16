@@ -81,12 +81,6 @@ body {
   background: $main-green !important;
 }
 
-/* Fix for material accordion inside mat-tab-control */
-div.mat-expansion-panel-content:not(.mat-expanded) {
-  height: 0px;
-  visibility: hidden;
-}
-
 .mat-expansion-panel-header:not(.mat-expanded) {
   height: 48px;
 }

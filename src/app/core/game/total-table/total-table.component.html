@@ -1,5 +1,5 @@
 <div class="total-table">
-  <mat-tab-group (selectChange)="changeTab($event)">
+  <mat-tab-group (selectedTabChange)="changeTab($event)">
     <ng-template ngFor
         [ngForOf]="availableTypes$ | async"
         let-type>
@@ -36,7 +36,7 @@
               +{{ diff | formatDuration }}
           </span>
         </span>
-        <span class="total-table__team-leader-difference" 
+        <span class="total-table__team-leader-difference"
             matTooltip="Отставание от лидера">
           <span *ngIf="idx !== 0">
             {{ sortedTeams$ | async | getProp:'duration' | totalStatCalculation:'leaderDifference':team | formatDuration }}
