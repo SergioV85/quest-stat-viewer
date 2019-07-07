@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -17,7 +18,7 @@ export class CodesListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public uniqueId: number;
   @Input() public levelId: number;
   @Input() public type: string;
-  @ViewChild(MatPaginator) public paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   public dataSource = new MatTableDataSource<QuestStat.Monitoring.CodeEntry>();
   public displayedColumns = ['player', 'code', 'time', 'timeDiff'];
   private ngUnsubscribe: Subject<void> = new Subject<void>();

@@ -36,7 +36,7 @@ export const routes: Route[] = [
       },
       {
         path: 'monitoring',
-        loadChildren: './../monitoring#MonitoringModule',
+        loadChildren: () => import('./../monitoring').then(m => m.MonitoringModule),
       },
       {
         path: '',

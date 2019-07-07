@@ -4,12 +4,12 @@ import { NoContentComponent } from './core/no-content';
 export const ROUTES: Routes = [
   {
     path: ':domain/:id',
-    loadChildren: './core/game#GameViewModule',
+    loadChildren: () => import('./core/game').then(m => m.GameViewModule),
   },
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: './core/games#GamesModule',
+    loadChildren: () => import('./core/games').then(m => m.GamesModule),
   },
   { path: '**', component: NoContentComponent },
 ];
