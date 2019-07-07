@@ -16,7 +16,7 @@
   &__header {
     height: 72px;
 
-    /deep/ .mat-toolbar-row {
+    ::ng-deep .mat-toolbar-row {
       flex-wrap: wrap;
 
       @include desktop {
@@ -42,7 +42,7 @@
     flex-basis: 100%;
     margin: 10px;
 
-    /deep/ .mat-card-header-text {
+    ::ng-deep .mat-card-header-text {
       margin: 0;
     }
 
