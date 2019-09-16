@@ -34,6 +34,7 @@ import {
   tap,
   uniq,
   update,
+  reject,
 } from 'ramda';
 
 const adjustBonusTime = (isRemoved: boolean, teamStat: QuestStat.TeamData) => {
@@ -95,7 +96,7 @@ export const getMatchedLevels = (selectedType, state) =>
     prop('levels'),
     filter(propEq('type', selectedType)),
     filter(complement(prop('removed'))),
-    map(prop('position')),
+    pluck('position'),
   )(state);
 export const getCalculatedStat = (matchedLevels, team: QuestStat.GroupedTeamData) => ({
   name: pipe(
@@ -206,7 +207,7 @@ export const updateStatByTeams = (removedLevel: QuestStat.LevelData, currentTeam
         curry(adjustBonusTime)(removedLevel.removed),
       ),
     ),
-    filter(complement(isNil)),
+    reject(isNil),
   )(currentTeamStat) as QuestStat.GroupedTeamData[];
 
   return pipe(
