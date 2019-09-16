@@ -2,7 +2,7 @@
   <mat-toolbar class="saved-games__header">
     <span class="saved-games__title">Сохраненные игры</span>
     <span class="saved-games__spacer"></span>
-    <mat-select class="saved-games__filter" placeholder="Фильтр по домену" (change)="filterByDomain($event)">
+    <mat-select class="saved-games__filter" placeholder="Фильтр по домену" (selectionChange)="filterByDomain($event)">
       <mat-option>Все домены</mat-option>
       <mat-option *ngFor="let domain of domains"
           [value]="domain">

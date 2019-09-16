@@ -16,7 +16,7 @@ export class SavedGamesComponent implements OnInit {
     this.domains = pipe(
       pluck('Domain'),
       uniq,
-    )(this.savedGames) as string[];
+    )(this.savedGames);
 
     this.games = [...this.savedGames];
   }
