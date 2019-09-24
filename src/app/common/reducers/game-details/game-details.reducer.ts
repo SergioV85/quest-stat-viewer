@@ -42,7 +42,7 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
   switch (action.type) {
     case GameDetailsActionTypes.ChangeLevelType: {
       const updatedLevel = action.payload;
-      const currentLevels = prop('levels', gameDetailsState) as QuestStat.LevelData[];
+      const currentLevels = prop('levels', gameDetailsState);
       const levels = updateLevels(updatedLevel, currentLevels);
 
       return merge(gameDetailsState, { levels });
@@ -67,10 +67,10 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
     case GameDetailsActionTypes.RemoveLevelFromStat: {
       const removedLevel = action.payload;
 
-      const currentLevels = prop('levels', gameDetailsState) as QuestStat.LevelData[];
-      const currentStatByLevels = prop('dataByLevels', gameDetailsState) as QuestStat.TeamData[][];
-      const currentStatByTeams = prop('dataByTeam', gameDetailsState) as QuestStat.GroupedTeamData[];
-      const currentFinishResulst = prop('finishResults', gameDetailsState) as QuestStat.TeamData[];
+      const currentLevels = prop('levels', gameDetailsState);
+      const currentStatByLevels = prop('dataByLevels', gameDetailsState);
+      const currentStatByTeams = prop('dataByTeam', gameDetailsState);
+      const currentFinishResults = prop('finishResults', gameDetailsState);
 
       const levels = updateLevels(removedLevel, currentLevels);
 
@@ -78,7 +78,7 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
 
       const dataByLevels = updateStatByLevel(newLevel, currentStatByLevels);
       const dataByTeam = updateStatByTeams(newLevel, currentStatByTeams);
-      const finishResults = updateFinishStat(newLevel, dataByTeam, currentFinishResulst);
+      const finishResults = updateFinishStat(newLevel, dataByTeam, currentFinishResults);
 
       return merge(gameDetailsState, { levels, dataByLevels, dataByTeam, finishResults });
     }
@@ -88,9 +88,9 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Game
     case GameDetailsActionTypes.RequestGameDetailsComplete: {
       const serverGameData = action.payload;
       const gameInfo = prop('info', serverGameData);
-      const levels = path(['stat', 'Levels'], serverGameData) as QuestStat.LevelData[];
-      const dataByTeam = path(['stat', 'DataByTeam'], serverGameData) as QuestStat.GroupedTeamData[];
-      const dataByLevels = path(['stat', 'DataByLevels'], serverGameData) as QuestStat.TeamData[];
+      const levels: QuestStat.LevelData[] = path(['stat', 'Levels'], serverGameData);
+      const dataByTeam: QuestStat.GroupedTeamData[] = path(['stat', 'DataByTeam'], serverGameData);
+      const dataByLevels: QuestStat.TeamData[] = path(['stat', 'DataByLevels'], serverGameData);
       const finishResults = sortFinishResults(serverGameData.stat.FinishResults);
 
       const selectedTotalTab = pipe(

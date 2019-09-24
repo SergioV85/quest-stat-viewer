@@ -45,7 +45,7 @@ const adjustBonusTime = (isRemoved: boolean, teamStat: QuestStat.TeamData) => {
     additionsTime: isRemoved
       ? add(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
       : subtract(pathOr(0, ['additionsTime'], teamStat), teamStat.duration),
-  });
+  }) as QuestStat.TeamData;
 };
 const replaceTeamStatInList = (
   existedLevel: QuestStat.LevelData,
@@ -197,7 +197,7 @@ export const updateStatByLevel = (removedLevel: QuestStat.LevelData, currentStat
     return adjust(removedLevel.position, curry(adjustBonusTime)(removedLevel.removed), levelRow);
   }, currentStat);
 };
-export const updateStatByTeams = (removedLevel: QuestStat.LevelData, currentTeamStat) => {
+export const updateStatByTeams = (removedLevel: QuestStat.LevelData, currentTeamStat: QuestStat.GroupedTeamData[]) => {
   const updatedStatByTeams = pipe(
     map(
       pipe(
@@ -207,7 +207,7 @@ export const updateStatByTeams = (removedLevel: QuestStat.LevelData, currentTeam
       ),
     ),
     reject(isNil),
-  )(currentTeamStat) as QuestStat.GroupedTeamData[];
+  )(currentTeamStat);
 
   return pipe(
     map(
