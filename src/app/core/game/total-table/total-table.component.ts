@@ -9,7 +9,7 @@ import {
   getActiveTabOnTotalStatState,
   getAvailableLevelTypes,
   getFinishResults,
-  getSortedTeamsTotalResulst,
+  getSortedTeamsTotalResults,
 } from '@app-common/reducers/game-details/game-details.reducer';
 
 import { UtilService } from '@app-common/services/helpers/util.service';
@@ -48,7 +48,7 @@ export class TotalTableComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe),
     );
     this.sortedTeams$ = this.store$.pipe(
-      select(getSortedTeamsTotalResulst),
+      select(getSortedTeamsTotalResults),
       takeUntil(this.ngUnsubscribe),
     );
   }

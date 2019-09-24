@@ -91,14 +91,14 @@ export const appendFinishStatToTeam = (
     };
   }, sortedTeamStat);
 };
-export const getMatchedLevels = (selectedType, state) =>
+export const getMatchedLevels = (selectedType: number, state: QuestStat.Store.GameDetails) =>
   pipe(
-    prop('levels'),
-    filter(propEq('type', selectedType)),
-    filter(complement(prop('removed'))),
-    pluck('position'),
+    prop('levels') as (data: QuestStat.Store.GameDetails) => QuestStat.LevelData[],
+    filter(propEq('type', selectedType)) as (data: QuestStat.LevelData[]) => QuestStat.LevelData[],
+    filter(complement(prop('removed'))) as (data: QuestStat.LevelData[]) => QuestStat.LevelData[],
+    pluck('position') as (data: QuestStat.LevelData[]) => number[],
   )(state);
-export const getCalculatedStat = (matchedLevels, team: QuestStat.GroupedTeamData) => ({
+export const getCalculatedStat = (matchedLevels: number[], team: QuestStat.GroupedTeamData) => ({
   name: pipe(
     prop('data') as (data: QuestStat.GroupedTeamData) => QuestStat.TeamData[],
     nth(0),
@@ -123,8 +123,7 @@ export const getCalculatedStat = (matchedLevels, team: QuestStat.GroupedTeamData
   )(team),
 });
 export const getPossibleLevelTypes = pipe(
-  // tslint:disable-next-line: no-any
-  dropLast(1) as any,
+  dropLast(1) as (data: QuestStat.LevelData[]) => QuestStat.LevelData[],
   pluck('type') as (data: QuestStat.LevelData[]) => number[],
   uniq,
   sort((a: number, b: number) => a - b),
@@ -156,7 +155,7 @@ export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamDat
     return pipe(
       find(propEq('id', teamId)),
       pathOr(0, ['extraBonus']),
-    )(finishList) as number;
+    )(finishList);
   };
 
   const calculateFullTime = (teamSource: QuestStat.TeamData[]) =>
@@ -173,7 +172,7 @@ export const sortTeamList = (finishList, sortingSource: QuestStat.GroupedTeamDat
     calculateFullTime,
   );
 
-  return sortWith([descend(closedLevelQuantity), ascend(sumDurations)])(sortingSource) as QuestStat.GroupedTeamData[];
+  return sortWith([descend(closedLevelQuantity), ascend(sumDurations)])(sortingSource);
 };
 export const updateLevels = (
   updatedLevel: {
@@ -222,7 +221,7 @@ export const updateStatByTeams = (removedLevel: QuestStat.LevelData, currentTeam
 };
 export const updateFinishStat = (removedLevel, dataByTeams, finishResults) => {
   const updateFinishResults = map((teamFinishResult: QuestStat.TeamData) => {
-    const existedAdditionsTime = propOr(0, 'additionsTime', teamFinishResult) as number;
+    const existedAdditionsTime: number = propOr(0, 'additionsTime', teamFinishResult);
     const levelTime = pipe(
       find(propEq('id', teamFinishResult.id)),
       prop('data'),
@@ -235,8 +234,8 @@ export const updateFinishStat = (removedLevel, dataByTeams, finishResults) => {
 
     return merge(teamFinishResult, {
       additionsTime: newAdditionalTime,
-    });
-  }, finishResults) as QuestStat.TeamData[];
+    }) as QuestStat.TeamData;
+  }, finishResults);
 
   return sortFinishResults(updateFinishResults);
 };

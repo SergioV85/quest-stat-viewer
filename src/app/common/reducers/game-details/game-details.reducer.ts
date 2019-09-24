@@ -142,26 +142,26 @@ export const getAvailableLevelTypes = createSelector(
     pipe(
       prop('levels'),
       getPossibleLevelTypes,
-    )(state) as number[],
+    )(state),
 );
 export const getFinishResults = createSelector(
   selectGameDetailsStore,
-  (state: QuestStat.Store.GameDetails) => prop('finishResults', state) as QuestStat.TeamData[],
+  prop('finishResults'),
 );
 export const getLevels = createSelector(
   selectGameDetailsStore,
-  (state: QuestStat.Store.GameDetails) => prop('levels', state) as QuestStat.LevelData[],
+  prop('levels'),
 );
 export const getLoadingState = createSelector(
   selectGameDetailsStore,
-  (state: QuestStat.Store.GameDetails) => prop('isLoading', state),
+  prop('isLoading'),
 );
-export const getSortedTeamsTotalResulst = createSelector(
+export const getSortedTeamsTotalResults = createSelector(
   selectGameDetailsStore,
   (state: QuestStat.Store.GameDetails) => {
     const selectedType = prop('selectedTotalTab', state);
     const matchedLevels = getMatchedLevels(selectedType, state);
-    const calculatedStat = team => getCalculatedStat(matchedLevels, team);
+    const calculatedStat = (team: QuestStat.GroupedTeamData) => getCalculatedStat(matchedLevels, team);
 
     return pipe(
       prop('dataByTeam'),
@@ -176,13 +176,13 @@ export const getStatData = createSelector(
     const levels = pipe(
       prop('dataByLevels') as (data: QuestStat.Store.GameDetails) => QuestStat.TeamData[][],
       curry(appendFinishStat)(state.finishResults),
-    )(state) as QuestStat.TeamData[][];
+    )(state);
     const teams = pipe(
       prop('dataByTeam') as (data: QuestStat.Store.GameDetails) => QuestStat.GroupedTeamData[],
       curry(sortTeamList)(state.finishResults),
       curry(appendFinishStatToTeam)(state.finishResults),
       pluck('data'),
-    )(state) as QuestStat.TeamData[][];
+    )(state);
 
     return {
       levels,
