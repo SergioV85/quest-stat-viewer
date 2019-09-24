@@ -2,6 +2,10 @@
   "name": "quest-stat-viewer",
   "version": "2.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "10.9.0",
+    "npm": "6.2.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
