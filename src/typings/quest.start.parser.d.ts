@@ -5,7 +5,7 @@ declare namespace QuestStat {
   }
 
   interface LevelData {
-    level: number;
+    level: number | string;
     name: string;
     position: number;
     removed: boolean;
@@ -26,6 +26,7 @@ declare namespace QuestStat {
   }
 
   interface GameInfo {
+    _id?: number;
     Domain: string;
     FinishTime: string;
     GameId: number;

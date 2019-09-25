@@ -6,14 +6,13 @@ import { catchError, exhaustMap, map, mergeMap, withLatestFrom } from 'rxjs/oper
 
 import { ApiService } from '@app-common/services/api/api.service';
 import {
-  GameDetailsActionTypes,
+  GetLatestDataFromEnAction,
   RequestGameDetailsAction,
   RequestGameDetailsFailedAction,
   RequestGameDetailsSuccessAction,
-  GetLatestDataFromEnAction,
-  SaveLevelsTypesSuccessAction,
-  SaveLevelsTypesFailedAction,
   SaveLevelsTypesAction,
+  SaveLevelsTypesFailedAction,
+  SaveLevelsTypesSuccessAction,
 } from '@app-common/actions/game-details.actions';
 import { ErrorNotificationAction, SuccessNotificationAction } from '@app-common/actions/notification.actions';
 import { getGameId, getGameDomain, getLevels } from '@app-common/reducers/game-details/game-details.reducer';
@@ -27,55 +26,52 @@ export class GameDetailsEffects {
   ) {}
 
   @Effect()
-  public getGames$ = this.actions$.pipe(
-    ofType(GameDetailsActionTypes.RequestGameDetails),
-    map((action: RequestGameDetailsAction) => action.payload),
-    exhaustMap(({ domain, id, force }) =>
-      this.apiService.getGameStat({ domain, id, force }).pipe(
-        map(gameData => new RequestGameDetailsSuccessAction(gameData)),
-        catchError(err => {
-          const actions = [
-            new RequestGameDetailsFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
-          ];
-          return from(actions);
-        }),
+  public getGameDetails$ = this.actions$.pipe(
+    ofType(RequestGameDetailsAction),
+    exhaustMap(({ query }) =>
+      this.apiService.getGameStat(query).pipe(
+        map(data => RequestGameDetailsSuccessAction({ data })),
+        catchError(err =>
+          from([
+            RequestGameDetailsFailedAction(err.error),
+            ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
+          ]),
+        ),
       ),
     ),
   );
 
   @Effect()
   public getGameDataFromEn$ = this.actions$.pipe(
-    ofType(GameDetailsActionTypes.GetLatestDataFromEn),
+    ofType(GetLatestDataFromEnAction),
     withLatestFrom(this.store$),
-    map(([action, state]: [GetLatestDataFromEnAction, QuestStat.Store.State]) => ({
+    map(([action, state]) => ({
       id: getGameId(state),
       domain: getGameDomain(state),
     })),
-    map(({ domain, id }) => new RequestGameDetailsAction({ domain, id, force: true })),
+    map(({ domain, id }) => RequestGameDetailsAction({ query: { domain, id, force: true } })),
   );
 
   @Effect()
   public saveLevels$ = this.actions$.pipe(
-    ofType(GameDetailsActionTypes.SaveLevelsTypes),
+    ofType(SaveLevelsTypesAction),
     withLatestFrom(this.store$),
-    map(([action, state]: [SaveLevelsTypesAction, QuestStat.Store.State]) => ({
+    map(([action, state]) => ({
       gameId: getGameId(state),
       levelData: getLevels(state),
     })),
     exhaustMap(({ levelData, gameId }) =>
       this.apiService.saveLevelSettings({ gameId, levelData }).pipe(
         mergeMap(gameData => [
-          new SaveLevelsTypesSuccessAction(),
-          new SuccessNotificationAction({ message: 'Данные сохраненны' }),
+          SaveLevelsTypesSuccessAction(),
+          SuccessNotificationAction({ message: 'Данные сохраненны' }),
         ]),
-        catchError(err => {
-          const actions = [
-            new SaveLevelsTypesFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось сохранить данные' }),
-          ];
-          return from(actions);
-        }),
+        catchError(err =>
+          from([
+            SaveLevelsTypesFailedAction(err.error),
+            ErrorNotificationAction({ message: 'Извините, не удалось сохранить данные' }),
+          ]),
+        ),
       ),
     ),
   );

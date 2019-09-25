@@ -1,24 +1,5 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-export enum NotificationActionTypes {
-  SuccessNotification = '[Notification] Success',
-  WarningNotification = '[Notification] Warning',
-  ErrorNotification = '[Notification] Error',
-}
-
-export class SuccessNotificationAction implements Action {
-  public readonly type = NotificationActionTypes.SuccessNotification;
-  constructor(public payload: { message?: string }) {}
-}
-
-export class WarningNotificationAction implements Action {
-  public readonly type = NotificationActionTypes.WarningNotification;
-  constructor(public payload: { message?: string }) {}
-}
-
-export class ErrorNotificationAction implements Action {
-  public readonly type = NotificationActionTypes.ErrorNotification;
-  constructor(public payload: { message?: string }) {}
-}
-
-export type NotificationActions = SuccessNotificationAction | WarningNotificationAction | ErrorNotificationAction;
+export const ErrorNotificationAction = createAction('[Notification] Error', props<{ message?: string }>());
+export const SuccessNotificationAction = createAction('[Notification] Success', props<{ message?: string }>());
+export const WarningNotificationAction = createAction('[Notification] Warning', props<{ message?: string }>());

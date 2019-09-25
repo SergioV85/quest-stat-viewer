@@ -68,6 +68,7 @@
     "codelyzer": "^5.0.1",
     "husky": "^2.2.0",
     "jasmine-core": "~2.6.2",
+    "jasmine-marbles": "^0.6.0",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
