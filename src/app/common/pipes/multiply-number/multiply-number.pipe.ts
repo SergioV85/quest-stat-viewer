@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class MultiplyNumberPipe implements PipeTransform {
   public transform(value: number, multiplier?: number): number {
-    if (value) {
+    if (value && multiplier) {
       return value * multiplier;
     }
     return value;

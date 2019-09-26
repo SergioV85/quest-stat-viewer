@@ -9,7 +9,7 @@ export const getActiveTab = createSelector(
   selectRouterStore,
   (state: RouterReducerState<RouterStateUrl>) =>
     pipe(
-      path(['state', 'url']),
+      path(['state', 'url']) as (data: RouterReducerState<RouterStateUrl>) => string,
       split('/'),
       last,
     )(state),

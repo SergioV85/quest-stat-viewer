@@ -1,6 +1,5 @@
-import { createSelector } from '@ngrx/store';
+import { createSelector, createReducer, on, Action } from '@ngrx/store';
 import {
-  adjust,
   ascend,
   clone,
   curry,
@@ -9,17 +8,27 @@ import {
   find,
   head,
   map,
-  merge,
-  mergeDeepRight,
+  mergeRight,
   path,
   pipe,
+  pluck,
   prop,
   propEq,
   sortWith,
-  uniq,
-  pluck,
 } from 'ramda';
-import { GameDetailsActions, GameDetailsActionTypes } from '@app-common/actions/game-details.actions';
+import {
+  ChangeLevelTypeAction,
+  ChangeTotalStatTabAction,
+  CleanGameDataAction,
+  GetLatestDataFromEnAction,
+  RemoveLevelFromStatAction,
+  RequestGameDetailsAction,
+  RequestGameDetailsFailedAction,
+  RequestGameDetailsSuccessAction,
+  SaveLevelsTypesAction,
+  SaveLevelsTypesFailedAction,
+  SaveLevelsTypesSuccessAction,
+} from '@app-common/actions/game-details.actions';
 import {
   appendFinishStat,
   appendFinishStatToTeam,
@@ -38,87 +47,79 @@ export const initialState: QuestStat.Store.GameDetails = {
   isLoading: false,
 };
 
-export function gameDetailsReducer(gameDetailsState = initialState, action: GameDetailsActions) {
-  switch (action.type) {
-    case GameDetailsActionTypes.ChangeLevelType: {
-      const updatedLevel = action.payload;
-      const currentLevels = prop('levels', gameDetailsState);
-      const levels = updateLevels(updatedLevel, currentLevels);
+const reducer = createReducer(
+  initialState,
+  on(ChangeLevelTypeAction, (state, { level, levelType }) => {
+    const currentLevels = prop('levels', state);
+    if (!currentLevels) {
+      return state;
+    }
+    const levels = updateLevels({ level, type: levelType }, currentLevels);
 
-      return merge(gameDetailsState, { levels });
-    }
-    case GameDetailsActionTypes.ChangeTotalStatTab: {
-      const selectedTotalTab = action.payload;
-      return merge(gameDetailsState, { selectedTotalTab });
-    }
-    case GameDetailsActionTypes.CleanGameData: {
-      return initialState;
-    }
-    case GameDetailsActionTypes.GetLatestDataFromEn: {
-      const emptyGameData = {
-        originalLevels: [],
-        levels: [],
-        dataByTeam: [],
-        dataByLevels: [],
-        finishResults: [],
-      };
-      return merge(gameDetailsState, emptyGameData);
-    }
-    case GameDetailsActionTypes.RemoveLevelFromStat: {
-      const removedLevel = action.payload;
+    return mergeRight(state, { levels });
+  }),
+  on(ChangeTotalStatTabAction, (state, { tab }) => mergeRight(state, { selectedTotalTab: tab })),
+  on(CleanGameDataAction, _ => initialState),
+  on(GetLatestDataFromEnAction, state =>
+    mergeRight(state, { originalLevels: [], levels: [], dataByTeam: [], dataByLevels: [], finishResults: [] }),
+  ),
+  on(RemoveLevelFromStatAction, (state, { removed, level }) => {
+    const currentLevels = prop('levels', state);
+    const currentStatByLevels = prop('dataByLevels', state);
+    const currentStatByTeams = prop('dataByTeam', state);
+    const currentFinishResults = prop('finishResults', state);
 
-      const currentLevels = prop('levels', gameDetailsState);
-      const currentStatByLevels = prop('dataByLevels', gameDetailsState);
-      const currentStatByTeams = prop('dataByTeam', gameDetailsState);
-      const currentFinishResults = prop('finishResults', gameDetailsState);
-
-      const levels = updateLevels(removedLevel, currentLevels);
-
-      const newLevel = find(propEq('level', removedLevel.level), levels) as QuestStat.LevelData;
-
-      const dataByLevels = updateStatByLevel(newLevel, currentStatByLevels);
-      const dataByTeam = updateStatByTeams(newLevel, currentStatByTeams);
-      const finishResults = updateFinishStat(newLevel, dataByTeam, currentFinishResults);
-
-      return merge(gameDetailsState, { levels, dataByLevels, dataByTeam, finishResults });
+    if (!currentLevels || !currentStatByLevels || !currentStatByTeams || !currentFinishResults) {
+      return state;
     }
-    case GameDetailsActionTypes.SaveLevelsTypes: {
-      return merge(gameDetailsState, { isLoading: true });
-    }
-    case GameDetailsActionTypes.RequestGameDetailsComplete: {
-      const serverGameData = action.payload;
-      const gameInfo = prop('info', serverGameData);
-      const levels: QuestStat.LevelData[] = path(['stat', 'Levels'], serverGameData);
-      const dataByTeam: QuestStat.GroupedTeamData[] = path(['stat', 'DataByTeam'], serverGameData);
-      const dataByLevels: QuestStat.TeamData[] = path(['stat', 'DataByLevels'], serverGameData);
-      const finishResults = sortFinishResults(serverGameData.stat.FinishResults);
 
-      const selectedTotalTab = pipe(
-        getPossibleLevelTypes as (data: QuestStat.LevelData[]) => number[],
-        head,
-      )(levels);
-      return merge(gameDetailsState, {
-        gameInfo,
-        levels,
-        dataByTeam,
-        dataByLevels,
-        finishResults,
-        isLoading: false,
-        selectedTotalTab,
-        originalLevels: levels,
-      });
+    const levels = updateLevels({ removed, level }, currentLevels);
+
+    const newLevel = find(propEq('level', level), levels) as QuestStat.LevelData;
+
+    const dataByLevels = updateStatByLevel(newLevel, currentStatByLevels);
+    const dataByTeam = updateStatByTeams(newLevel, currentStatByTeams);
+    const finishResults = updateFinishStat(newLevel, dataByTeam, currentFinishResults);
+
+    return mergeRight(state, { levels, dataByLevels, dataByTeam, finishResults });
+  }),
+  on(RequestGameDetailsAction, SaveLevelsTypesAction, state => mergeRight(state, { isLoading: true })),
+  on(RequestGameDetailsFailedAction, SaveLevelsTypesFailedAction, state => mergeRight(state, { isLoading: false })),
+  on(RequestGameDetailsSuccessAction, (state, { data }) => {
+    const levels: QuestStat.LevelData[] | undefined = path(['stat', 'Levels'], state);
+    const dataByTeam: QuestStat.GroupedTeamData[] | undefined = path(['stat', 'DataByTeam'], state);
+    const dataByLevels: QuestStat.TeamData[] | undefined = path(['stat', 'DataByLevels'], state);
+
+    if (!levels || !dataByLevels || !dataByTeam || !data) {
+      return state;
     }
-    case GameDetailsActionTypes.SaveLevelsTypesComplete: {
-      const originalLevels = clone(gameDetailsState.levels);
-      return merge(gameDetailsState, { isLoading: false, originalLevels });
-    }
-    case GameDetailsActionTypes.RequestGameDetailsError:
-    case GameDetailsActionTypes.SaveLevelsTypesError: {
-      return merge(gameDetailsState, { isLoading: false });
-    }
-    default:
-      return gameDetailsState;
-  }
+
+    const gameInfo = prop('info', data);
+    const finishResults = sortFinishResults(data.stat.FinishResults);
+
+    const selectedTotalTab = pipe(
+      getPossibleLevelTypes as (data: QuestStat.LevelData[]) => number[],
+      head,
+    )(levels);
+    return mergeRight(state, {
+      gameInfo,
+      levels,
+      dataByTeam,
+      dataByLevels,
+      finishResults,
+      isLoading: false,
+      selectedTotalTab,
+      originalLevels: levels,
+    });
+  }),
+  on(SaveLevelsTypesSuccessAction, state => {
+    const originalLevels = clone(state.levels);
+    return mergeRight(state, { isLoading: false, originalLevels });
+  }),
+);
+
+export function gameDetailsReducer(gameDetailsState = initialState, action: Action) {
+  return reducer(gameDetailsState, action);
 }
 
 /* Selectors */
@@ -136,35 +137,31 @@ export const getGameDomain = createSelector(
   selectGameDetailsStore,
   (state: QuestStat.Store.GameDetails) => path(['gameInfo', 'Domain'], state) as string,
 );
-export const getAvailableLevelTypes = createSelector(
-  selectGameDetailsStore,
-  (state: QuestStat.Store.GameDetails) =>
-    pipe(
-      prop('levels'),
-      getPossibleLevelTypes,
-    )(state),
-);
 export const getFinishResults = createSelector(
   selectGameDetailsStore,
-  prop('finishResults'),
+  prop('finishResults') as (data: QuestStat.Store.GameDetails) => QuestStat.TeamData[],
 );
 export const getLevels = createSelector(
   selectGameDetailsStore,
-  prop('levels'),
+  prop('levels') as (data: QuestStat.Store.GameDetails) => QuestStat.LevelData[],
+);
+export const getAvailableLevelTypes = createSelector(
+  getLevels,
+  getPossibleLevelTypes,
 );
 export const getLoadingState = createSelector(
   selectGameDetailsStore,
-  prop('isLoading'),
+  prop('isLoading') as (data: QuestStat.Store.GameDetails) => boolean,
 );
 export const getSortedTeamsTotalResults = createSelector(
   selectGameDetailsStore,
   (state: QuestStat.Store.GameDetails) => {
-    const selectedType = prop('selectedTotalTab', state);
+    const selectedType = prop('selectedTotalTab', state) as number;
     const matchedLevels = getMatchedLevels(selectedType, state);
     const calculatedStat = (team: QuestStat.GroupedTeamData) => getCalculatedStat(matchedLevels, team);
 
     return pipe(
-      prop('dataByTeam'),
+      prop('dataByTeam') as (data: QuestStat.Store.GameDetails) => QuestStat.GroupedTeamData[],
       map(calculatedStat),
       sortWith([descend(prop('closedLevels')), ascend(prop('duration'))]),
     )(state);
@@ -173,14 +170,15 @@ export const getSortedTeamsTotalResults = createSelector(
 export const getStatData = createSelector(
   selectGameDetailsStore,
   (state: QuestStat.Store.GameDetails) => {
+    const finishResults = state.finishResults as QuestStat.TeamData[];
     const levels = pipe(
       prop('dataByLevels') as (data: QuestStat.Store.GameDetails) => QuestStat.TeamData[][],
-      curry(appendFinishStat)(state.finishResults),
+      curry(appendFinishStat)(finishResults),
     )(state);
     const teams = pipe(
       prop('dataByTeam') as (data: QuestStat.Store.GameDetails) => QuestStat.GroupedTeamData[],
-      curry(sortTeamList)(state.finishResults),
-      curry(appendFinishStatToTeam)(state.finishResults),
+      curry(sortTeamList)(finishResults),
+      curry(appendFinishStatToTeam)(finishResults),
       pluck('data'),
     )(state);
 
@@ -192,5 +190,9 @@ export const getStatData = createSelector(
 );
 export const hasPendingChanges = createSelector(
   selectGameDetailsStore,
-  (state: QuestStat.Store.GameDetails) => !equals(pluck('type', state.levels), pluck('type', state.originalLevels)),
+  (state: QuestStat.Store.GameDetails) =>
+    !equals(
+      pluck('type', state.levels as QuestStat.LevelData[]),
+      pluck('type', state.originalLevels as QuestStat.LevelData[]),
+    ),
 );

@@ -1,25 +1,23 @@
-import { createSelector } from '@ngrx/store';
-import { merge, prop, propOr, pipe, sortWith, descend } from 'ramda';
+import { createSelector, createReducer, on, Action } from '@ngrx/store';
+import { mergeRight, prop, propOr, pipe, sortWith, descend } from 'ramda';
 
-import { GamesActions, GamesActionTypes } from '@app-common/actions/games.actions';
+import {
+  RequestGamesAction,
+  RequestGamesSuccessAction,
+  RequestGamesFailedAction,
+} from '@app-common/actions/games.actions';
 
 export const initialState: QuestStat.Store.Games = {};
 
-export function gameReducer(gamesState = initialState, action: GamesActions): QuestStat.Store.Games {
-  switch (action.type) {
-    case GamesActionTypes.RequestGames: {
-      return merge(gamesState, { isLoading: true });
-    }
-    case GamesActionTypes.RequestGamesComplete: {
-      const games = action.payload;
-      return merge(gamesState, { games, isLoading: false });
-    }
-    case GamesActionTypes.RequestGamesError: {
-      return merge(gamesState, { isLoading: false });
-    }
-    default:
-      return gamesState;
-  }
+const reducer = createReducer(
+  initialState,
+  on(RequestGamesAction, state => mergeRight(state, { isLoading: true })),
+  on(RequestGamesFailedAction, state => mergeRight(state, { isLoading: false })),
+  on(RequestGamesSuccessAction, (state, { data }) => mergeRight(state, { isLoading: false, games: data })),
+);
+
+export function gameReducer(gamesState = initialState, action: Action): QuestStat.Store.Games {
+  return reducer(gamesState, action);
 }
 
 export const selectGamesStore = (state: QuestStat.Store.State) => state.games;

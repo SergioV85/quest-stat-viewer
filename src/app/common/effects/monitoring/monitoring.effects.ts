@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Store, Action } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { from } from 'rxjs';
 import { catchError, exhaustMap, map, withLatestFrom } from 'rxjs/operators';
 
+import { State } from '@app-common/models';
 import { ApiService } from '@app-common/services/api/api.service';
 import {
   RequestMonitoringAction,
-  MonitoringActionTypes,
   RequestMonitoringSuccessAction,
   RequestMonitoringFailedAction,
   GetMonitoringDetailsAction,
@@ -20,80 +20,73 @@ import {
 import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
 import { getGameId } from '@app-common/reducers/game-details/game-details.reducer';
 
+const DEFAULT_ERROR_MESSAGE = 'Извините, не удалось загрузить данные';
+
 @Injectable()
 export class MonitoringEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly store$: Store<QuestStat.Store.State>,
+    private readonly store$: Store<State>,
     private readonly apiService: ApiService,
   ) {}
 
   @Effect()
   public getMonitoring$ = this.actions$.pipe(
-    ofType(MonitoringActionTypes.RequestMonitoring),
-    map((action: RequestMonitoringAction) => action.payload),
+    ofType(RequestMonitoringAction),
     exhaustMap(({ domain, id }) =>
       this.apiService.getMonitoringData({ domain, id }).pipe(
-        map(monitoringData => new RequestMonitoringSuccessAction(monitoringData)),
-        catchError(err => {
-          const actions = [
-            new RequestMonitoringFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
-          ];
-          return from(actions);
-        }),
+        map(data => RequestMonitoringSuccessAction({ data })),
+        catchError(err =>
+          from([RequestMonitoringFailedAction(err.error), ErrorNotificationAction({ message: DEFAULT_ERROR_MESSAGE })]),
+        ),
       ),
     ),
   );
 
   @Effect()
   public getMonitoringDetails$ = this.actions$.pipe(
-    ofType(MonitoringActionTypes.GetMonitoringDetails),
+    ofType(GetMonitoringDetailsAction),
     withLatestFrom(this.store$),
-    map(([action, state]: [GetMonitoringDetailsAction, QuestStat.Store.State]) => ({
+    map(([{ teamId, playerId, detailsLevel }, state]) => ({
       gameId: getGameId(state),
-      ...action.payload,
+      teamId,
+      playerId,
+      detailsLevel,
     })),
     exhaustMap(({ gameId, playerId, teamId, detailsLevel }) =>
       this.apiService.getMonitoringDetails({ gameId, playerId, teamId, detailsLevel }).pipe(
-        map(
-          monitoringData =>
-            new GetMonitoringDetailsSuccessAction({
-              detailsLevel,
-              playerId,
-              teamId,
-              monitoringData,
-            }),
+        map(monitoringData =>
+          GetMonitoringDetailsSuccessAction({
+            detailsLevel,
+            playerId,
+            teamId,
+            monitoringData,
+          }),
         ),
-        catchError(err => {
-          const actions = [
-            new GetMonitoringDetailsFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
-          ];
-          return from(actions);
-        }),
+        catchError(err =>
+          from([
+            GetMonitoringDetailsFailedAction(err.error),
+            ErrorNotificationAction({ message: DEFAULT_ERROR_MESSAGE }),
+          ]),
+        ),
       ),
     ),
   );
 
   @Effect()
-  public $getCodesList = this.actions$.pipe(
-    ofType(MonitoringActionTypes.RequestCodes),
+  public getCodesList$ = this.actions$.pipe(
+    ofType(RequestCodesAction),
     withLatestFrom(this.store$),
-    map(([action, state]: [RequestCodesAction, QuestStat.Store.State]) => ({
+    map(([{ query }, state]) => ({
       gameId: getGameId(state),
-      ...action.payload,
+      ...query,
     })),
     exhaustMap(({ gameId, playerId, teamId, levelId, type }) =>
       this.apiService.getListOfCodes({ gameId, playerId, teamId, levelId, type }).pipe(
-        map(codes => new RequestCodesSuccessAction({ playerId, teamId, levelId, codes, type })),
-        catchError(err => {
-          const actions = [
-            new RequestCodesFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
-          ];
-          return from(actions);
-        }),
+        map(codes => RequestCodesSuccessAction({ playerId, teamId, levelId, codes, requestType: type })),
+        catchError(err =>
+          from([RequestCodesFailedAction(err.error), ErrorNotificationAction({ message: DEFAULT_ERROR_MESSAGE })]),
+        ),
       ),
     ),
   );

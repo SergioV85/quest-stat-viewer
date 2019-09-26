@@ -13,7 +13,7 @@ export class TotalStatCalculationPipe implements PipeTransform {
           const leaderTime = head(value);
           return team.duration - leaderTime;
         case 'prevTeamDifference':
-          const prevTeamTime = nth(idx - 1, value);
+          const prevTeamTime = nth(idx - 1, value) as number;
           return team.duration - prevTeamTime;
         default:
           return value;

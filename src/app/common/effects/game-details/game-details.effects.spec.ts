@@ -16,14 +16,15 @@ import {
   SaveLevelsTypesSuccessAction,
 } from '@app-common/actions/game-details.actions';
 import { SuccessNotificationAction, ErrorNotificationAction } from '@app-common/actions/notification.actions';
+import { State } from '@app-common/models';
 import { getGameId, getGameDomain, getLevels } from '@app-common/reducers/game-details/game-details.reducer';
 import { ApiService } from '@app-common/services/api/api.service';
 import { GameDetailsEffects } from './game-details.effects';
 
-describe('GameDetailsService', () => {
+describe('GameDetailsEffects', () => {
   let actions$: Observable<Actions>;
   let gameDetailsEffects: GameDetailsEffects;
-  let store$: MockStore<QuestStat.Store.State>;
+  let store$: MockStore<State>;
   const apiService = {
     getGameStat: jasmine.createSpy('getGameStat'),
     saveLevelSettings: jasmine.createSpy('saveLevelSettings'),
@@ -41,7 +42,7 @@ describe('GameDetailsService', () => {
         },
       ],
     });
-    store$ = TestBed.get<Store<QuestStat.Store.State>>(Store);
+    store$ = TestBed.get<Store<State>>(Store);
     store$.overrideSelector(getGameId, 12345);
     store$.overrideSelector(getGameDomain, 'quest.ua');
     store$.overrideSelector(getLevels, []);
@@ -53,7 +54,7 @@ describe('GameDetailsService', () => {
     expect(gameDetailsEffects).toBeTruthy();
   });
   describe('getGameDetails$', () => {
-    const startAction = RequestGameDetailsAction({ query: { id: 12345, domain: 'quest.ua' } });
+    const startAction = RequestGameDetailsAction({ id: 12345, domain: 'quest.ua' });
     it('should send a request for getting game details and dispatch success action on complete', () => {
       const successAction = RequestGameDetailsSuccessAction({ data: mockedGameDetails });
 
@@ -80,7 +81,7 @@ describe('GameDetailsService', () => {
   describe('getGameDataFromEn$', () => {
     const startAction = GetLatestDataFromEnAction();
     it('should send a request for refreshing game data from EN ', () => {
-      const successAction = RequestGameDetailsAction({ query: { domain: 'quest.ua', id: 12345, force: true } });
+      const successAction = RequestGameDetailsAction({ domain: 'quest.ua', id: 12345, force: true });
 
       actions$ = hot('-a', { a: startAction });
       const expected$ = cold('--b', { b: successAction });

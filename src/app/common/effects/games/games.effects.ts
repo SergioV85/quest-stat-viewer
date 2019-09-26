@@ -5,7 +5,7 @@ import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { ApiService } from '@app-common/services/api/api.service';
 import {
-  GamesActionTypes,
+  RequestGamesAction,
   RequestGamesSuccessAction,
   RequestGamesFailedAction,
 } from '@app-common/actions/games.actions';
@@ -17,17 +17,16 @@ export class GamesEffects {
 
   @Effect()
   public getGames$ = this.actions$.pipe(
-    ofType(GamesActionTypes.RequestGames),
+    ofType(RequestGamesAction),
     exhaustMap(() =>
       this.apiService.getSavedGames().pipe(
-        map(games => new RequestGamesSuccessAction(games)),
-        catchError(err => {
-          const actions = [
-            new RequestGamesFailedAction(err.error),
-            new ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
-          ];
-          return from(actions);
-        }),
+        map(data => RequestGamesSuccessAction({ data })),
+        catchError(err =>
+          from([
+            RequestGamesFailedAction(err.error),
+            ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' }),
+          ]),
+        ),
       ),
     ),
   );

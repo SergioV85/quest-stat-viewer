@@ -1,112 +1,133 @@
-import { createSelector } from '@ngrx/store';
-import { flip, merge, mergeDeepRight, pick, pipe, prop, propOr, subtract } from 'ramda';
-import { MonitoringActions, MonitoringActionTypes } from '@app-common/actions/monitoring.actions';
+import { createSelector, createReducer, on, Action } from '@ngrx/store';
+import { mergeDeepLeft, mergeLeft, mergeRight, objOf, pick, pipe, prop, propOr, subtract } from 'ramda';
+import {
+  CodesListResponse,
+  MonitoringResponse,
+  MonitoringState,
+  MonitoringTeamDetailedData,
+  MonitoringTeamGroupedData,
+  PlayerLevelData,
+  State,
+} from '@app-common/models';
+import {
+  CleanMonitoringDataAction,
+  GetMonitoringDetailsAction,
+  GetMonitoringDetailsFailedAction,
+  GetMonitoringDetailsSuccessAction,
+  RequestCodesAction,
+  RequestCodesFailedAction,
+  RequestCodesSuccessAction,
+  RequestMonitoringAction,
+  RequestMonitoringFailedAction,
+  RequestMonitoringSuccessAction,
+} from '@app-common/actions/monitoring.actions';
 
-export const initialState: QuestStat.Store.Monitoring = {
+export const initialState: MonitoringState = {
   dataLoaded: false,
 };
 
-export function monitoringReducer(
-  monitoringState = initialState,
-  action: MonitoringActions,
-): QuestStat.Store.Monitoring {
-  switch (action.type) {
-    case MonitoringActionTypes.RequestMonitoring:
-    case MonitoringActionTypes.RequestCodes:
-    case MonitoringActionTypes.GetMonitoringDetails: {
-      return merge(monitoringState, { isLoading: true });
-    }
-    case MonitoringActionTypes.RequestMonitoringComplete: {
-      const monitoringData = action.payload;
-      const pagesLeft = subtract(
-        propOr(0, 'totalPages', monitoringData) as number,
-        propOr(0, 'pageSaved', monitoringData) as number,
-      );
-      const parsingStat = pipe(
-        pick(['pageSaved', 'parsed', 'totalPages']),
-        flip(merge)({ pagesLeft }),
-      )(monitoringData);
+const reducer = createReducer(
+  initialState,
+  on(CleanMonitoringDataAction, _ => initialState),
+  on(GetMonitoringDetailsAction, RequestCodesAction, RequestMonitoringAction, state =>
+    mergeRight(state, { isLoading: true }),
+  ),
+  on(GetMonitoringDetailsFailedAction, RequestCodesFailedAction, RequestMonitoringFailedAction, state =>
+    mergeRight(state, { isLoading: false }),
+  ),
+  on(GetMonitoringDetailsSuccessAction, (state, { detailsLevel, playerId, teamId, monitoringData }) => {
+    const target = detailsLevel === 'byPlayer' ? 'playerData' : 'teamData';
+    const key = detailsLevel === 'byPlayer' ? (playerId as number) : (teamId as number);
+    return pipe(
+      prop(target) as (data: MonitoringState) => (MonitoringState['playerData']) | MonitoringState['teamData'],
+      mergeLeft({
+        [key]: monitoringData,
+      }) as (data: unknown) => { [key: number]: MonitoringResponse },
+      objOf(target) as (data: {
+        [key: number]: MonitoringResponse;
+      }) => { [property in 'playerData' | 'teamData']: { [key: number]: MonitoringResponse } },
+      mergeRight({ isLoading: false }) as (
+        data: { [property in 'playerData' | 'teamData']: { [key: number]: MonitoringResponse } },
+      ) => Partial<MonitoringState>,
+      mergeRight(state) as (data: Partial<MonitoringState>) => MonitoringState,
+    )(state);
+  }),
+  on(RequestCodesSuccessAction, (state, { levelId, playerId, teamId, requestType, codes }) => {
+    const propertyName = requestType === 'byLevel' ? teamId : playerId;
 
-      // tslint:disable-next-line: no-any
-      const totalData = propOr(null, 'totalData', action.payload) as any;
+    return pipe(
+      objOf(`${levelId}`),
+      objOf(`${propertyName}`),
+      mergeDeepLeft(state.codes),
+      objOf('codes'),
+      mergeRight({ isLoading: false }),
+      mergeRight(state),
+    )(codes);
+  }),
+  on(RequestMonitoringSuccessAction, (state, { data }) => {
+    const pagesLeft = subtract(propOr(0, 'totalPages', data) as number, propOr(0, 'pageSaved', data) as number);
+    const parsingStat = pipe(
+      pick(['pageSaved', 'parsed', 'totalPages']),
+      mergeLeft({ pagesLeft }),
+    )(state);
 
-      return merge(monitoringState, { isLoading: false, dataLoaded: true, ...parsingStat, totalData });
-    }
-    case MonitoringActionTypes.GetMonitoringDetailsComplete: {
-      const groupType = action.payload.detailsLevel;
-      let monitoringData;
-      switch (groupType) {
-        case 'byPlayer':
-          monitoringData = {
-            playerData: merge(monitoringState.playerData, {
-              [action.payload.playerId]: action.payload.monitoringData,
-            }),
-          };
-          break;
-        case 'byTeam':
-        default:
-          monitoringData = {
-            teamData: merge(monitoringState.teamData, {
-              [action.payload.teamId]: action.payload.monitoringData,
-            }),
-          };
-      }
-      return merge(monitoringState, { isLoading: true, ...monitoringData }) as QuestStat.Store.Monitoring;
-    }
-    case MonitoringActionTypes.RequestCodesComplete: {
-      const type = action.payload.type;
-      const propertyName = type === 'byLevel' ? action.payload.teamId : action.payload.playerId;
-      const codes = mergeDeepRight(monitoringState.codes, {
-        [propertyName]: {
-          [action.payload.levelId]: action.payload.codes,
-        },
-      });
-      return merge(monitoringState, { isLoading: false, codes });
-    }
-    case MonitoringActionTypes.GetMonitoringDetailsError:
-    case MonitoringActionTypes.RequestCodesError:
-    case MonitoringActionTypes.RequestMonitoringError: {
-      return merge(monitoringState, { isLoading: false });
-    }
-    case MonitoringActionTypes.CleanMonitoringData: {
-      return initialState;
-    }
-    default:
-      return monitoringState;
-  }
+    // tslint:disable-next-line: no-any
+    const totalData = propOr(null, 'totalData', data) as any;
+
+    return mergeRight(state, { isLoading: false, dataLoaded: true, ...parsingStat, totalData });
+  }),
+);
+
+export function monitoringReducer(monitoringState = initialState, action: Action): MonitoringState {
+  return reducer(monitoringState, action);
 }
 
 /* Selectors */
-export const selectMonitoringStore = (state: QuestStat.Store.State) => state.monitoring;
+export const selectMonitoringStore = (state: State) => state.monitoring;
+export const dataLoaded = createSelector(
+  selectMonitoringStore,
+  prop('dataLoaded') as (data: MonitoringState) => boolean,
+);
 export const dataParsed = createSelector(
   selectMonitoringStore,
-  prop('parsed'),
+  prop('parsed') as (data: MonitoringState) => boolean,
 );
 export const getParsingStat = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => pick(['pagesLeft', 'pageSaved', 'totalPages'], state),
+  (state: MonitoringState) => pick(['pagesLeft', 'pageSaved', 'totalPages'], state),
 );
 export const getTotalData = createSelector(
   selectMonitoringStore,
-  prop('totalData'),
+  prop('totalData') as (data: MonitoringState) => MonitoringTeamGroupedData[],
 );
 export const getTeamData = createSelector(
   selectMonitoringStore,
-  prop('teamData'),
+  prop('teamData') as (
+    data: MonitoringState,
+  ) => {
+    [key: number]: MonitoringTeamDetailedData;
+  },
 );
 export const getPlayerData = createSelector(
   selectMonitoringStore,
-  prop('playerData'),
+  prop('playerData') as (
+    data: MonitoringState,
+  ) => {
+    [key: number]: {
+      parsed: boolean;
+      totalData?: PlayerLevelData;
+    };
+  },
 );
-export const getCodesByTeam = createSelector(
+export const getCodes = createSelector(
   selectMonitoringStore,
-  prop('codes'),
-);
-export const getCodesByPlayer = createSelector(
-  selectMonitoringStore,
-  prop('codes'),
+  prop('codes') as (
+    data: MonitoringState,
+  ) => {
+    [key: number]: CodesListResponse;
+  },
 );
 export const getLoadingState = createSelector(
   selectMonitoringStore,
-  prop('isLoading'),
+  prop('isLoading') as (data: MonitoringState) => boolean,
 );

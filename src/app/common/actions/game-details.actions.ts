@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { GameRequest, GameData } from '@app-common/models';
 
 export const ChangeLevelTypeAction = createAction(
   '[Game Details] Change level type',
@@ -14,13 +15,10 @@ export const RemoveLevelFromStatAction = createAction(
   '[Game Details] Remove level from statistic',
   props<{ removed: boolean; level: number }>(),
 );
-export const RequestGameDetailsAction = createAction(
-  '[Game Details] Request game data',
-  props<{ query: QuestStat.GameRequest }>(),
-);
+export const RequestGameDetailsAction = createAction('[Game Details] Request game data', props<GameRequest>());
 export const RequestGameDetailsSuccessAction = createAction(
   '[Game Details] Game details retrieved from the server',
-  props<{ data: QuestStat.GameData }>(),
+  props<{ data: GameData | null }>(),
 );
 export const RequestGameDetailsFailedAction = createAction(
   '[Game Details] Request game date failed',

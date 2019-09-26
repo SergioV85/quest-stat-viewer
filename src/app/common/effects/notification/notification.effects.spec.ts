@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { NotificationEffects } from './notification.effects';
 
-xdescribe('NotificationService', () => {
+describe('NotificationEffects', () => {
   // tslint:disable-next-line: no-any prefer-const
   let actions$: Observable<any>;
   let effects: NotificationEffects;

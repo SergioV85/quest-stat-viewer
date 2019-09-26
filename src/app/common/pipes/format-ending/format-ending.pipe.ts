@@ -4,12 +4,11 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'formatEnding',
 })
 export class FormatEndingPipe implements PipeTransform {
-  // tslint:disable-next-line: no-any
-  public transform(value: any, word?: string): string {
+  public transform(value: number, word: string): string {
     if (value) {
       return word === 'страница' ? this.getEndingForPage(value) : word;
     }
-    return value;
+    return '';
   }
 
   private getEndingForPage(value: number) {

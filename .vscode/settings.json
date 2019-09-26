@@ -3,5 +3,8 @@
   "sonarlint.connectedMode.project": {
     "serverId": "QuestStat",
     "projectKey": "SergioV85_quest-stat-viewer"
-  }
+  },
+  "cSpell.words": [
+    "paginator"
+  ]
 }

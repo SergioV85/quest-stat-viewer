@@ -9,8 +9,7 @@ import { DeviceService } from './helpers/device.service';
 import { UtilService } from './helpers/util.service';
 import { HttpCacheInterceptorService } from './http/http-interceptor.service';
 import { NotificationsService } from './notification/notification.service';
-import { GameDataResolver } from './resolvers/game-resolver.service';
-import { GameMonitoringResolver } from './resolvers/monitoring-resolver.service';
+
 import { SavedGamesResolver } from './resolvers/saved-games-resolver.service';
 
 import { SharedService } from './shared.service';
@@ -19,8 +18,6 @@ import { SharedService } from './shared.service';
   imports: [CommonModule, HttpClientModule, SharedComponentsModule],
   declarations: [],
   providers: [
-    GameDataResolver,
-    GameMonitoringResolver,
     SavedGamesResolver,
     ApiService,
     NotificationsService,

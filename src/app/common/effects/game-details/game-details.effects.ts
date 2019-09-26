@@ -4,6 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { from } from 'rxjs';
 import { catchError, exhaustMap, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
+import { State } from '@app-common/models';
 import { ApiService } from '@app-common/services/api/api.service';
 import {
   GetLatestDataFromEnAction,
@@ -21,15 +22,15 @@ import { getGameId, getGameDomain, getLevels } from '@app-common/reducers/game-d
 export class GameDetailsEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly store$: Store<QuestStat.Store.State>,
+    private readonly store$: Store<State>,
     private readonly apiService: ApiService,
   ) {}
 
   @Effect()
   public getGameDetails$ = this.actions$.pipe(
     ofType(RequestGameDetailsAction),
-    exhaustMap(({ query }) =>
-      this.apiService.getGameStat(query).pipe(
+    exhaustMap(({ domain, id }) =>
+      this.apiService.getGameStat({ domain, id }).pipe(
         map(data => RequestGameDetailsSuccessAction({ data })),
         catchError(err =>
           from([
@@ -49,7 +50,7 @@ export class GameDetailsEffects {
       id: getGameId(state),
       domain: getGameDomain(state),
     })),
-    map(({ domain, id }) => RequestGameDetailsAction({ query: { domain, id, force: true } })),
+    map(({ domain, id }) => RequestGameDetailsAction({ domain, id, force: true })),
   );
 
   @Effect()

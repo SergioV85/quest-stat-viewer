@@ -3,13 +3,15 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { filter, take, tap, switchMap, catchError } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { isNil, prop } from 'ramda';
+import { isNil } from 'ramda';
 
 import { RequestGameDetailsAction } from '@app-common/actions/game-details.actions';
+import { getFinishResults } from 'app/common/reducers/game-details/game-details.reducer';
+import { State, TeamData } from '@app-common/models';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GameDataResolver implements Resolve<boolean> {
-  constructor(private readonly store: Store<QuestStat.Store.State>) {}
+  constructor(private readonly store: Store<State>) {}
 
   public resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.getGame(route).pipe(
@@ -19,17 +21,17 @@ export class GameDataResolver implements Resolve<boolean> {
   }
 
   private getGame(route: ActivatedRouteSnapshot) {
-    const domain = route.paramMap.get('domain');
-    const id = route.paramMap.get('id');
+    const domain = route.paramMap.get('domain') as string;
+    const id = route.paramMap.get('id') as string;
 
     return this.store.pipe(
-      select('gameDetails'),
-      tap((data: QuestStat.Store.GameDetails) => {
-        if (isNil(prop('finishResults', data)) && !data.isLoading) {
-          this.store.dispatch(new RequestGameDetailsAction({ domain, id }));
+      select(getFinishResults),
+      tap((data: TeamData[]) => {
+        if (isNil(data)) {
+          this.store.dispatch(RequestGameDetailsAction({ domain, id }));
         }
       }),
-      filter((data: QuestStat.Store.GameDetails) => !isNil(prop('finishResults', data))),
+      filter((data: TeamData[]) => !isNil(data)),
       take(1),
     );
   }

@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 
 @Pipe({ name: 'formatDateTime' })
 export class FormatDateTimePipe implements PipeTransform {
@@ -11,17 +11,19 @@ export class FormatDateTimePipe implements PipeTransform {
 
   public transform(value: string | Date, type: string, parseFromString?: boolean) {
     if (value) {
-      const date = parseFromString ? moment(value, this.serverFormat) : moment(value);
-      if (date.isValid()) {
+      const date = parseFromString
+        ? DateTime.fromString(value as string, this.serverFormat)
+        : DateTime.fromJSDate(value as Date);
+      if (date.isValid) {
         switch (type) {
           case 'longer':
-            return date.format(this.longerFormat);
+            return date.toFormat(this.longerFormat);
           case 'short':
-            return date.format(this.shortFormat);
+            return date.toFormat(this.shortFormat);
           case 'time':
-            return date.format(this.timeOnly);
+            return date.toFormat(this.timeOnly);
           default:
-            return date.format(this.mediumWithSecFormat);
+            return date.toFormat(this.mediumWithSecFormat);
         }
       } else {
         return value;

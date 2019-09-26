@@ -11,7 +11,7 @@ import { getParsingStat } from '@app-common/reducers/monitoring/monitoring.reduc
   styleUrls: ['./monitoring-loader.component.scss'],
 })
 export class MonitoringLoaderComponent implements OnInit, OnDestroy {
-  public parsingStat$: Observable<{}>;
+  public parsingStat$?: Observable<Partial<{ pagesLeft: number; pageSaved: number; totalPages: number }>>;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly store: Store<QuestStat.Store.State>) {}
