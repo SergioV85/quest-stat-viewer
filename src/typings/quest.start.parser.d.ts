@@ -36,7 +36,7 @@ declare namespace QuestStat {
   }
 
   interface GameData {
-    info: GameInfo,
+    info: GameInfo;
     stat: {
       DataByTeam: GroupedTeamData[];
       DataByLevels: TeamData[][];
@@ -52,8 +52,8 @@ declare namespace QuestStat {
   }
 
   interface ViewSettings {
-    showLeaderGap?: boolean,
-    showBestTime?: boolean
+    showLeaderGap?: boolean;
+    showBestTime?: boolean;
   }
 
   namespace Monitoring {
@@ -82,13 +82,13 @@ declare namespace QuestStat {
       _id: {
         level: number;
         teamId: number;
-      }
+      };
     }
     interface TeamGroupedData extends GroupData {
       _id: {
         teamId: number;
         teamName: string;
-      }
+      };
     }
     interface TeamDetailedData {
       parsed: boolean;
@@ -99,13 +99,13 @@ declare namespace QuestStat {
       _id: {
         userId: number;
         userName: string;
-      }
+      };
     }
     interface PlayerLevelData extends GroupData {
       _id: {
         level: number;
         userId: number;
-      }
+      };
     }
     interface DetailedMonitoring {
       gameId: number;
@@ -147,7 +147,7 @@ declare namespace QuestStat {
       dataByLevels?: TeamData[][];
       finishResults?: TeamData[];
       selectedTotalTab?: number;
-      originalLevels?: LevelData[]
+      originalLevels?: LevelData[];
     }
 
     interface Monitoring {
@@ -168,14 +168,14 @@ declare namespace QuestStat {
         };
       };
       codes?: {
-        [key: number]: Monitoring.CodesListResponse
+        [key: number]: Monitoring.CodesListResponse;
       };
     }
 
     interface State {
       games: Games;
       gameDetails: GameDetails;
-      monitoring: Monitoring
+      monitoring: Monitoring;
       router: any;
     }
   }

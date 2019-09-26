@@ -9,19 +9,21 @@
           }"
           (click)="changeView('total')">
         <i class="d-lg-none fas fa-list game-page__viewButton-icon"
-            matTooltip="Сумарная статистика">
+            matTooltip="Сумарная статистика"
+            aria-hidden="true">
         </i>
         <span class="d-none d-lg-inline game-page__viewButton-title">Сумарная статистика</span>
       </button>
       <button type="button"
-          class="btn game-page__viewButton" 
+          class="btn game-page__viewButton"
           [ngClass]="{
             'btn-outline-primary': (activeTab$ | async) !== 'levels',
             'btn-primary': (activeTab$ | async) === 'levels'
           }"
           (click)="changeView('levels')">
         <i class="d-lg-none fas fa-th-list game-page__viewButton-icon"
-            matTooltip="Обычная статистика">
+            matTooltip="Обычная статистика"
+            aria-hidden="true">
         </i>
         <span class="d-none d-lg-inline game-page__viewButton-title">Обычная статистика</span>
       </button>
@@ -33,7 +35,8 @@
           }"
           (click)="changeView('teams')">
         <i class="d-lg-none fas fa-list-ol game-page__viewButton-icon"
-            matTooltip="Статистика по командам">
+            matTooltip="Статистика по командам"
+            aria-hidden="true">
         </i>
         <span class="d-none d-lg-inline game-page__viewButton-title">Статистика по командам</span>
       </button>
@@ -45,7 +48,8 @@
           }"
           (click)="changeView('monitoring')">
         <i class="d-lg-none fas fa-file-alt game-page__viewButton-icon"
-            matTooltip="Мониторинг">
+            matTooltip="Мониторинг"
+            aria-hidden="true">
         </i>
         <span class="d-none d-lg-inline game-page__viewButton-title">Мониторинг</span>
       </button>
@@ -53,26 +57,32 @@
     <div class="col game-page__changesContainer text-right">
       <button class="game-page__refreshDataButton"
           *ngIf="(activeTab$ | async) !== 'monitoring'"
-          mat-raised-button 
+          mat-raised-button
           color="accent"
           (click)="refreshData()">
-        <i class="game-page__changesContainer-icon fas fa-sync fa-lg" matTooltip="Обновить данные"></i>
+        <i class="game-page__changesContainer-icon fas fa-sync fa-lg"
+            matTooltip="Обновить данные"
+            aria-hidden="true"></i>
         <span class="game-page__changesContainer-label">Обновить данные</span>
       </button>
-      <span class="game-page__changesStatus" *ngIf="hasPendingChanges$ | async">Изменения не сохраненны</span>
-      <button class="game-page__saveChangesButton" 
+      <span class="game-page__changesStatus"
+          *ngIf="hasPendingChanges$ | async">Изменения не сохраненны</span>
+      <button class="game-page__saveChangesButton"
           *ngIf="hasPendingChanges$ | async"
-          mat-raised-button 
+          mat-raised-button
           color="primary"
           [disabled]="disableSaveButton"
           (click)="saveChanges()">
-        <i class="game-page__changesContainer-icon fas fa-save fa-lg" matTooltip="Сохранить"></i>
+        <i class="game-page__changesContainer-icon fas fa-save fa-lg"
+            matTooltip="Сохранить"
+            aria-hidden="true"></i>
         <span class="game-page__changesContainer-label">Сохранить</span>
       </button>
     </div>
   </div>
   <div class="full-width">
-    <mat-spinner *ngIf="loadData" class="loading"></mat-spinner>
+    <mat-spinner *ngIf="loadData"
+        class="loading"></mat-spinner>
     <router-outlet></router-outlet>
   </div>
 </div>

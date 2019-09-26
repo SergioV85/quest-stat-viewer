@@ -11,9 +11,9 @@ import { getTotalData } from '@app-common/reducers/monitoring/monitoring.reducer
   styleUrls: ['./monitoring-total.component.scss'],
 })
 export class MonitoringTotalComponent implements OnInit, OnDestroy {
-  public totalData$: Observable<QuestStat.Monitoring.TeamGroupedData[]>;
+  public totalData$?: Observable<QuestStat.Monitoring.TeamGroupedData[]>;
   public pathToTeamName = ['_id', 'teamName'];
-  private ngUnsubscribe: Subject<void> = new Subject<void>();
+  private readonly ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly store: Store<QuestStat.Store.State>) {}
 

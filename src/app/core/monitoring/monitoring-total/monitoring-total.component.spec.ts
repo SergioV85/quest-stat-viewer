@@ -2,17 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MonitoringTotalComponent } from './monitoring-total.component';
 
-describe('MonitoringTotalComponent', () => {
+describe('Monitoring Module: MonitoringTotalComponent', () => {
   let component: MonitoringTotalComponent;
   let fixture: ComponentFixture<MonitoringTotalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MonitoringTotalComponent],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(MonitoringTotalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

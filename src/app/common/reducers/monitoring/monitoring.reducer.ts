@@ -80,7 +80,7 @@ export function monitoringReducer(
 export const selectMonitoringStore = (state: QuestStat.Store.State) => state.monitoring;
 export const dataParsed = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('parsed', state),
+  prop('parsed'),
 );
 export const getParsingStat = createSelector(
   selectMonitoringStore,
@@ -88,25 +88,25 @@ export const getParsingStat = createSelector(
 );
 export const getTotalData = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('totalData', state),
+  prop('totalData'),
 );
 export const getTeamData = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('teamData', state),
+  prop('teamData'),
 );
 export const getPlayerData = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('playerData', state),
+  prop('playerData'),
 );
 export const getCodesByTeam = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('codes', state),
+  prop('codes'),
 );
 export const getCodesByPlayer = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('codes', state),
+  prop('codes'),
 );
 export const getLoadingState = createSelector(
   selectMonitoringStore,
-  (state: QuestStat.Store.Monitoring) => prop('isLoading', state),
+  prop('isLoading'),
 );

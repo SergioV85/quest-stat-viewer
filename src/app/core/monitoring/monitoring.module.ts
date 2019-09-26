@@ -7,7 +7,7 @@ import { SharedServicesModule } from '@app-common/services/shared-services.modul
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
 import { SharedComponentsModule } from '@app-common/components/shared-components.module';
 
-import { MonitoringComponent } from './monitoring.component';
+import { MonitoringComponent } from './monitoring-root/monitoring.component';
 import { MonitoringLoaderComponent } from './monitoring-loader/monitoring-loader.component';
 import { MonitoringTotalComponent } from './monitoring-total/monitoring-total.component';
 import { MonitoringByTeamComponent } from './monitoring-by-team/monitoring-by-team.component';

@@ -6,7 +6,7 @@ export const ChangeLevelTypeAction = createAction(
 );
 export const ChangeTotalStatTabAction = createAction(
   '[Game Details] Change tab in total statistic',
-  props<{ tabIndex: number }>(),
+  props<{ tab: number }>(),
 );
 export const CleanGameDataAction = createAction('[Game Details] Clean game details');
 export const GetLatestDataFromEnAction = createAction('[Game Details] Re-read game data from EN');
@@ -19,7 +19,7 @@ export const RequestGameDetailsAction = createAction(
   props<{ query: QuestStat.GameRequest }>(),
 );
 export const RequestGameDetailsSuccessAction = createAction(
-  '[Game Details] Game details saved to store',
+  '[Game Details] Game details retrieved from the server',
   props<{ data: QuestStat.GameData }>(),
 );
 export const RequestGameDetailsFailedAction = createAction(
