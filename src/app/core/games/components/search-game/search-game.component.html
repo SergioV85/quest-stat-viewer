@@ -1,0 +1,29 @@
+<div class="search-component">
+  <mat-card>
+
+    <mat-card-title>
+      Вставьте URL описания игры или игровой статистики
+    </mat-card-title>
+    <mat-card-content>
+      <mat-form-field class="search-component__url">
+        <input matInput
+            placeholder="URL игры"
+            [formControl]="urlInput">
+        <mat-error *ngIf="controlHasError('pattern')">
+          Адрес некоректный. Поддержываемые домены: *.en.cx и *.quest.ua.
+        </mat-error>
+        <mat-error *ngIf="controlHasError('required')">
+          URL <strong>обязательный</strong>
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions class="search-component__buttons">
+      <button mat-button
+          (click)="sendRequest()"
+          [disabled]="urlInput.invalid">
+        Отправить
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</div>

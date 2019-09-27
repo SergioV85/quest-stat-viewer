@@ -1,11 +1,12 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { head, indexOf, nth, propEq } from 'ramda';
+import { head, indexOf, nth } from 'ramda';
+import { TeamData } from '@app-common/models';
 
 @Pipe({ name: 'totalStatCalculation' })
 export class TotalStatCalculationPipe implements PipeTransform {
-  public transform(value: number[], pipeType: string, additionalParam: number | QuestStat.TeamData, idx: number) {
+  public transform(value: number[], pipeType: string, additionalParam: number | TeamData, idx: number) {
     if (value) {
-      const team = additionalParam as QuestStat.TeamData;
+      const team = additionalParam as TeamData;
       switch (pipeType) {
         case 'teamTotalPosition':
           return indexOf(additionalParam, value) + 1;

@@ -1,0 +1,42 @@
+<div class="level-card">
+  <p class="level-card__iconContainer">
+    <span *ngIf="!isLastLevel"
+        class="level-card__icon level-card__icon--left">
+      <button class="level-card__typeButton"
+          mat-icon-button
+          [matMenuTriggerFor]="menu">
+        <i class="level-card__levelType fa-lg"
+            [ngClass]="[levelTypeIcon, levelColorIcon]"
+            [matTooltip]="levelTypeName"
+            aria-hidden="true">
+        </i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button *ngFor="let type of LevelTypeSelector"
+            class="level-card__menuButton"
+            mat-menu-item
+            [disabled]="levelData?.type === LevelType[type.type]"
+            (click)="selectLevelType(type.type)">
+          <i class="level-card__levelType level-card__levelType--{{ LevelType[type.type] }} {{ type.icon }}"
+              aria-hidden="true"></i>
+          <span>{{ type.name }}</span>
+        </button>
+      </mat-menu>
+    </span>
+    <span *ngIf="!isLastLevel"
+        class="level-card__icon level-card__icon--right">
+      <button class="level-card__typeButton"
+          mat-icon-button
+          (click)="toggleLevelState()">
+        <i class="level-card__levelStatus fas fa-lg"
+            [ngClass]="{
+              'fa-eye-slash level-card__levelStatus--dismissed': levelData.removed,
+              'fa-eye': !levelData.removed
+            }"
+            aria-hidden="true">
+        </i>
+      </button>
+    </span>
+  </p>
+  <p class="level-card__levelName mb-0">#{{ levelData?.level }}: {{ levelData?.name }}</p>
+</div>

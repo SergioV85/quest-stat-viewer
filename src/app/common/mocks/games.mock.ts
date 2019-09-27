@@ -1,4 +1,6 @@
-const mockedGames: QuestStat.GameInfo[] = [
+import { GameInfo, GameData } from '@app-common/models';
+
+export const mockedGames: GameInfo[] = [
   {
     _id: 59543,
     GameId: 59543,
@@ -730,7 +732,7 @@ const mockedGames: QuestStat.GameInfo[] = [
   },
 ];
 
-const mockedGameDetails: QuestStat.GameData = {
+export const mockedGameDetails: GameData = {
   info: {
     GameId: 65889,
     FinishTime: '2019-09-09T01:00:00.000Z',

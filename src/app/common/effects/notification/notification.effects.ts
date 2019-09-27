@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
+import { NotificationType } from '@app-common/models';
 import { NotificationsService } from '@app-common/services/notification/notification.service';
 import {
   ErrorNotificationAction,
   WarningNotificationAction,
   SuccessNotificationAction,
 } from '@app-common/actions/notification.actions';
-import { NotificationType } from 'app/common/models';
 
 @Injectable()
 export class NotificationEffects {

@@ -1,3 +1,4 @@
+import { mockedGameDetails } from '@app-common/mocks/games.mock';
 import { CheckLevelRemovalPipe } from './check-level-removal.pipe';
 
 describe('CheckLevelRemovalPipe', () => {

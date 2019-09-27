@@ -4,9 +4,9 @@ import { HttpRequest, HttpResponse, HttpInterceptor, HttpHandler, HttpEvent } fr
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class HttpCacheInterceptorService implements HttpInterceptor {
-  private cache: Map<string, HttpResponse<any>> = new Map();
+  private readonly cache: Map<string, HttpResponse<any>> = new Map();
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.method !== 'GET' || req.params.has('force')) {

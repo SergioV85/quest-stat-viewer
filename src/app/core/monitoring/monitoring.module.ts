@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
 
-import { GameMonitoringResolver } from '@app-common/services/resolvers/monitoring-resolver.service';
-import { SharedServicesModule } from '@app-common/services/shared-services.module';
+import { GameMonitoringResolver } from '@app-common/services/resolvers/monitoring-resolver/monitoring-data.resolver';
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
+import { SharedServicesModule } from '@app-common/services/shared-services.module';
 import { SharedComponentsModule } from '@app-common/components/shared-components.module';
 
 import { MonitoringComponent } from './monitoring-root/monitoring.component';

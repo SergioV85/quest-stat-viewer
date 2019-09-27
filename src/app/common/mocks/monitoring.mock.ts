@@ -1,4 +1,6 @@
-const mockedMonitoringData: QuestStat.Monitoring.Response = {
+import { MonitoringResponse, CodeEntry } from '@app-common/models';
+
+export const mockedMonitoringData: MonitoringResponse = {
   parsed: true,
   totalData: [
     {
@@ -40,7 +42,7 @@ const mockedMonitoringData: QuestStat.Monitoring.Response = {
   ],
 };
 
-const mockedMonitoringDetailsData: QuestStat.Monitoring.Response = {
+export const mockedMonitoringDetailsData: MonitoringResponse = {
   parsed: true,
   dataByLevel: [
     { _id: { level: 1, teamId: 13977 }, codesCounts: 2, correctCodesQuantity: 1, correctCodesPercent: 50 },
@@ -192,7 +194,7 @@ const mockedMonitoringDetailsData: QuestStat.Monitoring.Response = {
   ],
 };
 
-const mockedCodesList: QuestStat.Monitoring.CodeEntry[] = [
+export const mockedCodesList: CodeEntry[] = [
   {
     _id: '5acb82a8bb1bfc36f14683f7',
     GameId: 59543,

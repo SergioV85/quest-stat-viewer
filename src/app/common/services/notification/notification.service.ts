@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { propOr } from 'ramda';
 import { NotificationType } from '@app-common/models';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class NotificationsService {
   constructor(private readonly snackBar: MatSnackBar) {}
 

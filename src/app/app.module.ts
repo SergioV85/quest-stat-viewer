@@ -1,16 +1,13 @@
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
-import { SharedEffectsModule } from '@app-common/effects/shared-effects.module';
-import { CustomRouterStateSerializer } from '@app-commonserializers/router-state/custom-router-state-serializer';
-
-import { reducers } from '@app-common/reducers';
 import { environment } from '../environments/environment';
 
 import { ROUTES } from './app.routes';
@@ -20,6 +17,8 @@ import { AppComponent } from './app.component';
 import { NoContentComponent } from './core/no-content';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
+import { NotificationEffects } from './common/effects/notification/notification.effects';
+import { HttpCacheInterceptorService } from './common/services/http/http-interceptor.service';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -27,19 +26,20 @@ import { FooterComponent } from './core/footer/footer.component';
   imports: [
     BrowserModule.withServerTransition({ appId: 'quest-stat-viewer' }),
     BrowserTransferStateModule,
+    HttpClientModule,
     RouterModule.forRoot(ROUTES),
-    StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([]),
+    StoreModule.forRoot({ router: routerReducer }),
+    EffectsModule.forRoot([NotificationEffects]),
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
     }),
-    SharedEffectsModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
     {
-      provide: RouterStateSerializer,
-      useClass: CustomRouterStateSerializer,
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCacheInterceptorService,
+      multi: true,
     },
   ],
 })

@@ -1,4 +1,4 @@
-import { RouterState } from '@ngrx/router-store';
+import { RouterReducerState } from '@ngrx/router-store';
 import {
   CodesListResponse,
   GameInfo,
@@ -11,12 +11,12 @@ import {
 } from '.';
 
 export interface GamesState {
-  isLoading?: boolean;
-  games?: GameInfo[];
+  isLoading: boolean;
+  games?: GameInfo[] | null;
 }
 
 export interface GameDetailsState {
-  isLoading?: boolean;
+  isLoading: boolean;
   gameInfo?: GameInfo;
   levels?: LevelData[];
   dataByTeam?: GroupedTeamData[];
@@ -49,8 +49,8 @@ export interface MonitoringState {
 }
 
 export interface State {
-  games: GamesState;
-  gameDetails: GameDetailsState;
-  monitoring: MonitoringState;
-  router: RouterState;
+  games?: GamesState;
+  gameDetails?: GameDetailsState;
+  monitoring?: MonitoringState;
+  router: RouterReducerState;
 }
