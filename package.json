@@ -17,11 +17,13 @@
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
     "test": "ng test",
     "test:coverage": "ng test --source-map --code-coverage",
+    "test:ci": "ng test --code-coverage --karma-config ./karma.ci.conf.js && npm run prepare-code-coverage-report",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start:heroku": "node dist/server.js",
     "prettier": "prettier --config ./.prettierrc --list-different \"./src/app/**/*.{ts,js,scss,css,json}\"",
-    "precommit": "npm run prettier && npm run lint"
+    "precommit": "npm run prettier && npm run lint",
+    "prepare-code-coverage-report": "replace '...*src' 'SF:./src' coverage/lcov.info"
   },
   "private": true,
   "dependencies": {
@@ -84,6 +86,7 @@
     "prettier": "^1.18.2",
     "protractor": "~5.4.2",
     "puppeteer": "^1.15.0",
+    "replace": "^1.1.1",
     "rxjs-tslint-rules": "^4.25.0",
     "ts-loader": "^6.0.0",
     "ts-node": "~8.1.0",
