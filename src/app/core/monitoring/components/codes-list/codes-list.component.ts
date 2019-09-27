@@ -32,7 +32,7 @@ export class CodesListComponent implements OnInit, OnDestroy, AfterViewInit {
         ? { teamId: this.uniqueId, levelId: this.levelId }
         : { playerId: this.uniqueId, levelId: this.levelId };
 
-    this.store.dispatch(RequestCodesAction({ query: mergeRight(request, { type: this.type }) }));
+    this.store.dispatch(RequestCodesAction({ query: mergeRight(request, { requestType: this.type }) }));
 
     this.store
       .pipe(

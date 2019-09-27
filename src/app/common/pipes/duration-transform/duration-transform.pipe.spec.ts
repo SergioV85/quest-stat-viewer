@@ -13,16 +13,16 @@ describe('FormatDurationPipe', () => {
       expect(pipe.transform(735)).toEqual('735 мс');
     });
     it('should transform seconds duration', () => {
-      expect(pipe.transform(24, 's')).toEqual('24 с');
+      expect(pipe.transform(24, 's')).toEqual('24 с ');
     });
     it('should transform minutes duration', () => {
-      expect(pipe.transform(135, 's')).toEqual('2 м 15 с');
+      expect(pipe.transform(135, 's')).toEqual('2 м 15 с ');
     });
     it('should transform hours duration', () => {
-      expect(pipe.transform(5460000, 'ms')).toEqual('1 ч 31 м');
+      expect(pipe.transform(5460000, 'ms')).toEqual('1 ч 31 м ');
     });
     it('should transform days duration', () => {
-      expect(pipe.transform(115460000, 'ms')).toEqual('1 д 8 ч 4 м 20 с');
+      expect(pipe.transform(115460000, 'ms')).toEqual('1 д 8 ч 4 м 20 с ');
     });
   });
 });

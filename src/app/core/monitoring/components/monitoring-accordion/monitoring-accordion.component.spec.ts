@@ -1,3 +1,5 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatExpansionModule } from '@angular/material';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MonitoringAccordionComponent } from './monitoring-accordion.component';
@@ -8,7 +10,9 @@ describe('Monitoring: MonitoringAccordionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [MatExpansionModule],
       declarations: [MonitoringAccordionComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MonitoringAccordionComponent);

@@ -25,7 +25,7 @@ import { getGameId } from '@app-core/game-details/reducers/game-details.reducer'
 
 import { MonitoringEffects } from './monitoring.effects';
 
-describe('MonitoringEffects', () => {
+describe('Monitoring: MonitoringEffects', () => {
   let actions$: Observable<Actions>;
   let monitoringEffects: MonitoringEffects;
   let store$: MockStore<State>;
@@ -85,6 +85,7 @@ describe('MonitoringEffects', () => {
     const startAction = GetMonitoringDetailsAction({ teamId: 13977, detailsLevel: 'byTeam' });
     it('should send a request for getting detailed monitoring data and dispatch success action on complete', () => {
       const successAction = GetMonitoringDetailsSuccessAction({
+        gameId: 12345,
         teamId: 13977,
         detailsLevel: 'byTeam',
         monitoringData: mockedMonitoringDetailsData,
@@ -111,9 +112,10 @@ describe('MonitoringEffects', () => {
     });
   });
   describe('getCodesList$', () => {
-    const startAction = RequestCodesAction({ query: { playerId: 52015, levelId: 5, type: 'byPlayer' } });
+    const startAction = RequestCodesAction({ query: { playerId: 52015, levelId: 5, requestType: 'byPlayer' } });
     it('should send a request for getting codes list and dispatch success action on complete', () => {
       const successAction = RequestCodesSuccessAction({
+        gameId: 12345,
         playerId: 52015,
         levelId: 5,
         requestType: 'byPlayer',

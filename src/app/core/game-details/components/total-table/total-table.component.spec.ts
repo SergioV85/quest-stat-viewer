@@ -3,6 +3,9 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
+import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pip.mock';
+import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe mock';
+import { MockedTotalStatCalculationPipe } from '@app-common/pipes/total-stat-calculation/total-stat-calculation.pipe.mock';
 import {
   getActiveTabOnTotalStatState,
   getAvailableLevelTypes,
@@ -18,7 +21,12 @@ describe('Game Details: TotalTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TotalTableComponent],
+      declarations: [
+        TotalTableComponent,
+        MockedGetPropertyPipe,
+        MockedFormatDurationPipe,
+        MockedTotalStatCalculationPipe,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideMockStore()],
     }).compileComponents();

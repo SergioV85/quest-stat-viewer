@@ -47,19 +47,15 @@ export class MonitoringEffects {
   public getMonitoringDetails$ = this.actions$.pipe(
     ofType(GetMonitoringDetailsAction),
     withLatestFrom(this.store$),
-    map(([{ teamId, playerId, detailsLevel }, state]) => ({
+    map(([request, state]) => ({
       gameId: getGameId(state),
-      teamId,
-      playerId,
-      detailsLevel,
+      ...request,
     })),
-    exhaustMap(({ gameId, playerId, teamId, detailsLevel }) =>
-      this.apiService.getMonitoringDetails({ gameId, playerId, teamId, detailsLevel }).pipe(
+    exhaustMap((request: { gameId: number; playerId?: number; teamId?: number; detailsLevel: string }) =>
+      this.apiService.getMonitoringDetails(request).pipe(
         map(monitoringData =>
           GetMonitoringDetailsSuccessAction({
-            detailsLevel,
-            playerId,
-            teamId,
+            ...request,
             monitoringData,
           }),
         ),
@@ -81,13 +77,14 @@ export class MonitoringEffects {
       gameId: getGameId(state),
       ...query,
     })),
-    exhaustMap(({ gameId, playerId, teamId, levelId, type }) =>
-      this.apiService.getListOfCodes({ gameId, playerId, teamId, levelId, type }).pipe(
-        map(codes => RequestCodesSuccessAction({ playerId, teamId, levelId, codes, requestType: type })),
-        catchError(err =>
-          from([RequestCodesFailedAction(err.error), ErrorNotificationAction({ message: DEFAULT_ERROR_MESSAGE })]),
+    exhaustMap(
+      (request: { gameId: number; playerId?: number; teamId?: number; levelId: number; requestType: string }) =>
+        this.apiService.getListOfCodes(request).pipe(
+          map(codes => RequestCodesSuccessAction({ ...request, codes })),
+          catchError(err =>
+            from([RequestCodesFailedAction(err.error), ErrorNotificationAction({ message: DEFAULT_ERROR_MESSAGE })]),
+          ),
         ),
-      ),
     ),
   );
 }

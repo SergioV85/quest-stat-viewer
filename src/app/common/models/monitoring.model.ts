@@ -69,6 +69,6 @@ export interface CodesListRequest {
   playerId?: number;
   teamId?: number;
   levelId: number;
-  type: string;
+  requestType: string;
 }
 export type CodesListResponse = CodeEntry[];

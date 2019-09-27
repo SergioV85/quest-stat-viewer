@@ -8,8 +8,7 @@
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts",
-    "typings.d.ts"
+    "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
     "entryModule": "app/app.server.module#AppServerModule"

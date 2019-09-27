@@ -1,7 +1,10 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
+import { FilterByPropPipe } from '@app-common/pipes/filter-by-prop/filter-by-prop.pipe';
+import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe mock';
 import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
 import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
 import { getTeamData } from '@app-core/monitoring/reducers/monitoring.reducer';
@@ -14,8 +17,9 @@ describe('Monitoring: MonitoringByTeamComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MonitoringByTeamComponent],
+      declarations: [MonitoringByTeamComponent, FilterByPropPipe, MockedGetPropertyPipe],
       providers: [provideMockStore()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     store$ = TestBed.get<Store<State>>(Store);

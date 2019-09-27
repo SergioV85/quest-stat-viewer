@@ -75,9 +75,13 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
-            "styles": ["src/styles.scss"],
-            "assets": ["src/assets", "src/robots.txt"]
+            "assets": ["src/assets", "src/robots.txt"],
+            "styles": [
+              "src/styles/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome/index.js"
+            ]
           }
         },
         "server": {

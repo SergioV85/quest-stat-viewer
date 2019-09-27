@@ -39,7 +39,7 @@ describe('GamesEffects', () => {
       const successAction = RequestGamesSuccessAction({ data: mockedGames });
 
       actions$ = hot('-a', { a: startAction });
-      const response$ = cold('-a|', { a: mockedGameDetails });
+      const response$ = cold('-a|', { a: mockedGames });
       const expected$ = cold('--b', { b: successAction });
 
       apiService.getSavedGames.and.returnValues(response$);

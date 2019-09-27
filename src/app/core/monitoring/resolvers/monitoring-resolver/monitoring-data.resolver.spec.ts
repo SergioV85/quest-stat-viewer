@@ -7,14 +7,14 @@ import { RequestMonitoringAction } from '@app-core/monitoring/actions/monitoring
 import { isDataLoaded } from '@app-core/monitoring/reducers/monitoring.reducer';
 import { GameMonitoringResolver } from './monitoring-data.resolver';
 
-describe('GameMonitoringResolver', () => {
+describe('Monitoring: GameMonitoringResolver', () => {
   let resolver: GameMonitoringResolver;
   let store$: MockStore<State>;
   let dataLoaded: MemoizedSelector<State, boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideMockStore, GameMonitoringResolver],
+      providers: [provideMockStore(), GameMonitoringResolver],
     });
     store$ = TestBed.get<Store<State>>(Store);
     dataLoaded = store$.overrideSelector(isDataLoaded, false);
@@ -31,6 +31,7 @@ describe('GameMonitoringResolver', () => {
     const mockActivatedRouteSnapshot: any = {
       parent: {
         parent: {
+          paramMap: new Map<string, string>([['domain', 'quest.ua'], ['id', '12345']]),
           params: {
             domain: 'quest.ua',
             id: '12345',
@@ -38,14 +39,14 @@ describe('GameMonitoringResolver', () => {
         },
       },
     };
-    const action = RequestMonitoringAction({ domain: 'quest.ua', id: 12345 });
+    const action = RequestMonitoringAction({ domain: 'quest.ua', id: '12345' });
 
     it('should resolve the game details', () => {
       resolver.resolve(mockActivatedRouteSnapshot).subscribe();
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });
     it('should not call action for game details if it already exist', () => {
-      isDataLoaded.setResult(true);
+      dataLoaded.setResult(true);
       resolver.resolve(mockActivatedRouteSnapshot).subscribe();
       expect(store$.dispatch).not.toHaveBeenCalledWith(action);
     });

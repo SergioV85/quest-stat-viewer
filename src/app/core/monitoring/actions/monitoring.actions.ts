@@ -8,7 +8,13 @@ export const GetMonitoringDetailsAction = createAction(
 );
 export const GetMonitoringDetailsSuccessAction = createAction(
   '[Monitoring] Detailed monitoring saved to store',
-  props<{ detailsLevel: string; playerId?: number; teamId?: number; monitoringData: MonitoringResponse }>(),
+  props<{
+    gameId: number;
+    detailsLevel: string;
+    playerId?: number;
+    teamId?: number;
+    monitoringData: MonitoringResponse;
+  }>(),
 );
 export const GetMonitoringDetailsFailedAction = createAction(
   '[Monitoring] Request detailed game monitoring failed',
@@ -21,6 +27,7 @@ export const RequestCodesAction = createAction(
 export const RequestCodesSuccessAction = createAction(
   '[Monitoring] Codes saved to store',
   props<{
+    gameId: number;
     levelId: number;
     playerId?: number;
     teamId?: number;

@@ -22,7 +22,7 @@ import {
 import { getGameId, getGameDomain, getLevels } from '@app-core/game-details/reducers/game-details.reducer';
 import { GameDetailsEffects } from './game-details.effects';
 
-describe('GameDetailsEffects', () => {
+describe('Game Details: GameDetailsEffects', () => {
   let actions$: Observable<Actions>;
   let gameDetailsEffects: GameDetailsEffects;
   let store$: MockStore<State>;
@@ -85,7 +85,7 @@ describe('GameDetailsEffects', () => {
       const successAction = RequestGameDetailsAction({ domain: 'quest.ua', id: 12345, force: true });
 
       actions$ = hot('-a', { a: startAction });
-      const expected$ = cold('--b', { b: successAction });
+      const expected$ = cold('-b', { b: successAction });
 
       expect(gameDetailsEffects.getGameDataFromEn$).toBeObservable(expected$);
     });

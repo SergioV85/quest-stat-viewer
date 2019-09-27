@@ -23,7 +23,7 @@ describe('CheckLevelRemovalPipe', () => {
     it('should return false if level not removed', () => {
       const teamData = {
         id: 16858,
-        levelIdx: 39,
+        levelIdx: 38,
         name: 'la_Resistance',
         levelTime: '2019-09-07T21:33:49+02:00',
         additionsTime: 338000,

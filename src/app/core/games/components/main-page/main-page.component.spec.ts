@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
 import { mockedGames } from '@app-common/mocks/games.mock';
-import { CleanGameDataAction } from '@app-common/actions/game-details.actions';
-import { CleanMonitoringDataAction } from '@app-common/actions/monitoring.actions';
+import { CleanGameDataAction } from '@app-core/game-details/actions/game-details.actions';
+import { CleanMonitoringDataAction } from '@app-core/monitoring/actions/monitoring.actions';
 import { getGames, getLoadingState } from '@app-core/games/reducers/games.reducer';
 import { MainPageComponent } from './main-page.component';
 

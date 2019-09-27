@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { MonitoringTeamGroupedData, State } from '@app-common/models';
+import { MonitoringTeamGroupedData } from '@app-common/models';
 
 @Component({
   selector: 'monitoring-total',

@@ -11,17 +11,17 @@ describe('FormatEndingPipe', () => {
     });
     describe('pages', () => {
       it('should return singular form for pages', () => {
-        expect(pipe.transform(1, 'страниц')).toEqual('страница');
+        expect(pipe.transform(1, 'страница')).toEqual('цу');
       });
       it('should return plural (up to 5) form for pages', () => {
-        expect(pipe.transform(2, 'страниц')).toEqual('страницы');
+        expect(pipe.transform(2, 'страница')).toEqual('цы');
       });
       it('should return plural (more than 5) form for pages', () => {
-        expect(pipe.transform(6, 'страниц')).toEqual('страниц');
+        expect(pipe.transform(6, 'страница')).toEqual('ц');
       });
     });
     it('should return original word if no endings described', () => {
-      expect(pipe.transform(2, 'игр')).toEqual('игр');
+      expect(pipe.transform(2, 'игра')).toEqual('игра');
     });
   });
 });

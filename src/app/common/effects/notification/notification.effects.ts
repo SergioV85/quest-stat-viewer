@@ -16,18 +16,18 @@ export class NotificationEffects {
   @Effect({ dispatch: false })
   public errorNotificationMessage$ = this.actions$.pipe(
     ofType(ErrorNotificationAction),
-    tap(error => this.notificationService.showNotification(NotificationType.ERROR, error)),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.ERROR, { message })),
   );
 
   @Effect({ dispatch: false })
   public warningNotificationMessage$ = this.actions$.pipe(
     ofType(WarningNotificationAction),
-    tap(warning => this.notificationService.showNotification(NotificationType.WARNING, warning)),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.WARNING, { message })),
   );
 
   @Effect({ dispatch: false })
   public successNotificationMessage$ = this.actions$.pipe(
     ofType(SuccessNotificationAction),
-    tap(success => this.notificationService.showNotification(NotificationType.SUCCESS, success)),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.SUCCESS, { message })),
   );
 }

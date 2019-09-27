@@ -15,7 +15,7 @@ describe('SavedGamesResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideMockStore, SavedGamesResolver],
+      providers: [provideMockStore(), SavedGamesResolver],
     });
     store$ = TestBed.get<Store<State>>(Store);
     gamesList = store$.overrideSelector(getGames, []);

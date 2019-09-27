@@ -16,7 +16,7 @@ export class FormatDurationPipe implements PipeTransform {
       const hours = duration.hours ? `${duration.hours} ч ` : '';
       const minutes = duration.minutes ? `${duration.minutes} м ` : '';
       const seconds = duration.seconds ? `${duration.seconds} с ` : '';
-      const ms = `${duration.milliseconds} мс `;
+      const ms = `${duration.milliseconds} мс`;
 
       return Duration.fromObject(calculatedObj).as('milliseconds') >= 1000
         ? `${days}${hours}${minutes}${seconds}`
