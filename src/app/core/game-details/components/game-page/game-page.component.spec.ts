@@ -5,9 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
-import { mockedGames } from '@app-common/mocks/games.mock';
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
-import { SaveLevelsTypesAction, GetLatestDataFromEnAction } from '@app-core/game-details/actions/game-details.actions';
 import { getLoadingState, hasPendingChanges } from '@app-core/game-details/reducers/game-details.reducer';
 import { GamePageComponent } from './game-page.component';
 

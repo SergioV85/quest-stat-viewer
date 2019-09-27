@@ -35,7 +35,7 @@ export const RequestCodesFailedAction = createAction(
 export const RequestMonitoringAction = createAction('[Monitoring] Request game monitoring', props<GameRequest>());
 export const RequestMonitoringSuccessAction = createAction(
   '[Monitoring] Game monitoring saved to store',
-  props<{ data: MonitoringResponse }>(),
+  props<{ data: MonitoringResponse | null }>(),
 );
 export const RequestMonitoringFailedAction = createAction(
   '[Monitoring] Request game monitoring failed',

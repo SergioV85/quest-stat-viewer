@@ -31,7 +31,7 @@ export interface MonitoringState {
   dataLoaded: boolean;
   parsed?: boolean;
   pagesLeft?: number;
-  parsedPages?: number;
+  pageSaved?: number;
   totalPages?: number;
   totalData?: MonitoringTeamGroupedData[];
   teamData?: {

@@ -6,7 +6,6 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedComponentsModule } from '@app-common/components/shared-components.module';
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
-import { SharedServicesModule } from '@app-common/services/shared-services.module';
 
 import { GamesEffects } from './effects/games.effects';
 import { gamesReducer } from './reducers/games.reducer';

@@ -4,9 +4,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { MonitoringTeamDetailedData, State, LevelData } from '@app-common/models';
-import { getLevels } from '@app-common/reducers/game-details/game-details.reducer';
-import { GetMonitoringDetailsAction } from '@app-common/actions/monitoring.actions';
-import { getTeamData } from '@app-common/reducers/monitoring/monitoring.reducer';
+import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
+import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { getTeamData } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
   selector: 'monitoring-by-team',

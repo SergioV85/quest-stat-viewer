@@ -5,8 +5,8 @@ import { filter, take, tap, switchMap, catchError } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { State } from '@app-common/models';
-import { RequestMonitoringAction } from '@app-common/actions/monitoring.actions';
-import { dataLoaded } from '@app-common/reducers/monitoring/monitoring.reducer';
+import { RequestMonitoringAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { isDataLoaded } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Injectable({ providedIn: 'root' })
 export class GameMonitoringResolver implements Resolve<boolean> {
@@ -26,7 +26,7 @@ export class GameMonitoringResolver implements Resolve<boolean> {
     const id = ((route.parent as ActivatedRouteSnapshot).parent as ActivatedRouteSnapshot).paramMap.get('id') as string;
 
     return this.store.pipe(
-      select(dataLoaded),
+      select(isDataLoaded),
       tap((data: boolean) => {
         if (!data) {
           this.store.dispatch(RequestMonitoringAction({ domain, id }));

@@ -20,7 +20,7 @@ import {
   RequestMonitoringAction,
   RequestMonitoringFailedAction,
   RequestMonitoringSuccessAction,
-} from '@app-common/actions/monitoring.actions';
+} from '@app-core/monitoring/actions/monitoring.actions';
 
 export const initialState: MonitoringState = {
   dataLoaded: false,
@@ -83,12 +83,12 @@ export function monitoringReducer(monitoringState = initialState, action: Action
 }
 
 /* Selectors */
-export const selectMonitoringStore = (state: State) => state.monitoring;
-export const dataLoaded = createSelector(
+export const selectMonitoringStore = (state: State) => state.monitoring as MonitoringState;
+export const isDataLoaded = createSelector(
   selectMonitoringStore,
   prop('dataLoaded') as (data: MonitoringState) => boolean,
 );
-export const dataParsed = createSelector(
+export const isDataParsed = createSelector(
   selectMonitoringStore,
   prop('parsed') as (data: MonitoringState) => boolean,
 );

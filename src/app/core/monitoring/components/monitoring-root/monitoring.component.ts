@@ -3,8 +3,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { State } from '@app-common/models';
-import { dataParsed } from '@app-common/reducers/monitoring/monitoring.reducer';
+import { State, MonitoringTeamGroupedData } from '@app-common/models';
+import { isDataParsed, getParsingStat, getTotalData } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
   selector: 'app-monitoring',
@@ -12,14 +12,24 @@ import { dataParsed } from '@app-common/reducers/monitoring/monitoring.reducer';
   styleUrls: ['./monitoring.component.scss'],
 })
 export class MonitoringComponent implements OnInit, OnDestroy {
-  public parsingStatus$?: Observable<boolean>;
+  public isDataParsed$?: Observable<boolean>;
+  public parsingStat$?: Observable<Partial<{ pagesLeft: number; pageSaved: number; totalPages: number }>>;
+  public totalData$?: Observable<MonitoringTeamGroupedData[]>;
   private readonly ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly store: Store<State>) {}
 
   public ngOnInit() {
-    this.parsingStatus$ = this.store.pipe(
-      select(dataParsed),
+    this.isDataParsed$ = this.store.pipe(
+      select(isDataParsed),
+      takeUntil(this.ngUnsubscribe),
+    );
+    this.parsingStat$ = this.store.pipe(
+      select(getParsingStat),
+      takeUntil(this.ngUnsubscribe),
+    );
+    this.totalData$ = this.store.pipe(
+      select(getTotalData),
       takeUntil(this.ngUnsubscribe),
     );
   }

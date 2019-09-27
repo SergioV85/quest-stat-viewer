@@ -1,11 +1,10 @@
 <div class="c-monitoring">
-  <div *ngIf="parsingStatus$ | async; then dataParsedTemplate; else loadingTemplate">
+  <div *ngIf="isDataParsed$ | async; then dataParsedTemplate; else loadingTemplate">
   </div>
   <ng-template #dataParsedTemplate>
-    <monitoring-total></monitoring-total>
+    <monitoring-total [totalData]="totalData$ | async"></monitoring-total>
   </ng-template>
   <ng-template #loadingTemplate>
-    <monitoring-loader></monitoring-loader>
+    <monitoring-loader [parsingStat]="parsingStat$ | async"></monitoring-loader>
   </ng-template>
 </div>
-

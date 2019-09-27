@@ -7,8 +7,8 @@ import { Store, select } from '@ngrx/store';
 import { pathOr, mergeRight } from 'ramda';
 
 import { CodeEntry, State } from '@app-common/models';
-import { RequestCodesAction } from '@app-common/actions/monitoring.actions';
-import { getCodes } from '@app-common/reducers/monitoring/monitoring.reducer';
+import { RequestCodesAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { getCodes } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
   selector: 'codes-list',
@@ -18,7 +18,7 @@ import { getCodes } from '@app-common/reducers/monitoring/monitoring.reducer';
 export class CodesListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public uniqueId = 0;
   @Input() public levelId = 0;
-  @Input() public type: string = 'byLevel';
+  @Input() public type = 'byLevel';
   @ViewChild(MatPaginator, { static: true }) public paginator?: MatPaginator;
   public dataSource = new MatTableDataSource<CodeEntry>();
   public displayedColumns = ['player', 'code', 'time', 'timeDiff'];

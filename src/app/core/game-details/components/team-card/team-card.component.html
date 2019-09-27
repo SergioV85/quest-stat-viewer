@@ -19,7 +19,7 @@
   Таймаут
 </p>
 <p class="team-card__duration"> {{ duration | formatDuration }} </p>
-<p class="team-card__time"> {{ levelTime | formatDateTime: 'time' }} </p>
+<p class="team-card__time"> {{ levelTime | formatDateTime: 'time': true }} </p>
 <p *ngIf="additionsTime"
     class="team-card__additionalTime"
     [ngClass]="{

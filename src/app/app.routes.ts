@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { NoContentComponent } from './core/no-content';
+import { NoContentComponent } from './core/no-content/no-content.component';
 
 export const ROUTES: Routes = [
   {
     path: ':domain/:id',
-    loadChildren: () => import('./core/game/game.module').then(m => m.GameViewModule),
+    loadChildren: () => import('./core/game-details/game-details.module').then(m => m.GameDetailsModule),
   },
   {
     path: '',

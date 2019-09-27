@@ -3,17 +3,14 @@ import { DateTime } from 'luxon';
 
 @Pipe({ name: 'formatDateTime' })
 export class FormatDateTimePipe implements PipeTransform {
-  private readonly serverFormat = 'DD.MM.YYYY HH:mm:ss.S';
-  private readonly mediumWithSecFormat = 'DD MMM YYYY, HH:mm:ss';
-  private readonly longerFormat = 'dd DD MMM YYYY, HH:mm:ss';
-  private readonly shortFormat = 'DD MMM YYYY';
+  private readonly mediumWithSecFormat = 'dd LLL yyyy, HH:mm:ss';
+  private readonly longerFormat = 'DD dd LLL yyyy, HH:mm:ss';
+  private readonly shortFormat = 'dd LLL yyyy';
   private readonly timeOnly = 'HH:mm:ss';
 
-  public transform(value: string | Date, type: string, parseFromString?: boolean) {
+  public transform(value: string | Date, type: string, parseFromString = false) {
     if (value) {
-      const date = parseFromString
-        ? DateTime.fromString(value as string, this.serverFormat)
-        : DateTime.fromJSDate(value as Date);
+      const date = parseFromString ? DateTime.fromISO(value as string) : DateTime.fromJSDate(value as Date);
       if (date.isValid) {
         switch (type) {
           case 'longer':

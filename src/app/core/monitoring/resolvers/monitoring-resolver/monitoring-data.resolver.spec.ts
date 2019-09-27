@@ -3,21 +3,21 @@ import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 
 import { State } from '@app-common/models';
-import { RequestMonitoringAction } from '@app-common/actions/monitoring.actions';
-import { dataLoaded } from '@app-common/reducers/monitoring/monitoring.reducer';
+import { RequestMonitoringAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { isDataLoaded } from '@app-core/monitoring/reducers/monitoring.reducer';
 import { GameMonitoringResolver } from './monitoring-data.resolver';
 
 describe('GameMonitoringResolver', () => {
   let resolver: GameMonitoringResolver;
   let store$: MockStore<State>;
-  let isDataLoaded: MemoizedSelector<State, boolean>;
+  let dataLoaded: MemoizedSelector<State, boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideMockStore, GameMonitoringResolver],
     });
     store$ = TestBed.get<Store<State>>(Store);
-    isDataLoaded = store$.overrideSelector(dataLoaded, false);
+    dataLoaded = store$.overrideSelector(isDataLoaded, false);
     spyOn(store$, 'dispatch');
     resolver = TestBed.get<GameMonitoringResolver>(GameMonitoringResolver);
   });

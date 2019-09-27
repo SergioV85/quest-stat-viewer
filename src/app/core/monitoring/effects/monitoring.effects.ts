@@ -6,6 +6,7 @@ import { catchError, exhaustMap, map, withLatestFrom } from 'rxjs/operators';
 
 import { State } from '@app-common/models';
 import { ApiService } from '@app-common/services/api/api.service';
+import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
 import {
   RequestMonitoringAction,
   RequestMonitoringSuccessAction,
@@ -16,9 +17,8 @@ import {
   RequestCodesSuccessAction,
   RequestCodesAction,
   RequestCodesFailedAction,
-} from '@app-common/actions/monitoring.actions';
-import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
-import { getGameId } from '@app-common/reducers/game-details/game-details.reducer';
+} from '@app-core/monitoring/actions/monitoring.actions';
+import { getGameId } from '@app-core/game-details/reducers/game-details.reducer';
 
 const DEFAULT_ERROR_MESSAGE = 'Извините, не удалось загрузить данные';
 

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { find, path, pipe, prop, propEq } from 'ramda';
-import { LevelData, MonitoringLevelData, PlayerGroupedData, PlayerLevelData } from '@app-common/models';
-import { UtilService } from '@app-common/services/helpers/util.service';
+import { LevelData, MonitoringLevelData, PlayerLevelData } from '@app-common/models';
+import { getLevelTypeName } from '@app-common/services/util/util.metods';
 
 type MonitoringDataRow = MonitoringLevelData | PlayerLevelData;
 
@@ -25,7 +25,7 @@ export class MonitoringAccordionComponent {
   public getLevelDescription(row: MonitoringDataRow): string {
     const levelId = path(['_id', 'level'], row);
     const level = find(propEq('level', levelId), this.levels) as LevelData;
-    const levelType = UtilService.getLevelTypeName(level.type as number);
+    const levelType = getLevelTypeName(level.type as number);
     return `${levelType}: ${level.name}`;
   }
 

@@ -2,7 +2,9 @@
   <mat-toolbar class="saved-games__header">
     <span class="saved-games__title">Сохраненные игры</span>
     <span class="saved-games__spacer"></span>
-    <mat-select class="saved-games__filter" placeholder="Фильтр по домену" (selectionChange)="filterByDomain($event)">
+    <mat-select class="saved-games__filter"
+        placeholder="Фильтр по домену"
+        (selectionChange)="filterByDomain($event)">
       <mat-option>Все домены</mat-option>
       <mat-option *ngFor="let domain of domains"
           [value]="domain">
@@ -18,7 +20,7 @@
         <mat-card-title>{{ game.GameName }}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="saved-games__game-content">
-        <p>{{ game.StartTime | formatDateTime: 'short' }}</p>
+        <p>{{ game.StartTime | formatDateTime:'short':true }}</p>
         <p>{{ game.Domain }}</p>
       </mat-card-content>
     </mat-card>

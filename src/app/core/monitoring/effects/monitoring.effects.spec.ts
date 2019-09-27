@@ -7,6 +7,8 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { hot, cold } from 'jasmine-marbles';
 
 import { State } from '@app-common/models';
+import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
+import { mockedMonitoringData, mockedMonitoringDetailsData, mockedCodesList } from '@app-common/mocks/monitoring.mock';
 import { ApiService } from '@app-common/services/api/api.service';
 import {
   RequestMonitoringAction,
@@ -18,9 +20,8 @@ import {
   RequestCodesSuccessAction,
   RequestCodesAction,
   RequestCodesFailedAction,
-} from '@app-common/actions/monitoring.actions';
-import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
-import { getGameId } from '@app-common/reducers/game-details/game-details.reducer';
+} from '@app-core/monitoring/actions/monitoring.actions';
+import { getGameId } from '@app-core/game-details/reducers/game-details.reducer';
 
 import { MonitoringEffects } from './monitoring.effects';
 

@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { CleanGameDataAction } from '@app-common/actions/game-details.actions';
-import { CleanMonitoringDataAction } from '@app-common/actions/monitoring.actions';
 import { GameInfo, State, GameRequest } from '@app-common/models';
+import { CleanGameDataAction } from '@app-core/game-details/actions/game-details.actions';
+import { CleanMonitoringDataAction } from '@app-core/monitoring/actions/monitoring.actions';
 import { getLoadingState, getGames } from '@app-core/games/reducers/games.reducer';
 
 @Component({

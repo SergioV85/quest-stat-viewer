@@ -2,6 +2,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -14,7 +15,7 @@ import { ROUTES } from './app.routes';
 
 import { AppComponent } from './app.component';
 
-import { NoContentComponent } from './core/no-content';
+import { NoContentComponent } from './core/no-content/no-content.component';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { NotificationEffects } from './common/effects/notification/notification.effects';
@@ -27,6 +28,7 @@ import { HttpCacheInterceptorService } from './common/services/http/http-interce
     BrowserModule.withServerTransition({ appId: 'quest-stat-viewer' }),
     BrowserTransferStateModule,
     HttpClientModule,
+    MatSnackBarModule,
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot({ router: routerReducer }),
     EffectsModule.forRoot([NotificationEffects]),

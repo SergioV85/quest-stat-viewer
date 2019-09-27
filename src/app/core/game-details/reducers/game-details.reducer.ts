@@ -88,15 +88,15 @@ const reducer = createReducer(
   on(RequestGameDetailsAction, SaveLevelsTypesAction, state => mergeRight(state, { isLoading: true })),
   on(RequestGameDetailsFailedAction, SaveLevelsTypesFailedAction, state => mergeRight(state, { isLoading: false })),
   on(RequestGameDetailsSuccessAction, (state, { data }) => {
-    const levels: LevelData[] | undefined = path(['stat', 'Levels'], state);
-    const dataByTeam: GroupedTeamData[] | undefined = path(['stat', 'DataByTeam'], state);
-    const dataByLevels: TeamData[][] | undefined = path(['stat', 'DataByLevels'], state);
-
-    if (!levels || !dataByLevels || !dataByTeam || !data) {
+    if (!data) {
       return state;
     }
 
     const gameInfo = prop('info', data);
+    const levels = path(['stat', 'Levels'], data) as LevelData[];
+    const dataByTeam = path(['stat', 'DataByTeam'], data) as GroupedTeamData[];
+    const dataByLevels = path(['stat', 'DataByLevels'], data) as TeamData[][];
+
     const finishResults = sortFinishResults(data.stat.FinishResults);
 
     const selectedTotalTab: number = pipe(

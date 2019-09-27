@@ -1,18 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MonitoringAccordionComponent } from './monitoring-accordion.component';
 
-describe('MonitoringAccordionComponent', () => {
+describe('Monitoring: MonitoringAccordionComponent', () => {
   let component: MonitoringAccordionComponent;
   let fixture: ComponentFixture<MonitoringAccordionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MonitoringAccordionComponent],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(MonitoringAccordionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
