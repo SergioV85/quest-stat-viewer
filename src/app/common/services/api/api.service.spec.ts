@@ -8,9 +8,9 @@ import { ApiService } from './api.service';
 describe('ApiService', () => {
   let apiService: ApiService;
   let httpMock: HttpTestingController;
-  // tslint:disable-next-line: no-any
   const mockedTransferSate = {
     hasKey: jasmine.createSpy('hasKey').and.returnValue(false),
+    set: jasmine.createSpy('set'),
   };
   beforeEach(() => {
     TestBed.configureTestingModule({

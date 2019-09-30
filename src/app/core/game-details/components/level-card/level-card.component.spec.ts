@@ -19,10 +19,31 @@ describe('Game Details: LevelCardComponent', () => {
     component = fixture.componentInstance;
     component.levelInfo = mockedGameDetails.stat.Levels[3];
 
+    spyOn(component.levelTypeChange, 'emit');
+    spyOn(component.levelStateChange, 'emit');
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('selectLevelType', () => {
+    it('should emit event with new level type', () => {
+      component.selectLevelType(4);
+      expect(component.levelTypeChange.emit).toHaveBeenCalledWith(4);
+    });
+  });
+  describe('toggleLevelState', () => {
+    it('should emit event with new level state', () => {
+      component.toggleLevelState();
+      expect(component.levelStateChange.emit).toHaveBeenCalledWith(true);
+    });
+    it('should emit not event if level data is nullable', () => {
+      // tslint:disable-next-line: no-any
+      component.levelData = null as any;
+      component.toggleLevelState();
+      expect(component.levelStateChange.emit).not.toHaveBeenCalledWith(true);
+    });
   });
 });

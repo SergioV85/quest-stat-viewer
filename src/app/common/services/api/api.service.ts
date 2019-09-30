@@ -22,7 +22,7 @@ const GAME_MONITORING_KEY = makeStateKey<GameData>('game.monitoring');
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly isBrowser: boolean;
+  public isBrowser: boolean;
   private readonly serverAddress = environment.serverAddress;
 
   constructor(

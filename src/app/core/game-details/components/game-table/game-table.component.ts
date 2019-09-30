@@ -23,7 +23,7 @@ export class GameTableComponent implements OnInit, OnDestroy {
   public levels?: LevelData[];
   public statData?: { teams: TeamData[][]; levels: TeamData[][] };
   public LevelType = LevelType;
-  private selectedTeams: number[] = [];
+  public selectedTeams: number[] = [];
 
   private readonly ngUnsubscribe: Subject<void> = new Subject<void>();
 

@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
+import { SaveLevelsTypesAction, GetLatestDataFromEnAction } from '@app-core/game-details/actions/game-details.actions';
 import { getLoadingState, hasPendingChanges } from '@app-core/game-details/reducers/game-details.reducer';
 import { GamePageComponent } from './game-page.component';
 
@@ -16,6 +17,7 @@ describe('Game Details: GamePageComponent', () => {
   const mockedRouter = {
     navigate: jasmine.createSpy('navigate'),
   };
+  const mockedSnapshot = {};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +27,7 @@ describe('Game Details: GamePageComponent', () => {
         provideMockStore(),
         FormBuilder,
         { provide: Router, useValue: mockedRouter },
-        { provide: ActivatedRoute, useValue: {} },
+        { provide: ActivatedRoute, useValue: mockedSnapshot },
       ],
     }).compileComponents();
 
@@ -44,5 +46,31 @@ describe('Game Details: GamePageComponent', () => {
 
   it('should create an instance', () => {
     expect(component).toBeTruthy();
+  });
+  describe('changeView', () => {
+    it('should navigate router to new url', () => {
+      component.changeView('monitoring');
+      expect(mockedRouter.navigate).toHaveBeenCalledWith(['./', 'monitoring'], { relativeTo: mockedSnapshot });
+    });
+  });
+  describe('changeViewType', () => {
+    it('should navigate router to new url', () => {
+      component.changeViewType({ value: 'team' });
+      expect(mockedRouter.navigate).toHaveBeenCalledWith(['./', 'team'], { relativeTo: mockedSnapshot });
+    });
+  });
+  describe('refreshData', () => {
+    it('should dispatch action GetLatestDataFromEnAction', () => {
+      const action = GetLatestDataFromEnAction();
+      component.refreshData();
+      expect(store$.dispatch).toHaveBeenCalledWith(action);
+    });
+  });
+  describe('saveChanges', () => {
+    it('should dispatch action SaveLevelsTypesAction', () => {
+      const action = SaveLevelsTypesAction();
+      component.saveChanges();
+      expect(store$.dispatch).toHaveBeenCalledWith(action);
+    });
   });
 });
