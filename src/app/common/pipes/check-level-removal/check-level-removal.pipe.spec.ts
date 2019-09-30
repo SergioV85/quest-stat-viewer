@@ -9,14 +9,14 @@ describe('CheckLevelRemovalPipe', () => {
   describe('transform', () => {
     it('should return true if level is removed', () => {
       const teamData = {
-        id: 95650,
-        levelIdx: 40,
-        name: 'WDG',
-        levelTime: '2019-09-07T22:33:41+02:00',
-        additionsTime: 3042000,
-        timeout: false,
-        duration: 3042000,
+        additionsTime: 705000,
         bestTime: false,
+        duration: 705000,
+        id: 13977,
+        levelIdx: 4,
+        levelTime: '2017-12-01T19:57:21+01:00',
+        name: 'Закон Ома',
+        timeout: false,
       };
       expect(pipe.transform(mockedGameDetails.stat.Levels, teamData)).toEqual(true);
     });

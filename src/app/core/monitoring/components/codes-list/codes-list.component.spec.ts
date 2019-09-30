@@ -8,7 +8,7 @@ import { mockedCodesList } from '@app-common/mocks/monitoring.mock';
 import { getCodes } from '@app-core/monitoring/reducers/monitoring.reducer';
 import { CodesListComponent } from './codes-list.component';
 import { MockedFormatDateTimePipe } from '@app-common/pipes/date-format/date-format.pipe.mock';
-import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pip.mock';
+import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pipe.mock';
 
 describe('Monitoring: CodesListComponent', () => {
   let component: CodesListComponent;

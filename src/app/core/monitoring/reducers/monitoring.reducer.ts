@@ -69,7 +69,7 @@ const reducer = createReducer(
     const parsingStat = pipe(
       pick(['pageSaved', 'parsed', 'totalPages']),
       mergeLeft({ pagesLeft }),
-    )(state);
+    )(data);
 
     // tslint:disable-next-line: no-any
     const totalData = propOr(null, 'totalData', data) as any;

@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressBarModule } from '@angular/material';
-import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pip.mock';
+import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pipe.mock';
 import { GetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe';
 import { MockedFormatEndingPipe } from '@app-common/pipes/format-ending/format-ending.pipe.mock';
 import { MultiplyNumberPipe } from '@app-common/pipes/multiply-number/multiply-number.pipe';

@@ -5,7 +5,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
 
 import { FilterByPropPipe } from '@app-common/pipes/filter-by-prop/filter-by-prop.pipe';
-import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe mock';
+import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe.mock';
 import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
 import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
 import { getPlayerData } from '@app-core/monitoring/reducers/monitoring.reducer';

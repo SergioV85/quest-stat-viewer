@@ -33,7 +33,7 @@ export interface MonitoringState {
   pagesLeft?: number;
   pageSaved?: number;
   totalPages?: number;
-  totalData?: MonitoringTeamGroupedData[];
+  totalData?: MonitoringTeamGroupedData[] | PlayerLevelData[] | null;
   teamData?: {
     [key: number]: MonitoringTeamDetailedData;
   };
@@ -44,7 +44,9 @@ export interface MonitoringState {
     };
   };
   codes?: {
-    [key: number]: CodesListResponse;
+    [key: number]: {
+      [key: number]: CodesListResponse;
+    };
   };
 }
 

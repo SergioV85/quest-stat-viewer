@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pip.mock';
+import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pipe.mock';
 import { MockedFormatDateTimePipe } from '@app-common/pipes/date-format/date-format.pipe.mock';
 import { TeamCardComponent } from './team-card.component';
 
