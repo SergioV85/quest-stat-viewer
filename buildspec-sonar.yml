@@ -11,6 +11,7 @@ phases:
       - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
       - unzip sonar-scanner-cli-4.0.0.1744-linux.zip
       - export PATH=$PATH:./sonar-scanner-cli-4.0.0.1744-linux/bin/
+  build:
     commands:
       - echo Run the scanner
       - sonar-scanner -Dsonar.projectKey=SergioV85_quest-stat-viewer -Dsonar.organization=sergiov85-github -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=799270451643b073ac2ee494720d741d6f79293f

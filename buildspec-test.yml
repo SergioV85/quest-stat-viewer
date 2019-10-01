@@ -8,6 +8,7 @@ phases:
       nodejs: 10
     commands:
       - npm install
+  build:
     commands:
       - echo Testing the app
       - npm run test:ci
