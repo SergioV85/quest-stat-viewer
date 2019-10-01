@@ -7,18 +7,15 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - echo Installing dependencies...
       - npm install
-      - npm install -g @angular/cli
-  build:
     commands:
-      - echo Build the app
-      - npm run build
+      - echo Testing the app
+      - npm run test:ci
   post_build:
     commands:
-      - echo Build completed
+      - echo Test completed
 artifacts:
   files:
     - '**/*'
-  base-directory: 'dist*'
+  base-directory: 'coverage*'
   discard-paths: yes
