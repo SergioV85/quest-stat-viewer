@@ -11,9 +11,7 @@ phases:
       - echo Installing node.js dependencies
       - npm install
       - echo Installing SonarQube Scanner
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
-      - unzip sonar-scanner-cli-4.0.0.1744-linux.zip
-      - export PATH=$PATH:./sonar-scanner-cli-4.0.0.1744-linux/bin/
+      - npm install -g sonarqube-scanner
   build:
     commands:
       - echo Testing the app
