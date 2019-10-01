@@ -27,7 +27,7 @@
               "src/styles/styles.scss"
             ],
             "scripts": [
-              "node_modules/@fortawesome/fontawesome/index.js"
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
             ]
           },
           "configurations": {
@@ -80,7 +80,7 @@
               "src/styles/styles.scss"
             ],
             "scripts": [
-              "node_modules/@fortawesome/fontawesome/index.js"
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
             ]
           }
         },
