@@ -1,5 +1,5 @@
 import { createSelector, createReducer, on, Action } from '@ngrx/store';
-import { mergeDeepLeft, mergeLeft, mergeRight, objOf, pick, pipe, prop, propOr, subtract } from 'ramda';
+import { mergeDeepLeft, mergeLeft, mergeRight, objOf, pick, pipe, prop, propOr, subtract, mergeDeepRight } from 'ramda';
 import {
   CodesListResponse,
   MonitoringResponse,
@@ -56,10 +56,15 @@ const reducer = createReducer(
     const propertyName = requestType === 'byLevel' ? teamId : playerId;
 
     return pipe(
-      objOf(`${levelId}`),
-      objOf(`${propertyName}`),
-      mergeDeepLeft(state.codes),
-      objOf('codes'),
+      objOf(`${levelId}`) as (
+        data: CodesListResponse,
+      ) => {
+        [key: number]: CodesListResponse;
+      },
+      objOf(`${propertyName}`) as (data: { [key: number]: CodesListResponse }) => MonitoringState['codes'],
+      // tslint:disable-next-line: no-any
+      mergeDeepRight(state.codes || ({} as any)) as (data: MonitoringState['codes']) => MonitoringState['codes'],
+      objOf('codes') as (data: MonitoringState['codes']) => { codes: MonitoringState['codes'] },
       mergeRight({ isLoading: false }),
       mergeRight(state),
     )(codes);
