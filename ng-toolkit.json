@@ -1,0 +1,13 @@
+{
+  "serverless": {
+    "project": "quest-stat-viewer",
+    "provider": "aws",
+    "skipInstall": false,
+    "directory": ".",
+    "clientProject": "quest-stat-viewer",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}

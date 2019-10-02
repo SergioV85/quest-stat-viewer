@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { SharedComponentsModule } from '@app-common/components/shared-components.module';
 import { SharedPipesModule } from '@app-common/pipes/shared-pipes.module';
-import { SharedServicesModule } from '@app-common/services/shared-services.module';
 
-import { SavedGamesResolver } from '@app-common/services/resolvers/saved-games-resolver.service';
+import { GamesEffects } from './effects/games.effects';
+import { gamesReducer } from './reducers/games.reducer';
 
-import { MainPageComponent } from './main-page';
-import { SavedGamesComponent } from './saved-games';
-import { SearchGameComponent } from './search-game';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { SavedGamesComponent } from './components/saved-games/saved-games.component';
+import { SearchGameComponent } from './components/search-game/search-game.component';
+import { SavedGamesResolver } from './resolvers/saved-games/saved-games.resolver';
 
 export const routes: Route[] = [
   {
@@ -28,8 +31,9 @@ export const routes: Route[] = [
     CommonModule,
     RouterModule.forChild(routes),
     SharedComponentsModule,
-    SharedServicesModule,
     SharedPipesModule,
+    StoreModule.forFeature('games', gamesReducer),
+    EffectsModule.forFeature([GamesEffects]),
   ],
   declarations: [MainPageComponent, SavedGamesComponent, SearchGameComponent],
 })

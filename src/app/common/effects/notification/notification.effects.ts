@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { NotificationType } from '@app-common/models';
 import { NotificationsService } from '@app-common/services/notification/notification.service';
 import {
-  NotificationActionTypes,
   ErrorNotificationAction,
   WarningNotificationAction,
   SuccessNotificationAction,
@@ -11,26 +11,23 @@ import {
 
 @Injectable()
 export class NotificationEffects {
-  constructor(private actions$: Actions, private notificationService: NotificationsService) {}
+  constructor(private readonly actions$: Actions, private readonly notificationService: NotificationsService) {}
 
   @Effect({ dispatch: false })
   public errorNotificationMessage$ = this.actions$.pipe(
-    ofType(NotificationActionTypes.ErrorNotification),
-    map((action: ErrorNotificationAction) => action.payload),
-    tap(error => this.notificationService.showNotification('error', error)),
+    ofType(ErrorNotificationAction),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.ERROR, { message })),
   );
 
   @Effect({ dispatch: false })
   public warningNotificationMessage$ = this.actions$.pipe(
-    ofType(NotificationActionTypes.WarningNotification),
-    map((action: WarningNotificationAction) => action.payload),
-    tap(warning => this.notificationService.showNotification('warning', warning)),
+    ofType(WarningNotificationAction),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.WARNING, { message })),
   );
 
   @Effect({ dispatch: false })
   public successNotificationMessage$ = this.actions$.pipe(
-    ofType(NotificationActionTypes.SuccessNotification),
-    map((action: SuccessNotificationAction) => action.payload),
-    tap(success => this.notificationService.showNotification('success', success)),
+    ofType(SuccessNotificationAction),
+    tap(({ message }) => this.notificationService.showNotification(NotificationType.SUCCESS, { message })),
   );
 }

@@ -1,0 +1,23 @@
+@import './../../../../../styles/mixins';
+
+.main-page {
+  box-sizing: border-box;
+  padding-top: 60px;
+
+  @include tablet {
+    padding-top: 80px;
+  }
+
+  @include desktop {
+    padding-top: 100px;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.loading {
+  margin: 0 auto;
+}

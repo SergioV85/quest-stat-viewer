@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { propOr } from 'ramda';
+import { NotificationType } from '@app-common/models';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class NotificationsService {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) {}
 
-  public showNotification(type, message) {
+  public showNotification(type: NotificationType, message: { message?: string }) {
     const text = propOr('Error occurred', 'message', message) as string;
     const cssClass = [`snack-${type}-message`];
 

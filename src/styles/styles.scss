@@ -5,10 +5,10 @@
 @import 'reset';
 @import '~bootstrap/scss/bootstrap';
 @import '~@angular/material/_theming';
-@import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
-@import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
-@import "@fortawesome/fontawesome-free-webfonts/css/fa-regular.css";
-@import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
+@import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+@import "@fortawesome/fontawesome-free/css/solid.min.css";
+@import "@fortawesome/fontawesome-free/css/regular.min.css";
+@import "@fortawesome/fontawesome-free/css/brands.min.css";
 
 // NOTE: Theming is currently experimental and not yet publicly released!
 

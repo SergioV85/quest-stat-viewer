@@ -1,0 +1,88 @@
+<div class="game-page">
+  <div class="game-page__header row align-items-center">
+    <div class="col-8 game-page__viewSelector game-page__viewSelector--buttons btn-group">
+      <button type="button"
+          class="btn game-page__viewButton"
+          [ngClass]="{
+            'btn-outline-primary': (activeTab$ | async) !== 'total',
+            'btn-primary': (activeTab$ | async) === 'total'
+          }"
+          (click)="changeView('total')">
+        <i class="d-lg-none fas fa-list game-page__viewButton-icon"
+            matTooltip="Сумарная статистика"
+            aria-hidden="true">
+        </i>
+        <span class="d-none d-lg-inline game-page__viewButton-title">Сумарная статистика</span>
+      </button>
+      <button type="button"
+          class="btn game-page__viewButton"
+          [ngClass]="{
+            'btn-outline-primary': (activeTab$ | async) !== 'levels',
+            'btn-primary': (activeTab$ | async) === 'levels'
+          }"
+          (click)="changeView('levels')">
+        <i class="d-lg-none fas fa-th-list game-page__viewButton-icon"
+            matTooltip="Обычная статистика"
+            aria-hidden="true">
+        </i>
+        <span class="d-none d-lg-inline game-page__viewButton-title">Обычная статистика</span>
+      </button>
+      <button type="button"
+          class="btn game-page__viewButton"
+          [ngClass]="{
+            'btn-outline-primary': (activeTab$ | async) !== 'teams',
+            'btn-primary': (activeTab$ | async) === 'teams'
+          }"
+          (click)="changeView('teams')">
+        <i class="d-lg-none fas fa-list-ol game-page__viewButton-icon"
+            matTooltip="Статистика по командам"
+            aria-hidden="true">
+        </i>
+        <span class="d-none d-lg-inline game-page__viewButton-title">Статистика по командам</span>
+      </button>
+      <button type="button"
+          class="btn game-page__viewButton"
+          [ngClass]="{
+            'btn-outline-primary': (activeTab$ | async) !== 'monitoring',
+            'btn-primary': (activeTab$ | async) === 'monitoring'
+          }"
+          (click)="changeView('monitoring')">
+        <i class="d-lg-none fas fa-file-alt game-page__viewButton-icon"
+            matTooltip="Мониторинг"
+            aria-hidden="true">
+        </i>
+        <span class="d-none d-lg-inline game-page__viewButton-title">Мониторинг</span>
+      </button>
+    </div>
+    <div class="col game-page__changesContainer text-right">
+      <button class="game-page__refreshDataButton"
+          *ngIf="(activeTab$ | async) !== 'monitoring'"
+          mat-raised-button
+          color="accent"
+          (click)="refreshData()">
+        <i class="game-page__changesContainer-icon fas fa-sync fa-lg"
+            matTooltip="Обновить данные"
+            aria-hidden="true"></i>
+        <span class="game-page__changesContainer-label">Обновить данные</span>
+      </button>
+      <span class="game-page__changesStatus"
+          *ngIf="hasPendingChanges$ | async">Изменения не сохраненны</span>
+      <button class="game-page__saveChangesButton"
+          *ngIf="hasPendingChanges$ | async"
+          mat-raised-button
+          color="primary"
+          [disabled]="disableSaveButton"
+          (click)="saveChanges()">
+        <i class="game-page__changesContainer-icon fas fa-save fa-lg"
+            matTooltip="Сохранить"
+            aria-hidden="true"></i>
+        <span class="game-page__changesContainer-label">Сохранить</span>
+      </button>
+    </div>
+  </div>
+  <div class="full-width">
+    <mat-spinner *ngIf="loadData"
+        class="loading"></mat-spinner>
+    <router-outlet></router-outlet>
+  </div>
+</div>
