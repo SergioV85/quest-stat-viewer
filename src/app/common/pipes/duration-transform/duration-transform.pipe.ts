@@ -6,7 +6,7 @@ export class FormatDurationPipe implements PipeTransform {
   public transform(value: number, countType = 'ms') {
     if (value) {
       const key = countType === 's' ? 'seconds' : 'milliseconds';
-      const calculatedObj = { [key]: value };
+      const calculatedObj = { [key]: Math.abs(value) };
 
       const duration = Duration.fromObject(calculatedObj)
         .shiftTo('days', 'hours', 'minutes', 'seconds', 'milliseconds')
