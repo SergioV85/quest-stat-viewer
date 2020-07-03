@@ -27,11 +27,7 @@ export class SearchGameComponent {
     }
 
     const domain = this.getUrl(gameUrl);
-    const id = pipe(
-      split('='),
-      last,
-      parseInt,
-    )(gameUrl);
+    const id = pipe(split('='), last, parseInt)(gameUrl);
 
     this.requestGameData.emit({
       domain,
@@ -42,9 +38,6 @@ export class SearchGameComponent {
   private getUrl(gameUrl: string): string {
     const regex = new RegExp(test(/quest/, gameUrl) ? /quest/ : /en.cx/);
 
-    return pipe(
-      split('/'),
-      find(test(regex)),
-    )(gameUrl) as string;
+    return pipe(split('/'), find(test(regex)))(gameUrl) as string;
   }
 }

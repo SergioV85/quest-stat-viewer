@@ -29,7 +29,10 @@ describe('GameDataResolver', () => {
   describe('resolve', () => {
     // tslint:disable-next-line: no-any
     const mockActivatedRouteSnapshot: any = {
-      paramMap: new Map<string, string>([['domain', 'quest.ua'], ['id', '12345']]),
+      paramMap: new Map<string, string>([
+        ['domain', 'quest.ua'],
+        ['id', '12345'],
+      ]),
       params: {
         domain: 'quest.ua',
         id: '12345',

@@ -33,7 +33,7 @@ describe('ApiService', () => {
         expect(data).toEqual(mockedGames);
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/games');
+      const req = httpMock.expectOne('http://localhost:3000/prod/games');
       expect(req.request.method).toBe('GET');
       req.flush(mockedGames);
     });

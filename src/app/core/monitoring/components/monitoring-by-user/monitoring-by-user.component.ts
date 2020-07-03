@@ -30,14 +30,8 @@ export class MonitoringByUserComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.playerData$ = this.store.pipe(
-      select(getPlayerData),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.levels$ = this.store.pipe(
-      select(getLevels),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.playerData$ = this.store.pipe(select(getPlayerData), takeUntil(this.ngUnsubscribe));
+    this.levels$ = this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe));
   }
 
   public ngOnDestroy() {

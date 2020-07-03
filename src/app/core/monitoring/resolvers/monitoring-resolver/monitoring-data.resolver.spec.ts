@@ -31,7 +31,10 @@ describe('Monitoring: GameMonitoringResolver', () => {
     const mockActivatedRouteSnapshot: any = {
       parent: {
         parent: {
-          paramMap: new Map<string, string>([['domain', 'quest.ua'], ['id', '12345']]),
+          paramMap: new Map<string, string>([
+            ['domain', 'quest.ua'],
+            ['id', '12345'],
+          ]),
           params: {
             domain: 'quest.ua',
             id: '12345',

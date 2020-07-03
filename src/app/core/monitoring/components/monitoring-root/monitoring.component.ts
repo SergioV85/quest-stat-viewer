@@ -20,18 +20,9 @@ export class MonitoringComponent implements OnInit, OnDestroy {
   constructor(private readonly store: Store<State>) {}
 
   public ngOnInit() {
-    this.isDataParsed$ = this.store.pipe(
-      select(isDataParsed),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.parsingStat$ = this.store.pipe(
-      select(getParsingStat),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.totalData$ = this.store.pipe(
-      select(getTotalData),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.isDataParsed$ = this.store.pipe(select(isDataParsed), takeUntil(this.ngUnsubscribe));
+    this.parsingStat$ = this.store.pipe(select(getParsingStat), takeUntil(this.ngUnsubscribe));
+    this.totalData$ = this.store.pipe(select(getTotalData), takeUntil(this.ngUnsubscribe));
   }
 
   public ngOnDestroy() {

@@ -34,14 +34,9 @@ export class CodesListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.store.dispatch(RequestCodesAction({ query: mergeRight(request, { requestType: this.type }) }));
 
-    this.store
-      .pipe(
-        select(getCodes),
-        takeUntil(this.ngUnsubscribe),
-      )
-      .subscribe(codes => {
-        this.dataSource.data = pathOr([], [this.uniqueId, this.levelId], codes);
-      });
+    this.store.pipe(select(getCodes), takeUntil(this.ngUnsubscribe)).subscribe(codes => {
+      this.dataSource.data = pathOr([], [this.uniqueId, this.levelId], codes);
+    });
   }
 
   public ngAfterViewInit() {

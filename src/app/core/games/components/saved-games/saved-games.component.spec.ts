@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { mockedGames } from '@app-common/mocks/games.mock';
 import { MockedFormatDateTimePipe } from '@app-common/pipes/date-format/date-format.pipe.mock';
 import { SavedGamesComponent } from './saved-games.component';

@@ -11,7 +11,7 @@ export class TotalStatCalculationPipe implements PipeTransform {
         case 'teamTotalPosition':
           return indexOf(additionalParam, value) + 1;
         case 'leaderDifference':
-          const leaderTime = head(value);
+          const leaderTime = head(value) as number;
           return team.duration - leaderTime;
         case 'prevTeamDifference':
           const prevTeamTime = nth(idx - 1, value) as number;

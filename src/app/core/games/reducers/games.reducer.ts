@@ -24,14 +24,10 @@ export function gamesReducer(gamesState = initialState, action: Action): GamesSt
 }
 
 export const selectGamesStore = (state: State) => state.games as GamesState;
-export const getLoadingState = createSelector(
-  selectGamesStore,
-  prop('isLoading'),
-);
+export const getLoadingState = createSelector(selectGamesStore, prop('isLoading'));
 export const getGames = createSelector(
   selectGamesStore,
-  pipe(
-    propOr([], 'games'),
-    sortWith([descend(prop('StartTime')), descend(prop('FinishTime'))]),
-  ) as (data: GamesState) => GameInfo[],
+  pipe(propOr([], 'games'), sortWith([descend(prop('StartTime')), descend(prop('FinishTime'))])) as (
+    data: GamesState,
+  ) => GameInfo[],
 );

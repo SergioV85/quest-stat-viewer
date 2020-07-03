@@ -54,13 +54,15 @@ export class ApiService {
       this.transferState.remove(GAME_STAT_KEY);
       return of(singleGame);
     }
-    return this.http.get<GameData>(`${this.serverAddress}/game`, { params: this.convertHttpParams(gameData) }).pipe(
-      tap(response => {
-        if (!this.isBrowser) {
-          this.transferState.set<GameData>(GAME_STAT_KEY, response);
-        }
-      }),
-    );
+    return this.http
+      .get<GameData>(`${this.serverAddress}/game`, { params: this.convertHttpParams(gameData) })
+      .pipe(
+        tap(response => {
+          if (!this.isBrowser) {
+            this.transferState.set<GameData>(GAME_STAT_KEY, response);
+          }
+        }),
+      );
   }
 
   public saveLevelSettings({ gameId, levelData }: { gameId: number; levelData: LevelData[] }) {

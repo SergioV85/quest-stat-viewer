@@ -30,22 +30,9 @@ export class GameTableComponent implements OnInit, OnDestroy {
   constructor(private readonly store: Store<State>) {}
 
   public ngOnInit() {
-    this.activeTab$ = this.store.pipe(
-      select(getActiveTab),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.store
-      .pipe(
-        select(getLevels),
-        takeUntil(this.ngUnsubscribe),
-      )
-      .subscribe(levels => (this.levels = levels));
-    this.store
-      .pipe(
-        select(getStatData),
-        takeUntil(this.ngUnsubscribe),
-      )
-      .subscribe(data => (this.statData = data));
+    this.activeTab$ = this.store.pipe(select(getActiveTab), takeUntil(this.ngUnsubscribe));
+    this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe)).subscribe(levels => (this.levels = levels));
+    this.store.pipe(select(getStatData), takeUntil(this.ngUnsubscribe)).subscribe(data => (this.statData = data));
   }
 
   public ngOnDestroy() {

@@ -38,18 +38,9 @@ export class GamePageComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.isGameDataLoading$ = this.store.pipe(
-      select(getLoadingState),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.activeTab$ = this.store.pipe(
-      select(getActiveTab),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.hasPendingChanges$ = this.store.pipe(
-      select(hasPendingChanges),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.isGameDataLoading$ = this.store.pipe(select(getLoadingState), takeUntil(this.ngUnsubscribe));
+    this.activeTab$ = this.store.pipe(select(getActiveTab), takeUntil(this.ngUnsubscribe));
+    this.hasPendingChanges$ = this.store.pipe(select(hasPendingChanges), takeUntil(this.ngUnsubscribe));
 
     this.tabsForm = this.formBuilder.group({
       activeTabSelector: 'total',
