@@ -3,9 +3,9 @@
   <p *ngIf="parsingStat">
     Обработано {{ parsingStat | getProp:'pageSaved':false }} страни{{ parsingStat | getProp:'pageSaved':false | formatEnding:'страница' }} из {{ parsingStat | getProp:'totalPages':false }}. Приблизительно осталось: {{ parsingStat | getProp:'pagesLeft':false | multiplyNumber:1.75 | formatDuration:'s' }}
   </p>
-  <progressbar [max]="parsingStat?.totalPages"
+  <!-- progressbar [max]="parsingStat?.totalPages"
       [value]="parsingStat?.pageSaved"
       [striped]="true"
       [animate]="true">
-  </progressbar>
+  </progressbar -->
 </div>
