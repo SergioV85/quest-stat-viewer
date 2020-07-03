@@ -2,7 +2,6 @@ import { createSelector, createReducer, on, Action } from '@ngrx/store';
 import {
   ascend,
   clone,
-  curry,
   descend,
   equals,
   find,
@@ -17,7 +16,7 @@ import {
   sortWith,
 } from 'ramda';
 
-import { GameDetailsState, LevelData, TeamData, GroupedTeamData, State } from '@app-common/models';
+import { GameDetailsState, LevelData, TeamData, GroupedTeamData, State, UnaryOperator } from '@app-common/models';
 import {
   ChangeLevelTypeAction,
   ChangeTotalStatTabAction,
@@ -77,7 +76,7 @@ const reducer = createReducer(
 
     const levels = updateLevels({ removed, level }, currentLevels);
 
-    const newLevel = find(propEq('level', level), levels) as LevelData;
+    const newLevel = find(propEq('level', level) as UnaryOperator<LevelData, boolean>, levels) as LevelData;
 
     const dataByLevels = updateStatByLevel(newLevel, currentStatByLevels);
     const dataByTeam = updateStatByTeams(newLevel, currentStatByTeams);
@@ -100,8 +99,8 @@ const reducer = createReducer(
     const finishResults = sortFinishResults(data.stat.FinishResults);
 
     const selectedTotalTab: number = pipe(
-      getPossibleLevelTypes as (data: LevelData[]) => number[],
-      head,
+      getPossibleLevelTypes as UnaryOperator<LevelData[], number[]>,
+      head as UnaryOperator<number[], number>,
     )(levels);
     return mergeRight(state, {
       gameInfo,
@@ -127,9 +126,8 @@ export function gameDetailsReducer(gameDetailsState = initialState, action: Acti
 /* Selectors */
 
 export const selectGameDetailsStore = (state: State) => state.gameDetails as GameDetailsState;
-export const getActiveTabOnTotalStatState = createSelector(
-  selectGameDetailsStore,
-  (state: GameDetailsState) => prop('selectedTotalTab', state),
+export const getActiveTabOnTotalStatState = createSelector(selectGameDetailsStore, (state: GameDetailsState) =>
+  prop('selectedTotalTab', state),
 );
 export const getGameId = createSelector(
   selectGameDetailsStore,
@@ -147,49 +145,36 @@ export const getLevels = createSelector(
   selectGameDetailsStore,
   prop('levels') as (data: GameDetailsState) => LevelData[],
 );
-export const getAvailableLevelTypes = createSelector(
-  getLevels,
-  getPossibleLevelTypes,
-);
-export const getLoadingState = createSelector(
-  selectGameDetailsStore,
-  prop('isLoading'),
-);
-export const getSortedTeamsTotalResults = createSelector(
-  selectGameDetailsStore,
-  (state: GameDetailsState) => {
-    const selectedType = prop('selectedTotalTab', state) as number;
-    const matchedLevels = getMatchedLevels(selectedType, state);
-    const calculatedStat = (team: GroupedTeamData) => getCalculatedStat(matchedLevels, team);
+export const getAvailableLevelTypes = createSelector(getLevels, getPossibleLevelTypes);
+export const getLoadingState = createSelector(selectGameDetailsStore, prop('isLoading'));
+export const getSortedTeamsTotalResults = createSelector(selectGameDetailsStore, (state: GameDetailsState) => {
+  const selectedType = prop('selectedTotalTab', state) as number;
+  const matchedLevels = getMatchedLevels(selectedType, state);
+  const calculatedStat = (team: GroupedTeamData) => getCalculatedStat(matchedLevels, team);
 
-    return pipe(
-      prop('dataByTeam') as (data: GameDetailsState) => GroupedTeamData[],
-      map(calculatedStat),
-      sortWith([descend(prop('closedLevels')), ascend(prop('duration'))]),
-    )(state);
-  },
-);
-export const getStatData = createSelector(
-  selectGameDetailsStore,
-  (state: GameDetailsState) => {
-    const finishResults = state.finishResults as TeamData[];
-    const levels = pipe(
-      prop('dataByLevels') as (data: GameDetailsState) => TeamData[][],
-      curry(appendFinishStat)(finishResults),
-    )(state);
-    const teams = pipe(
-      prop('dataByTeam') as (data: GameDetailsState) => GroupedTeamData[],
-      curry(sortTeamList)(finishResults),
-      curry(appendFinishStatToTeam)(finishResults),
-      pluck('data'),
-    )(state);
+  return pipe(
+    prop('dataByTeam') as UnaryOperator<GameDetailsState, GroupedTeamData[]>,
+    map(calculatedStat),
+    sortWith([descend(prop('closedLevels')), ascend(prop('duration'))]),
+  )(state);
+});
+export const getStatData = createSelector(selectGameDetailsStore, (state: GameDetailsState) => {
+  const finishResults = state.finishResults as TeamData[];
+  const levels = pipe(prop('dataByLevels') as UnaryOperator<GameDetailsState, TeamData[][]>, (data: TeamData[][]) =>
+    appendFinishStat(finishResults, data),
+  )(state);
+  const teams = pipe(
+    prop('dataByTeam') as UnaryOperator<GameDetailsState, GroupedTeamData[]>,
+    (data: GroupedTeamData[]): GroupedTeamData[] => sortTeamList(finishResults, data),
+    (data: GroupedTeamData[]): GroupedTeamData[] => appendFinishStatToTeam(finishResults, data),
+    pluck('data'),
+  )(state);
 
-    return {
-      levels,
-      teams,
-    };
-  },
-);
+  return {
+    levels,
+    teams,
+  };
+});
 export const hasPendingChanges = createSelector(
   selectGameDetailsStore,
   (state: GameDetailsState) =>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -40,10 +40,7 @@ export class TotalTableComponent implements OnInit, OnDestroy {
       filter(isNotNullOrUndefined),
       takeUntil(this.ngUnsubscribe),
     );
-    this.availableTypes$ = this.store$.pipe(
-      select(getAvailableLevelTypes),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.availableTypes$ = this.store$.pipe(select(getAvailableLevelTypes), takeUntil(this.ngUnsubscribe));
     this.finishResults$ = this.store$.pipe(
       select(getFinishResults),
       filter(isNotNullOrUndefined),

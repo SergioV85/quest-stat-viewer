@@ -30,9 +30,8 @@ export class MonitoringAccordionComponent {
   }
 
   public getDescription(row: MonitoringDataRow): string {
-    const percentFull = pipe(
-      prop('correctCodesPercent') as (data: MonitoringDataRow) => number,
-      (num: number) => num.toFixed(2),
+    const percentFull = pipe(prop('correctCodesPercent') as (data: MonitoringDataRow) => number, (num: number) =>
+      num.toFixed(2),
     )(row);
 
     return `Уникальных кодов ${this.descriptionPrefix}: ${prop('codesCounts', row)},

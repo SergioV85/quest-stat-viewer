@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  serverAddress: 'http://localhost:3000',
+  serverAddress: 'http://localhost:3000/prod',
 	baseHref: '/'
 };

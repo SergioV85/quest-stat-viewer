@@ -6,7 +6,6 @@ import {
   ascend,
   complement,
   contains,
-  curry,
   descend,
   dropLast,
   filter,
@@ -16,42 +15,42 @@ import {
   isNil,
   length,
   map,
-  merge,
-  negate,
-  nth,
-  path,
+  mergeRight,
   pathOr,
   pipe,
   pluck,
   prop,
   propEq,
   propOr,
+  reject,
   sort,
   sortWith,
   subtract,
   sum,
   uniq,
   update,
-  reject,
 } from 'ramda';
-import { TeamData, LevelData, GroupedTeamData, GameDetailsState } from '@app-common/models';
+import { TeamData, LevelData, GroupedTeamData, GameDetailsState, UnaryOperator } from '@app-common/models';
 
 const adjustBonusTime = (isRemoved: boolean, teamStat: TeamData) => {
   if (isNil(teamStat)) {
     return;
   }
-  return merge(teamStat, {
+  return mergeRight(teamStat, {
     additionsTime: isRemoved
       ? add(pathOr(0, ['additionsTime'], teamStat), teamStat.duration)
       : subtract(pathOr(0, ['additionsTime'], teamStat), teamStat.duration),
   }) as TeamData;
 };
-const replaceTeamStatInList = (existedLevel: LevelData, updatedStatByTeams: TeamData[], teamStats: TeamData[]) => {
-  const teamId = pipe(
-    head as (data: TeamData[]) => TeamData,
-    prop('id'),
-  )(teamStats);
-  const indexInList = findIndex(propEq('levelIdx', existedLevel.position))(teamStats);
+const replaceTeamStatInList = (
+  existedLevel: LevelData,
+  updatedStatByTeams: TeamData[],
+  teamStats: TeamData[],
+): { id: number; data: TeamData[] } => {
+  const teamId = pipe(head as UnaryOperator<TeamData[], TeamData>, prop('id'))(teamStats);
+  const indexInList = findIndex(propEq('levelIdx', existedLevel.position) as UnaryOperator<TeamData, boolean>)(
+    teamStats,
+  );
   if (indexInList < 0) {
     return {
       id: teamId,
@@ -61,7 +60,7 @@ const replaceTeamStatInList = (existedLevel: LevelData, updatedStatByTeams: Team
   const newStat = find(propEq('id', teamId))(updatedStatByTeams);
   return {
     id: teamId,
-    data: update(indexInList, newStat, teamStats),
+    data: update(indexInList, newStat, teamStats) as TeamData[],
   };
 };
 
@@ -88,25 +87,22 @@ export const getMatchedLevels = (selectedType: number, state: GameDetailsState) 
   )(state);
 export const getCalculatedStat = (matchedLevels: number[], team: GroupedTeamData) => ({
   name: pipe(
-    prop('data') as (data: GroupedTeamData) => TeamData[],
-    head,
+    prop('data') as UnaryOperator<GroupedTeamData, TeamData[]>,
+    head as UnaryOperator<TeamData[], TeamData>,
     prop('name'),
-  )(team) as string,
+  )(team),
   id: pipe(
-    prop('data') as (data: GroupedTeamData) => TeamData[],
-    head,
+    prop('data') as UnaryOperator<GroupedTeamData, TeamData[]>,
+    head as UnaryOperator<TeamData[], TeamData>,
     prop('id'),
-  )(team) as number,
+  )(team),
   duration: pipe(
     prop('data') as (data: GroupedTeamData) => TeamData[],
     filter((stat: TeamData) => contains(stat.levelIdx, matchedLevels)) as (data: TeamData[]) => TeamData[],
     pluck('duration'),
     sum,
   )(team),
-  closedLevels: pipe(
-    prop('data') as (data: GroupedTeamData) => TeamData[],
-    length,
-  )(team),
+  closedLevels: pipe(prop('data') as (data: GroupedTeamData) => TeamData[], length)(team),
 });
 export const getPossibleLevelTypes = pipe(
   dropLast(1) as (data: LevelData[]) => LevelData[],
@@ -117,8 +113,8 @@ export const getPossibleLevelTypes = pipe(
 export const sortFinishResults = (finishStat: TeamData[]): TeamData[] => {
   const closedLevels = (team: TeamData) =>
     pipe(
-      find(propEq('id', team.id)),
-      prop('closedLevels'),
+      find(propEq('id', team.id) as UnaryOperator<TeamData, boolean>) as UnaryOperator<TeamData[], TeamData>,
+      prop('closedLevels') as UnaryOperator<TeamData, number>,
     )(finishStat);
 
   const calculateFullTime = (team: TeamData) => subtract(propOr(0, 'duration', team), propOr(0, 'additionsTime', team));
@@ -126,36 +122,22 @@ export const sortFinishResults = (finishStat: TeamData[]): TeamData[] => {
   return sortWith([descend(closedLevels), ascend(calculateFullTime)])(finishStat);
 };
 export const sortTeamList = (finishList: TeamData[], sortingSource: GroupedTeamData[]): GroupedTeamData[] => {
-  const closedLevelQuantity = pipe(
-    prop('data') as (data: GroupedTeamData) => TeamData[],
-    length,
-  );
+  const closedLevelQuantity = pipe(prop('data') as (data: GroupedTeamData) => TeamData[], length);
 
   const getTeamExtraBonus = (teamSource: TeamData[]): number => {
-    const teamId = pipe(
-      head,
-      prop('id'),
-    )(teamSource);
+    const teamId = pipe(head as UnaryOperator<TeamData[], TeamData>, prop('id'))(teamSource);
 
-    return pipe(
-      find(propEq('id', teamId)),
-      pathOr(0, ['extraBonus']),
-    )(finishList);
+    return pipe(find(propEq('id', teamId)), pathOr(0, ['extraBonus']))(finishList);
   };
 
   const calculateFullTime = (teamSource: TeamData[]) =>
     pipe(
-      map((team: TeamData) =>
-        subtract(propOr(0, 'duration', team) as number, propOr(0, 'additionsTime', team) as number),
-      ) as (data: TeamData[]) => number[],
-      sum as (data: number[]) => number,
-      add(negate(curry(getTeamExtraBonus)(teamSource))),
+      map((team: TeamData) => team.duration - (team.additionsTime || 0)) as UnaryOperator<TeamData[], number[]>,
+      sum as UnaryOperator<number[], number>,
+      (s: number): number => s - getTeamExtraBonus(teamSource),
     )(teamSource);
 
-  const sumDurations = pipe(
-    prop('data') as (data: { data: TeamData[] }) => TeamData[],
-    calculateFullTime,
-  );
+  const sumDurations = pipe(prop('data') as (data: { data: TeamData[] }) => TeamData[], calculateFullTime);
 
   return sortWith([descend(closedLevelQuantity), ascend(sumDurations)])(sortingSource);
 };
@@ -167,35 +149,42 @@ export const updateLevels = (
   },
   currentLevels: LevelData[],
 ): LevelData[] => {
-  const levelIdx = findIndex(propEq('level', updatedLevel.level), currentLevels);
-  return adjust(levelIdx, (oldLevel: LevelData) => merge(oldLevel, updatedLevel) as LevelData, currentLevels);
+  const levelIdx = findIndex(propEq('level', updatedLevel.level) as UnaryOperator<LevelData, boolean>, currentLevels);
+  return adjust(levelIdx, (oldLevel: LevelData) => mergeRight(oldLevel, updatedLevel) as LevelData, currentLevels);
 };
 export const updateStatByLevel = (removedLevel: LevelData, currentStat: TeamData[][]) =>
   map(levelRow => {
     if (removedLevel.position > levelRow.length) {
       return levelRow;
     }
-    // tslint:disable-next-line: no-any
-    return adjust(removedLevel.position, curry(adjustBonusTime)(removedLevel.removed) as any, levelRow);
+
+    return adjust(
+      removedLevel.position,
+      (data: TeamData): TeamData => adjustBonusTime(removedLevel.removed, data) as TeamData,
+      levelRow,
+    );
   }, currentStat);
 export const updateStatByTeams = (removedLevel: LevelData, currentTeamStat: GroupedTeamData[]) => {
   const updatedStatByTeams: TeamData[] = pipe(
     map(
       pipe(
-        prop('data') as (data: GroupedTeamData) => TeamData[],
-        find((teamStat: TeamData) => teamStat.levelIdx === removedLevel.position) as (data: TeamData[]) => TeamData,
-        curry(adjustBonusTime)(removedLevel.removed),
+        prop('data') as UnaryOperator<GroupedTeamData, TeamData[]>,
+        find((teamStat: TeamData) => teamStat.levelIdx === removedLevel.position) as UnaryOperator<
+          TeamData[],
+          TeamData
+        >,
+        (data: TeamData) => adjustBonusTime(removedLevel.removed, data),
       ),
-    ) as (data: GroupedTeamData[]) => TeamData[],
-    reject(isNil) as (data: TeamData[]) => TeamData[],
+    ) as UnaryOperator<GroupedTeamData[], TeamData[]>,
+    reject(isNil) as UnaryOperator<TeamData[], TeamData[]>,
   )(currentTeamStat);
 
   return pipe(
     map(
-      pipe(
-        prop('data') as (data: GroupedTeamData) => TeamData[],
-        curry(replaceTeamStatInList)(removedLevel)(updatedStatByTeams),
-      ),
+      pipe(prop('data') as UnaryOperator<GroupedTeamData, TeamData[]>, (data: TeamData[]): {
+        id: number;
+        data: TeamData[];
+      } => replaceTeamStatInList(removedLevel, updatedStatByTeams, data)),
     ),
     filter(complement(isNil)),
   )(currentTeamStat) as GroupedTeamData[];
@@ -208,7 +197,10 @@ export const updateFinishStat = (
   const updateFinishResults = map((teamFinishResult: TeamData) => {
     const existedAdditionsTime: number = propOr(0, 'additionsTime', teamFinishResult);
     const levelTime = pipe(
-      find(propEq('id', teamFinishResult.id)),
+      find(propEq('id', teamFinishResult.id) as UnaryOperator<GroupedTeamData, boolean>) as UnaryOperator<
+        GroupedTeamData[],
+        GroupedTeamData
+      >,
       prop('data'),
       find((teamStat: TeamData) => teamStat.levelIdx === removedLevel.position),
       pathOr(0, ['duration']),
@@ -217,7 +209,7 @@ export const updateFinishStat = (
       ? add(existedAdditionsTime, levelTime)
       : subtract(existedAdditionsTime, levelTime);
 
-    return merge(teamFinishResult, {
+    return mergeRight(teamFinishResult, {
       additionsTime: newAdditionalTime,
     }) as TeamData;
   }, finishResults);

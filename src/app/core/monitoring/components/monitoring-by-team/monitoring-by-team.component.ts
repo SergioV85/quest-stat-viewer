@@ -31,14 +31,8 @@ export class MonitoringByTeamComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.teamData$ = this.store.pipe(
-      select(getTeamData),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.levels$ = this.store.pipe(
-      select(getLevels),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.teamData$ = this.store.pipe(select(getTeamData), takeUntil(this.ngUnsubscribe));
+    this.levels$ = this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe));
   }
 
   public ngOnDestroy() {

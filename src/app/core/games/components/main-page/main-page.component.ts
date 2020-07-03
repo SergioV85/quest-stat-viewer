@@ -21,14 +21,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
   constructor(private readonly store: Store<State>, private readonly router: Router) {}
 
   public ngOnInit() {
-    this.isGamesLoading$ = this.store.pipe(
-      select(getLoadingState),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.savedGames$ = this.store.pipe(
-      select(getGames),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.isGamesLoading$ = this.store.pipe(select(getLoadingState), takeUntil(this.ngUnsubscribe));
+    this.savedGames$ = this.store.pipe(select(getGames), takeUntil(this.ngUnsubscribe));
     this.store.dispatch(CleanGameDataAction());
     this.store.dispatch(CleanMonitoringDataAction());
   }

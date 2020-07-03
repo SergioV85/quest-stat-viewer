@@ -22,9 +22,16 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets", "src/robots.txt"],
-            "styles": ["src/styles/styles.scss"],
-            "scripts": ["node_modules/@fortawesome/fontawesome-free/js/all.min.js"]
+            "assets": [
+              "src/assets",
+              "src/robots.txt"
+            ],
+            "styles": [
+              "src/styles/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -60,8 +67,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -71,9 +83,16 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "assets": ["src/assets", "src/robots.txt"],
-            "styles": ["src/styles/styles.scss"],
-            "scripts": ["node_modules/@fortawesome/fontawesome-free/js/all.min.js"]
+            "assets": [
+              "src/assets",
+              "src/robots.txt"
+            ],
+            "styles": [
+              "src/styles/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
+            ]
           }
         },
         "server": {
@@ -109,6 +128,7 @@
   },
   "defaultProject": "quest-stat-viewer",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
+    "defaultCollection": "@ngrx/schematics",
+    "analytics": false
   }
 }

@@ -2,12 +2,17 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
+import {
+  StoreRouterConnectingModule,
+  routerReducer,
+  DefaultRouterStateSerializer,
+  MinimalRouterStateSerializer,
+} from '@ngrx/router-store';
 
 import { environment } from '../environments/environment';
 
@@ -32,9 +37,7 @@ import { HttpCacheInterceptorService } from './common/services/http/http-interce
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot({ router: routerReducer }),
     EffectsModule.forRoot([NotificationEffects]),
-    StoreRouterConnectingModule.forRoot({
-      stateKey: 'router',
-    }),
+    StoreRouterConnectingModule.forRoot({ serializer: MinimalRouterStateSerializer, stateKey: 'router' }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [

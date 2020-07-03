@@ -39,7 +39,7 @@ const reducer = createReducer(
     const target = detailsLevel === 'byPlayer' ? 'playerData' : 'teamData';
     const key = detailsLevel === 'byPlayer' ? (playerId as number) : (teamId as number);
     return pipe(
-      prop(target) as (data: MonitoringState) => (MonitoringState['playerData']) | MonitoringState['teamData'],
+      prop(target) as (data: MonitoringState) => MonitoringState['playerData'] | MonitoringState['teamData'],
       mergeLeft({
         [key]: monitoringData,
       }) as (data: unknown) => { [key: number]: MonitoringResponse },
@@ -71,10 +71,7 @@ const reducer = createReducer(
   }),
   on(RequestMonitoringSuccessAction, (state, { data }) => {
     const pagesLeft = subtract(propOr(0, 'totalPages', data) as number, propOr(0, 'pageSaved', data) as number);
-    const parsingStat = pipe(
-      pick(['pageSaved', 'parsed', 'totalPages']),
-      mergeLeft({ pagesLeft }),
-    )(data);
+    const parsingStat = pipe(pick(['pageSaved', 'parsed', 'totalPages']), mergeLeft({ pagesLeft }))(data);
 
     // tslint:disable-next-line: no-any
     const totalData = propOr(null, 'totalData', data) as any;
@@ -93,13 +90,9 @@ export const isDataLoaded = createSelector(
   selectMonitoringStore,
   prop('dataLoaded') as (data: MonitoringState) => boolean,
 );
-export const isDataParsed = createSelector(
-  selectMonitoringStore,
-  prop('parsed') as (data: MonitoringState) => boolean,
-);
-export const getParsingStat = createSelector(
-  selectMonitoringStore,
-  (state: MonitoringState) => pick(['pagesLeft', 'pageSaved', 'totalPages'], state),
+export const isDataParsed = createSelector(selectMonitoringStore, prop('parsed') as (data: MonitoringState) => boolean);
+export const getParsingStat = createSelector(selectMonitoringStore, (state: MonitoringState) =>
+  pick(['pagesLeft', 'pageSaved', 'totalPages'], state),
 );
 export const getTotalData = createSelector(
   selectMonitoringStore,

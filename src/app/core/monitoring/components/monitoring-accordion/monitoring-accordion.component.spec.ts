@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatExpansionModule } from '@angular/material';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MonitoringAccordionComponent } from './monitoring-accordion.component';

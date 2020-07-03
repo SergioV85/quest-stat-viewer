@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { pipe, uniq, filter, propEq, pluck } from 'ramda';
 import { GameInfo, GameRequest } from '@app-common/models';
 
@@ -15,10 +15,7 @@ export class SavedGamesComponent implements OnInit {
   public games: GameInfo[] = [];
 
   public ngOnInit() {
-    this.domains = pipe(
-      pluck('Domain'),
-      uniq,
-    )(this.savedGames);
+    this.domains = pipe(pluck('Domain'), uniq)(this.savedGames);
 
     this.games = [...this.savedGames];
   }
