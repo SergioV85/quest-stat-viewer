@@ -50,7 +50,7 @@
     "@angular/router": "10.2.4",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-toolkit/serverless": "^7.1.2",
-    "@ngrx/effects": "9.2.0",
+    "@ngrx/effects": "9.2.1",
     "@ngrx/router-store": "9.2.0",
     "@ngrx/store": "9.2.1",
     "@ngrx/store-devtools": "9.2.0",
