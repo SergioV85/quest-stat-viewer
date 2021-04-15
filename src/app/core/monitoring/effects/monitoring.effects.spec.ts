@@ -7,20 +7,10 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { hot, cold } from 'jasmine-marbles';
 
 import { State } from '@app-common/models';
-import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
+import { NOTIFICATION_ACTIONS } from '@app-common/actions/notification.actions';
 import { mockedMonitoringData, mockedMonitoringDetailsData, mockedCodesList } from '@app-common/mocks/monitoring.mock';
 import { ApiService } from '@app-common/services/api/api.service';
-import {
-  RequestMonitoringAction,
-  RequestMonitoringSuccessAction,
-  RequestMonitoringFailedAction,
-  GetMonitoringDetailsAction,
-  GetMonitoringDetailsSuccessAction,
-  GetMonitoringDetailsFailedAction,
-  RequestCodesSuccessAction,
-  RequestCodesAction,
-  RequestCodesFailedAction,
-} from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getGameId } from '@app-core/game-details/reducers/game-details.reducer';
 
 import { MonitoringEffects } from './monitoring.effects';
@@ -47,19 +37,19 @@ describe('Monitoring: MonitoringEffects', () => {
         },
       ],
     });
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getGameId, 12345);
-    monitoringEffects = TestBed.get<MonitoringEffects>(MonitoringEffects);
-    actions$ = TestBed.get<Actions>(Actions);
+    monitoringEffects = TestBed.inject<MonitoringEffects>(MonitoringEffects);
+    actions$ = TestBed.inject<Observable<Actions>>(Actions);
   });
 
   it('should be created', () => {
     expect(monitoringEffects).toBeTruthy();
   });
   describe('getMonitoring$', () => {
-    const startAction = RequestMonitoringAction({ id: 12345, domain: 'quest.ua' });
+    const startAction = MONITORING_ACTIONS.requestMonitoring({ id: 12345, domain: 'quest.ua' });
     it('should send a request for getting grouped game monitoring data and dispatch success action on complete', () => {
-      const successAction = RequestMonitoringSuccessAction({ data: mockedMonitoringData });
+      const successAction = MONITORING_ACTIONS.requestMonitoringSuccess({ data: mockedMonitoringData });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-a|', { a: mockedMonitoringData });
@@ -70,8 +60,10 @@ describe('Monitoring: MonitoringEffects', () => {
     });
     it('should send a request for getting grouped game monitoring data but dispatch error action on fail', () => {
       const error = new Error('Error');
-      const failAction = RequestMonitoringFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' });
+      const failAction = MONITORING_ACTIONS.requestMonitoringFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось загрузить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);
@@ -82,9 +74,9 @@ describe('Monitoring: MonitoringEffects', () => {
     });
   });
   describe('getMonitoringDetails$', () => {
-    const startAction = GetMonitoringDetailsAction({ teamId: 13977, detailsLevel: 'byTeam' });
+    const startAction = MONITORING_ACTIONS.getMonitoringDetails({ teamId: 13977, detailsLevel: 'byTeam' });
     it('should send a request for getting detailed monitoring data and dispatch success action on complete', () => {
-      const successAction = GetMonitoringDetailsSuccessAction({
+      const successAction = MONITORING_ACTIONS.getMonitoringDetailsSuccess({
         gameId: 12345,
         teamId: 13977,
         detailsLevel: 'byTeam',
@@ -100,8 +92,10 @@ describe('Monitoring: MonitoringEffects', () => {
     });
     it('should send a request for getting detailed monitoring data but dispatch error action on fail', () => {
       const error = new Error('Error');
-      const failAction = GetMonitoringDetailsFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' });
+      const failAction = MONITORING_ACTIONS.getMonitoringDetailsFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось загрузить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);
@@ -112,9 +106,11 @@ describe('Monitoring: MonitoringEffects', () => {
     });
   });
   describe('getCodesList$', () => {
-    const startAction = RequestCodesAction({ query: { playerId: 52015, levelId: 5, requestType: 'byPlayer' } });
+    const startAction = MONITORING_ACTIONS.requestCodes({
+      query: { playerId: 52015, levelId: 5, requestType: 'byPlayer' },
+    });
     it('should send a request for getting codes list and dispatch success action on complete', () => {
-      const successAction = RequestCodesSuccessAction({
+      const successAction = MONITORING_ACTIONS.requestCodesSuccess({
         gameId: 12345,
         playerId: 52015,
         levelId: 5,
@@ -131,8 +127,10 @@ describe('Monitoring: MonitoringEffects', () => {
     });
     it('should send a request for getting codes list but dispatch error action on fail', () => {
       const error = new Error('Error');
-      const failAction = RequestCodesFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' });
+      const failAction = MONITORING_ACTIONS.requestCodesFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось загрузить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);

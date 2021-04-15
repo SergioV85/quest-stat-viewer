@@ -5,7 +5,7 @@ import { filter, take, tap, switchMap, catchError } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { State } from '@app-common/models';
-import { RequestMonitoringAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { isDataLoaded } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Injectable({ providedIn: 'root' })
@@ -29,10 +29,10 @@ export class GameMonitoringResolver implements Resolve<boolean> {
       select(isDataLoaded),
       tap((data: boolean) => {
         if (!data) {
-          this.store.dispatch(RequestMonitoringAction({ domain, id }));
+          this.store.dispatch(MONITORING_ACTIONS.requestMonitoring({ domain, id }));
         }
       }),
-      filter(data => data),
+      filter((data) => data),
       take(1),
     );
   }

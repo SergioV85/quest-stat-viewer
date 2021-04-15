@@ -65,12 +65,12 @@ const replaceTeamStatInList = (
 };
 
 export const appendFinishStat = (finishList: TeamData[], levelsStat: TeamData[][]): TeamData[][] => {
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const indexedMap = addIndex(map) as any;
   return indexedMap((levelRow: TeamData[], indx: number) => append(finishList[indx], levelRow), levelsStat);
 };
 export const appendFinishStatToTeam = (finishList: TeamData[], sortedTeamStat: GroupedTeamData[]): GroupedTeamData[] =>
-  map(team => {
+  map((team) => {
     const finishResult = find(propEq('id', team.id), finishList) as TeamData;
     const updatedStat = append(finishResult, team.data);
     return {
@@ -80,10 +80,10 @@ export const appendFinishStatToTeam = (finishList: TeamData[], sortedTeamStat: G
   }, sortedTeamStat);
 export const getMatchedLevels = (selectedType: number, state: GameDetailsState) =>
   pipe(
-    prop('levels') as (data: GameDetailsState) => LevelData[],
-    filter(propEq('type', selectedType)) as (data: LevelData[]) => LevelData[],
-    filter(complement(prop('removed'))) as (data: LevelData[]) => LevelData[],
-    pluck('position') as (data: LevelData[]) => number[],
+    prop('levels') as UnaryOperator<GameDetailsState, LevelData[]>,
+    filter(propEq('type', selectedType)) as UnaryOperator<LevelData[], LevelData[]>,
+    filter(complement(prop('removed') as UnaryOperator<LevelData, boolean>)) as UnaryOperator<LevelData[], LevelData[]>,
+    pluck('position') as UnaryOperator<LevelData[], number[]>,
   )(state);
 export const getCalculatedStat = (matchedLevels: number[], team: GroupedTeamData) => ({
   name: pipe(
@@ -153,7 +153,7 @@ export const updateLevels = (
   return adjust(levelIdx, (oldLevel: LevelData) => mergeRight(oldLevel, updatedLevel) as LevelData, currentLevels);
 };
 export const updateStatByLevel = (removedLevel: LevelData, currentStat: TeamData[][]) =>
-  map(levelRow => {
+  map((levelRow) => {
     if (removedLevel.position > levelRow.length) {
       return levelRow;
     }

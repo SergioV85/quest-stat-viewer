@@ -15,7 +15,7 @@ describe('NotificationService', () => {
       providers: [NotificationsService, { provide: MatSnackBar, useValue: mockedSnackService }],
     });
 
-    service = TestBed.get<NotificationsService>(NotificationsService);
+    service = TestBed.inject<NotificationsService>(NotificationsService);
   });
 
   it('should be created', () => {

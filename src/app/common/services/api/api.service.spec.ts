@@ -17,8 +17,8 @@ describe('ApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [ApiService, { provide: TransferState, useValue: mockedTransferSate }],
     });
-    apiService = TestBed.get<ApiService>(ApiService);
-    httpMock = TestBed.get(HttpTestingController);
+    apiService = TestBed.inject<ApiService>(ApiService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
   afterEach(() => {
     httpMock.verify();

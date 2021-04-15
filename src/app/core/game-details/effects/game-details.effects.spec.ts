@@ -7,18 +7,10 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { hot, cold } from 'jasmine-marbles';
 
 import { State } from '@app-common/models';
-import { SuccessNotificationAction, ErrorNotificationAction } from '@app-common/actions/notification.actions';
+import { NOTIFICATION_ACTIONS } from '@app-common/actions/notification.actions';
 import { mockedGameDetails } from '@app-common/mocks/games.mock';
 import { ApiService } from '@app-common/services/api/api.service';
-import {
-  GetLatestDataFromEnAction,
-  RequestGameDetailsAction,
-  RequestGameDetailsFailedAction,
-  RequestGameDetailsSuccessAction,
-  SaveLevelsTypesAction,
-  SaveLevelsTypesFailedAction,
-  SaveLevelsTypesSuccessAction,
-} from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getGameId, getGameDomain, getLevels } from '@app-core/game-details/reducers/game-details.reducer';
 import { GameDetailsEffects } from './game-details.effects';
 
@@ -43,21 +35,21 @@ describe('Game Details: GameDetailsEffects', () => {
         },
       ],
     });
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getGameId, 12345);
     store$.overrideSelector(getGameDomain, 'quest.ua');
     store$.overrideSelector(getLevels, []);
-    gameDetailsEffects = TestBed.get<GameDetailsEffects>(GameDetailsEffects);
-    actions$ = TestBed.get<Actions>(Actions);
+    gameDetailsEffects = TestBed.inject<GameDetailsEffects>(GameDetailsEffects);
+    actions$ = TestBed.inject<Observable<Actions>>(Actions);
   });
 
   it('should be created', () => {
     expect(gameDetailsEffects).toBeTruthy();
   });
   describe('getGameDetails$', () => {
-    const startAction = RequestGameDetailsAction({ id: 12345, domain: 'quest.ua' });
+    const startAction = GAME_DETAILS_ACTIONS.requestGameDetails({ id: 12345, domain: 'quest.ua' });
     it('should send a request for getting game details and dispatch success action on complete', () => {
-      const successAction = RequestGameDetailsSuccessAction({ data: mockedGameDetails });
+      const successAction = GAME_DETAILS_ACTIONS.requestGameDetailsSuccess({ data: mockedGameDetails });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-a|', { a: mockedGameDetails });
@@ -68,8 +60,10 @@ describe('Game Details: GameDetailsEffects', () => {
     });
     it('should send a request for getting games list but dispatch error action on fail', () => {
       const error = new Error('Error');
-      const failAction = RequestGameDetailsFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' });
+      const failAction = GAME_DETAILS_ACTIONS.requestGameDetailsFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось загрузить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);
@@ -80,9 +74,9 @@ describe('Game Details: GameDetailsEffects', () => {
     });
   });
   describe('getGameDataFromEn$', () => {
-    const startAction = GetLatestDataFromEnAction();
+    const startAction = GAME_DETAILS_ACTIONS.getLatestDataFromEn();
     it('should send a request for refreshing game data from EN ', () => {
-      const successAction = RequestGameDetailsAction({ domain: 'quest.ua', id: 12345, force: true });
+      const successAction = GAME_DETAILS_ACTIONS.requestGameDetails({ domain: 'quest.ua', id: 12345, force: true });
 
       actions$ = hot('-a', { a: startAction });
       const expected$ = cold('-b', { b: successAction });
@@ -91,10 +85,10 @@ describe('Game Details: GameDetailsEffects', () => {
     });
   });
   describe('saveLevels$', () => {
-    const startAction = SaveLevelsTypesAction();
+    const startAction = GAME_DETAILS_ACTIONS.saveLevelsTypes();
     it('should send a request for saving level data and dispatch success actions on complete', () => {
-      const successAction = SaveLevelsTypesSuccessAction();
-      const messageAction = SuccessNotificationAction({ message: 'Данные сохраненны' });
+      const successAction = GAME_DETAILS_ACTIONS.saveLevelsTypesSuccess();
+      const messageAction = NOTIFICATION_ACTIONS.successNotification({ message: 'Данные сохраненны' });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-a|', { a: mockedGameDetails });
@@ -105,8 +99,10 @@ describe('Game Details: GameDetailsEffects', () => {
     });
     it('should send a request for saving game data but dispatch error actions on fail', () => {
       const error = new Error('Error');
-      const failAction = SaveLevelsTypesFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось сохранить данные' });
+      const failAction = GAME_DETAILS_ACTIONS.saveLevelsTypesFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось сохранить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);

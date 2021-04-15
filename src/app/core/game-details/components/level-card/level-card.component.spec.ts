@@ -40,7 +40,7 @@ describe('Game Details: LevelCardComponent', () => {
       expect(component.levelStateChange.emit).toHaveBeenCalledWith(true);
     });
     it('should emit not event if level data is nullable', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       component.levelData = null as any;
       component.toggleLevelState();
       expect(component.levelStateChange.emit).not.toHaveBeenCalledWith(true);

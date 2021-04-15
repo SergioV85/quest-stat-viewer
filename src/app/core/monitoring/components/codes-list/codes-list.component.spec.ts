@@ -23,7 +23,7 @@ describe('Monitoring: CodesListComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getCodes, { [12345]: mockedCodesList });
 
     fixture = TestBed.createComponent(CodesListComponent);

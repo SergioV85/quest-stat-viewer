@@ -3,7 +3,7 @@ import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 
 import { State } from '@app-common/models';
-import { RequestMonitoringAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { isDataLoaded } from '@app-core/monitoring/reducers/monitoring.reducer';
 import { GameMonitoringResolver } from './monitoring-data.resolver';
 
@@ -16,10 +16,10 @@ describe('Monitoring: GameMonitoringResolver', () => {
     TestBed.configureTestingModule({
       providers: [provideMockStore(), GameMonitoringResolver],
     });
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     dataLoaded = store$.overrideSelector(isDataLoaded, false);
     spyOn(store$, 'dispatch');
-    resolver = TestBed.get<GameMonitoringResolver>(GameMonitoringResolver);
+    resolver = TestBed.inject<GameMonitoringResolver>(GameMonitoringResolver);
   });
 
   it('should be created', () => {
@@ -27,7 +27,7 @@ describe('Monitoring: GameMonitoringResolver', () => {
   });
 
   describe('resolve', () => {
-    // tslint:disable-next-line: no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockActivatedRouteSnapshot: any = {
       parent: {
         parent: {
@@ -42,7 +42,7 @@ describe('Monitoring: GameMonitoringResolver', () => {
         },
       },
     };
-    const action = RequestMonitoringAction({ domain: 'quest.ua', id: '12345' });
+    const action = MONITORING_ACTIONS.requestMonitoring({ domain: 'quest.ua', id: '12345' });
 
     it('should resolve the game details', () => {
       resolver.resolve(mockActivatedRouteSnapshot).subscribe();

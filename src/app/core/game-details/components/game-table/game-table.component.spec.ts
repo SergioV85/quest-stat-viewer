@@ -7,7 +7,7 @@ import { mockedGameDetails } from '@app-common/mocks/games.mock';
 import { MockedCheckLevelRemovalPipe } from '@app-common/pipes/check-level-removal/check-level-removal.pipe.mock';
 import { GetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe';
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
-import { ChangeLevelTypeAction, RemoveLevelFromStatAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { GameTableComponent } from './game-table.component';
 
 describe('Game Details: GameTableComponent', () => {
@@ -38,7 +38,7 @@ describe('Game Details: GameTableComponent', () => {
     fixture = TestBed.createComponent(GameTableComponent);
     component = fixture.componentInstance;
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getActiveTab, 'total');
 
     spyOn(store$, 'dispatch');
@@ -111,14 +111,14 @@ describe('Game Details: GameTableComponent', () => {
   });
   describe('changeLevelType', () => {
     it('should dispatch action ChangeLevelTypeAction', () => {
-      const action = ChangeLevelTypeAction({ level: 4, levelType: 4 });
+      const action = GAME_DETAILS_ACTIONS.changeLevelType({ level: 4, levelType: 4 });
       component.changeLevelType({ type: 4, level: 4 });
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });
   });
   describe('removeLevel', () => {
     it('should dispatch action RemoveLevelFromStatAction', () => {
-      const action = RemoveLevelFromStatAction({ level: 4, removed: true });
+      const action = GAME_DETAILS_ACTIONS.removeLevelFromState({ level: 4, removed: true });
       component.removeLevel({ removed: true, level: 4 });
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });

@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State } from '@app-common/models';
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
-import { SaveLevelsTypesAction, GetLatestDataFromEnAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getLoadingState, hasPendingChanges } from '@app-core/game-details/reducers/game-details.reducer';
 import { GamePageComponent } from './game-page.component';
 
@@ -34,7 +34,7 @@ describe('Game Details: GamePageComponent', () => {
     fixture = TestBed.createComponent(GamePageComponent);
     component = fixture.componentInstance;
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getActiveTab, 'total');
     store$.overrideSelector(getLoadingState, false);
     store$.overrideSelector(hasPendingChanges, false);
@@ -61,14 +61,14 @@ describe('Game Details: GamePageComponent', () => {
   });
   describe('refreshData', () => {
     it('should dispatch action GetLatestDataFromEnAction', () => {
-      const action = GetLatestDataFromEnAction();
+      const action = GAME_DETAILS_ACTIONS.getLatestDataFromEn();
       component.refreshData();
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });
   });
   describe('saveChanges', () => {
     it('should dispatch action SaveLevelsTypesAction', () => {
-      const action = SaveLevelsTypesAction();
+      const action = GAME_DETAILS_ACTIONS.saveLevelsTypes();
       component.saveChanges();
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });

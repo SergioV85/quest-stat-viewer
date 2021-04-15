@@ -9,7 +9,7 @@
             let-isLast="last"
             let-idx="index"
             [ngForTrackBy]="trackByLevel">
-          <level-card class="gameTable__levelName gameTable__levelName--{{ LevelType[level.type] }} card"
+          <level-card class="gameTable__levelName gameTable__levelName--{{ levelType[level.type] }} card"
               [ngClass]="{
                 'gameTable__levelName--dismised': level.removed,
                 'mx-1': !isLast,

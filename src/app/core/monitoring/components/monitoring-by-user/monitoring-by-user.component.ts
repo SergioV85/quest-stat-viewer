@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { State, LevelData, PlayerLevelData } from '@app-common/models';
 import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
-import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getPlayerData } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
@@ -24,7 +24,7 @@ export class MonitoringByUserComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.store.dispatch(
-      GetMonitoringDetailsAction({
+      MONITORING_ACTIONS.getMonitoringDetails({
         playerId: this.id,
         detailsLevel: 'byPlayer',
       }),

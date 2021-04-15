@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 
 import { TeamData, State } from '@app-common/models';
 import { isNotNullOrUndefined, getLevelTypeIcon, getLevelTypeName } from '@app-common/services/util/util.metods';
-import { ChangeTotalStatTabAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import {
   getActiveTabOnTotalStatState,
   getAvailableLevelTypes,
@@ -81,7 +81,7 @@ export class TotalTableComponent implements OnInit, OnDestroy {
 
   public changeTab($event: MatTabChangeEvent) {
     const newTab = parseInt($event.tab.textLabel, 10);
-    this.store$.dispatch(ChangeTotalStatTabAction({ tab: newTab }));
+    this.store$.dispatch(GAME_DETAILS_ACTIONS.changeTotalStatTab({ tab: newTab }));
   }
 
   public trackByTeamId(index: number, item: MappedTeam) {

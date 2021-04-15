@@ -5,11 +5,7 @@ import { Observable } from 'rxjs';
 import { hot } from 'jasmine-marbles';
 
 import { NotificationType } from '@app-common/models';
-import {
-  ErrorNotificationAction,
-  WarningNotificationAction,
-  SuccessNotificationAction,
-} from '@app-common/actions/notification.actions';
+import { NOTIFICATION_ACTIONS } from '@app-common/actions/notification.actions';
 import { NotificationsService } from '@app-common/services/notification/notification.service';
 import { NotificationEffects } from './notification.effects';
 
@@ -29,8 +25,8 @@ describe('NotificationEffects', () => {
       ],
     });
 
-    effects = TestBed.get<NotificationEffects>(NotificationEffects);
-    actions$ = TestBed.get<Actions>(Actions);
+    effects = TestBed.inject<NotificationEffects>(NotificationEffects);
+    actions$ = TestBed.inject<Observable<Actions>>(Actions);
   });
 
   it('should be created', () => {
@@ -39,7 +35,7 @@ describe('NotificationEffects', () => {
 
   describe('errorNotificationMessage', () => {
     it('should call notification service with error message', () => {
-      const startAction = ErrorNotificationAction({ message: 'some error' });
+      const startAction = NOTIFICATION_ACTIONS.errorNotification({ message: 'some error' });
       actions$ = hot('-a', { a: startAction });
 
       effects.errorNotificationMessage$.subscribe(() => {
@@ -51,7 +47,7 @@ describe('NotificationEffects', () => {
   });
   describe('warningNotificationMessage', () => {
     it('should call notification service with warning message', () => {
-      const startAction = WarningNotificationAction({ message: 'some warning' });
+      const startAction = NOTIFICATION_ACTIONS.warningNotification({ message: 'some warning' });
       actions$ = hot('-a', { a: startAction });
 
       effects.warningNotificationMessage$.subscribe(() => {
@@ -63,7 +59,7 @@ describe('NotificationEffects', () => {
   });
   describe('successNotificationMessage', () => {
     it('should call notification service with success message', () => {
-      const startAction = SuccessNotificationAction({ message: 'some message' });
+      const startAction = NOTIFICATION_ACTIONS.successNotification({ message: 'some message' });
       actions$ = hot('-a', { a: startAction });
 
       effects.successNotificationMessage$.subscribe(() => {

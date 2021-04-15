@@ -1,14 +1,14 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { contains, indexOf, without } from 'ramda';
 
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
 import { TeamData, State, LevelData, LevelType } from '@app-common/models';
-import { ChangeLevelTypeAction, RemoveLevelFromStatAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getLevels, getStatData } from '@app-core/game-details/reducers/game-details.reducer';
 
 @Component({
@@ -22,7 +22,7 @@ export class GameTableComponent implements OnInit, OnDestroy {
 
   public levels$?: Observable<LevelData[]>;
   public statData?: { teams: TeamData[][]; levels: TeamData[][] };
-  public LevelType = LevelType;
+  public levelType = LevelType;
   public selectedTeams: number[] = [];
 
   private readonly ngUnsubscribe: Subject<void> = new Subject<void>();
@@ -34,7 +34,7 @@ export class GameTableComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.activeTab$ = this.store.pipe(select(getActiveTab), takeUntil(this.ngUnsubscribe));
     this.levels$ = this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe));
-    this.store.pipe(select(getStatData), takeUntil(this.ngUnsubscribe)).subscribe(data => (this.statData = data));
+    this.store.pipe(select(getStatData), takeUntil(this.ngUnsubscribe)).subscribe((data) => (this.statData = data));
   }
 
   public ngOnDestroy() {
@@ -56,9 +56,9 @@ export class GameTableComponent implements OnInit, OnDestroy {
   }
 
   public changeLevelType({ type, level }: { type: number; level: number }) {
-    this.store.dispatch(ChangeLevelTypeAction({ levelType: type, level }));
+    this.store.dispatch(GAME_DETAILS_ACTIONS.changeLevelType({ levelType: type, level }));
   }
   public removeLevel({ removed, level }: { removed: boolean; level: number }) {
-    this.store.dispatch(RemoveLevelFromStatAction({ removed, level }));
+    this.store.dispatch(GAME_DETAILS_ACTIONS.removeLevelFromState({ removed, level }));
   }
 }

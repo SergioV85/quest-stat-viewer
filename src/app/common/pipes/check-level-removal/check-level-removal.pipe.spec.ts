@@ -44,7 +44,7 @@ describe('CheckLevelRemovalPipe', () => {
         duration: 338000,
         bestTime: false,
       };
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(pipe.transform(null as any, teamData)).toEqual(false);
     });
   });

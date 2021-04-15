@@ -5,7 +5,7 @@ import { prop } from 'ramda';
   name: 'filterByProp',
 })
 export class FilterByPropPipe implements PipeTransform {
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public transform(value: any, property: string): any {
     if (value) {
       return prop(property, value);

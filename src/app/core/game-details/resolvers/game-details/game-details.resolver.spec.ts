@@ -3,7 +3,7 @@ import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { State, TeamData } from '@app-common/models';
 import { mockedGameDetails } from '@app-common/mocks/games.mock';
-import { RequestGameDetailsAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getFinishResults } from '@app-core/game-details/reducers/game-details.reducer';
 import { GameDataResolver } from './game-details.resolver';
 
@@ -16,10 +16,10 @@ describe('GameDataResolver', () => {
     TestBed.configureTestingModule({
       providers: [provideMockStore(), GameDataResolver],
     });
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     gameDetails = store$.overrideSelector(getFinishResults, null);
     spyOn(store$, 'dispatch');
-    resolver = TestBed.get<GameDataResolver>(GameDataResolver);
+    resolver = TestBed.inject<GameDataResolver>(GameDataResolver);
   });
 
   it('should be created', () => {
@@ -27,7 +27,7 @@ describe('GameDataResolver', () => {
   });
 
   describe('resolve', () => {
-    // tslint:disable-next-line: no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockActivatedRouteSnapshot: any = {
       paramMap: new Map<string, string>([
         ['domain', 'quest.ua'],
@@ -38,7 +38,7 @@ describe('GameDataResolver', () => {
         id: '12345',
       },
     };
-    const action = RequestGameDetailsAction({ domain: 'quest.ua', id: '12345' });
+    const action = GAME_DETAILS_ACTIONS.requestGameDetails({ domain: 'quest.ua', id: '12345' });
 
     it('should resolve the game details', () => {
       resolver.resolve(mockActivatedRouteSnapshot).subscribe();

@@ -6,7 +6,7 @@ describe('TotalStatCalculationPipe', () => {
     expect(pipe).toBeTruthy();
   });
   describe('transform', () => {
-    // tslint:disable-next-line: no-empty
+    // eslint-disable-next-line no-empty, @typescript-eslint/no-empty-function
     it('should return property from object', () => {});
   });
 });
