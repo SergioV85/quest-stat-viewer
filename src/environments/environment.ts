@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  serverAddress: 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod',
-  // serverAddress: 'http://localhost:3000/prod',
+  // serverAddress: 'https://btbihne3he.execute-api.eu-central-1.amazonaws.com/prod',
+  serverAddress: 'http://localhost:3000/prod',
 	baseHref: '/'
 };
