@@ -17,19 +17,7 @@ import {
 } from 'ramda';
 
 import { GameDetailsState, LevelData, TeamData, GroupedTeamData, State, UnaryOperator } from '@app-common/models';
-import {
-  ChangeLevelTypeAction,
-  ChangeTotalStatTabAction,
-  CleanGameDataAction,
-  GetLatestDataFromEnAction,
-  RemoveLevelFromStatAction,
-  RequestGameDetailsAction,
-  RequestGameDetailsFailedAction,
-  RequestGameDetailsSuccessAction,
-  SaveLevelsTypesAction,
-  SaveLevelsTypesFailedAction,
-  SaveLevelsTypesSuccessAction,
-} from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import {
   appendFinishStat,
   appendFinishStatToTeam,
@@ -50,7 +38,7 @@ export const initialState: GameDetailsState = {
 
 const reducer = createReducer(
   initialState,
-  on(ChangeLevelTypeAction, (state, { level, levelType }) => {
+  on(GAME_DETAILS_ACTIONS.changeLevelType, (state, { level, levelType }) => {
     const currentLevels = prop('levels', state);
     if (!currentLevels) {
       return state;
@@ -59,12 +47,12 @@ const reducer = createReducer(
 
     return mergeRight(state, { levels });
   }),
-  on(ChangeTotalStatTabAction, (state, { tab }) => mergeRight(state, { selectedTotalTab: tab })),
-  on(CleanGameDataAction, _ => initialState),
-  on(GetLatestDataFromEnAction, state =>
+  on(GAME_DETAILS_ACTIONS.changeTotalStatTab, (state, { tab }) => mergeRight(state, { selectedTotalTab: tab })),
+  on(GAME_DETAILS_ACTIONS.cleanGameData, (_) => initialState),
+  on(GAME_DETAILS_ACTIONS.getLatestDataFromEn, (state) =>
     mergeRight(state, { originalLevels: [], levels: [], dataByTeam: [], dataByLevels: [], finishResults: [] }),
   ),
-  on(RemoveLevelFromStatAction, (state, { removed, level }) => {
+  on(GAME_DETAILS_ACTIONS.removeLevelFromState, (state, { removed, level }) => {
     const currentLevels = prop('levels', state);
     const currentStatByLevels = prop('dataByLevels', state);
     const currentStatByTeams = prop('dataByTeam', state);
@@ -84,9 +72,13 @@ const reducer = createReducer(
 
     return mergeRight(state, { levels, dataByLevels, dataByTeam, finishResults });
   }),
-  on(RequestGameDetailsAction, SaveLevelsTypesAction, state => mergeRight(state, { isLoading: true })),
-  on(RequestGameDetailsFailedAction, SaveLevelsTypesFailedAction, state => mergeRight(state, { isLoading: false })),
-  on(RequestGameDetailsSuccessAction, (state, { data }) => {
+  on(GAME_DETAILS_ACTIONS.requestGameDetails, GAME_DETAILS_ACTIONS.saveLevelsTypes, (state) =>
+    mergeRight(state, { isLoading: true }),
+  ),
+  on(GAME_DETAILS_ACTIONS.requestGameDetailsFailed, GAME_DETAILS_ACTIONS.saveLevelsTypesFailed, (state) =>
+    mergeRight(state, { isLoading: false }),
+  ),
+  on(GAME_DETAILS_ACTIONS.requestGameDetailsSuccess, (state, { data }) => {
     if (!data) {
       return state;
     }
@@ -113,15 +105,14 @@ const reducer = createReducer(
       originalLevels: levels,
     });
   }),
-  on(SaveLevelsTypesSuccessAction, state => {
+  on(GAME_DETAILS_ACTIONS.saveLevelsTypesSuccess, (state) => {
     const originalLevels = clone(state.levels);
     return mergeRight(state, { isLoading: false, originalLevels });
   }),
 );
 
-export function gameDetailsReducer(gameDetailsState = initialState, action: Action) {
-  return reducer(gameDetailsState, action);
-}
+export const gameDetailsReducer = (gameDetailsState: GameDetailsState, action: Action) =>
+  reducer(gameDetailsState, action);
 
 /* Selectors */
 

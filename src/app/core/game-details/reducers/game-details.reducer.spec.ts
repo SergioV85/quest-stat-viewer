@@ -2,19 +2,7 @@ import { mergeRight } from 'ramda';
 import { GameDetailsState } from '@app-common/models';
 import { mockedGameDetails } from '@app-common/mocks/games.mock';
 
-import {
-  ChangeLevelTypeAction,
-  ChangeTotalStatTabAction,
-  CleanGameDataAction,
-  GetLatestDataFromEnAction,
-  RemoveLevelFromStatAction,
-  RequestGameDetailsAction,
-  RequestGameDetailsFailedAction,
-  RequestGameDetailsSuccessAction,
-  SaveLevelsTypesAction,
-  SaveLevelsTypesFailedAction,
-  SaveLevelsTypesSuccessAction,
-} from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { gameDetailsReducer, initialState } from './game-details.reducer';
 
 const mutateState = mergeRight(initialState) as (data: Partial<GameDetailsState>) => GameDetailsState;
@@ -22,7 +10,7 @@ const mutateState = mergeRight(initialState) as (data: Partial<GameDetailsState>
 describe('GameDetails Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const action = {} as any;
 
       const result = gameDetailsReducer(initialState, action);
@@ -32,7 +20,7 @@ describe('GameDetails Reducer', () => {
   });
   describe('ChangeLevelTypeAction', () => {
     it('should change the level type', () => {
-      const action = ChangeLevelTypeAction({ level: 2, levelType: 4 });
+      const action = GAME_DETAILS_ACTIONS.changeLevelType({ level: 2, levelType: 4 });
       const mutatedState = mutateState({
         levels: mockedGameDetails.stat.Levels,
       });
@@ -193,7 +181,7 @@ describe('GameDetails Reducer', () => {
   });
   describe('CleanGameDataAction', () => {
     it('should return initial state', () => {
-      const action = CleanGameDataAction();
+      const action = GAME_DETAILS_ACTIONS.cleanGameData();
       const mutatedState = mutateState({
         isLoading: false,
         gameInfo: {
@@ -211,7 +199,7 @@ describe('GameDetails Reducer', () => {
   });
   describe('ChangeTotalStatTabAction', () => {
     it('should return initial state', () => {
-      const action = ChangeTotalStatTabAction({ tab: 1 });
+      const action = GAME_DETAILS_ACTIONS.changeTotalStatTab({ tab: 1 });
       const mutatedState = mutateState({
         selectedTotalTab: 0,
       });
@@ -224,7 +212,7 @@ describe('GameDetails Reducer', () => {
   });
   describe('GetLatestDataFromEnAction', () => {
     it('should clean the existed data', () => {
-      const action = GetLatestDataFromEnAction();
+      const action = GAME_DETAILS_ACTIONS.getLatestDataFromEn();
       const mutatedState = mutateState({
         levels: mockedGameDetails.stat.Levels,
         dataByTeam: mockedGameDetails.stat.DataByTeam,
@@ -245,7 +233,7 @@ describe('GameDetails Reducer', () => {
   });
   describe('RemoveLevelFromStatAction', () => {
     it('should recalculate data if level is removed', () => {
-      const action = RemoveLevelFromStatAction({ removed: true, level: 2 });
+      const action = GAME_DETAILS_ACTIONS.removeLevelFromState({ removed: true, level: 2 });
       const mutatedState = mutateState({
         levels: mockedGameDetails.stat.Levels,
         dataByTeam: mockedGameDetails.stat.DataByTeam,
@@ -1667,7 +1655,7 @@ describe('GameDetails Reducer', () => {
       expect(expectedState).toEqual(resultedState);
     });
     it('should recalculate data if level is restored', () => {
-      const action = RemoveLevelFromStatAction({ removed: false, level: 4 });
+      const action = GAME_DETAILS_ACTIONS.removeLevelFromState({ removed: false, level: 4 });
       const mutatedState = mutateState({
         levels: mockedGameDetails.stat.Levels,
         dataByTeam: mockedGameDetails.stat.DataByTeam,
@@ -3092,7 +3080,7 @@ describe('GameDetails Reducer', () => {
   describe('RequestGameDetails', () => {
     describe('RequestGameDetailsAction', () => {
       it('should set loading flag to true', () => {
-        const action = RequestGameDetailsAction({ id: 60124, domain: 'rivne.en.cx' });
+        const action = GAME_DETAILS_ACTIONS.requestGameDetails({ id: 60124, domain: 'rivne.en.cx' });
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -3102,7 +3090,7 @@ describe('GameDetails Reducer', () => {
     });
     describe('RequestGameDetailsFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = RequestGameDetailsFailedAction({});
+        const action = GAME_DETAILS_ACTIONS.requestGameDetailsFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -3115,7 +3103,7 @@ describe('GameDetails Reducer', () => {
     });
     describe('RequestGameDetailsSuccessAction', () => {
       it('should set loading flag to false and store data to store', () => {
-        const action = RequestGameDetailsSuccessAction({
+        const action = GAME_DETAILS_ACTIONS.requestGameDetailsSuccess({
           data: mockedGameDetails,
         });
         const mutatedState = mutateState({
@@ -3139,7 +3127,7 @@ describe('GameDetails Reducer', () => {
   describe('SaveLevelsTypes', () => {
     describe('SaveLevelsTypesAction', () => {
       it('should set loading flag to true', () => {
-        const action = SaveLevelsTypesAction();
+        const action = GAME_DETAILS_ACTIONS.saveLevelsTypes();
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -3149,7 +3137,7 @@ describe('GameDetails Reducer', () => {
     });
     describe('SaveLevelsTypesFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = SaveLevelsTypesFailedAction({});
+        const action = GAME_DETAILS_ACTIONS.saveLevelsTypesFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -3162,7 +3150,7 @@ describe('GameDetails Reducer', () => {
     });
     describe('SaveLevelsTypesSuccessAction', () => {
       it('should set loading flag to false and store data to store', () => {
-        const action = SaveLevelsTypesSuccessAction();
+        const action = GAME_DETAILS_ACTIONS.saveLevelsTypesSuccess();
         const mutatedState = mutateState({
           isLoading: true,
           levels: mockedGameDetails.stat.Levels,

@@ -34,7 +34,7 @@ import { HttpCacheInterceptorService } from './common/services/http/http-interce
     BrowserTransferStateModule,
     HttpClientModule,
     MatSnackBarModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forRoot(ROUTES, { relativeLinkResolution: 'legacy' }),
     StoreModule.forRoot({ router: routerReducer }),
     EffectsModule.forRoot([NotificationEffects]),
     StoreRouterConnectingModule.forRoot({ serializer: MinimalRouterStateSerializer, stateKey: 'router' }),

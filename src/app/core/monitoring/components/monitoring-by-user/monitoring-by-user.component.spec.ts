@@ -7,7 +7,7 @@ import { State } from '@app-common/models';
 import { FilterByPropPipe } from '@app-common/pipes/filter-by-prop/filter-by-prop.pipe';
 import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe.mock';
 import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
-import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getPlayerData } from '@app-core/monitoring/reducers/monitoring.reducer';
 import { MonitoringByUserComponent } from './monitoring-by-user.component';
 
@@ -23,7 +23,7 @@ describe('Monitoring: MonitoringByUserComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(getLevels, []);
     store$.overrideSelector(getPlayerData, []);
 

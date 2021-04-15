@@ -4,7 +4,7 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 
 import { State, GameInfo } from '@app-common/models';
 import { mockedGames } from '@app-common/mocks/games.mock';
-import { RequestGamesAction } from '@app-core/games/actions/games.actions';
+import { GAMES_LIST_ACTIONS } from '@app-core/games/actions/games.actions';
 import { getGames } from '@app-core/games/reducers/games.reducer';
 import { SavedGamesResolver } from './saved-games.resolver';
 
@@ -17,10 +17,10 @@ describe('SavedGamesResolver', () => {
     TestBed.configureTestingModule({
       providers: [provideMockStore(), SavedGamesResolver],
     });
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     gamesList = store$.overrideSelector(getGames, []);
     spyOn(store$, 'dispatch');
-    resolver = TestBed.get<SavedGamesResolver>(SavedGamesResolver);
+    resolver = TestBed.inject<SavedGamesResolver>(SavedGamesResolver);
   });
 
   it('should be created', () => {
@@ -28,7 +28,7 @@ describe('SavedGamesResolver', () => {
   });
 
   describe('resolve', () => {
-    const action = RequestGamesAction();
+    const action = GAMES_LIST_ACTIONS.requestGames();
 
     it('should resolve the games list', () => {
       resolver.resolve().subscribe();

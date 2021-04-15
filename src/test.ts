@@ -1,5 +1,4 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
-
 import 'zone.js/dist/long-stack-trace-zone';
 import 'zone.js/dist/proxy.js';
 import 'zone.js/dist/sync-test';
@@ -13,13 +12,13 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/naming-convention, no-underscore-dangle
 declare const __karma__: any;
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const require: any;
 
 // Prevent Karma from running prematurely.
-// tslint:disable-next-line: no-empty only-arrow-functions
+// eslint-disable-next-line no-empty, @typescript-eslint/no-empty-function, prefer-arrow/prefer-arrow-functions
 __karma__.loaded = function () {};
 
 // First, initialize the Angular testing environment.

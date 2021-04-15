@@ -4,8 +4,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { GameInfo, State, GameRequest } from '@app-common/models';
-import { CleanGameDataAction } from '@app-core/game-details/actions/game-details.actions';
-import { CleanMonitoringDataAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getLoadingState, getGames } from '@app-core/games/reducers/games.reducer';
 
 @Component({
@@ -23,8 +23,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.isGamesLoading$ = this.store.pipe(select(getLoadingState), takeUntil(this.ngUnsubscribe));
     this.savedGames$ = this.store.pipe(select(getGames), takeUntil(this.ngUnsubscribe));
-    this.store.dispatch(CleanGameDataAction());
-    this.store.dispatch(CleanMonitoringDataAction());
+    this.store.dispatch(GAME_DETAILS_ACTIONS.cleanGameData());
+    this.store.dispatch(MONITORING_ACTIONS.cleanMonitoringData());
   }
 
   public ngOnDestroy() {

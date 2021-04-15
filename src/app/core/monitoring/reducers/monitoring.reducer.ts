@@ -9,18 +9,7 @@ import {
   PlayerLevelData,
   State,
 } from '@app-common/models';
-import {
-  CleanMonitoringDataAction,
-  GetMonitoringDetailsAction,
-  GetMonitoringDetailsFailedAction,
-  GetMonitoringDetailsSuccessAction,
-  RequestCodesAction,
-  RequestCodesFailedAction,
-  RequestCodesSuccessAction,
-  RequestMonitoringAction,
-  RequestMonitoringFailedAction,
-  RequestMonitoringSuccessAction,
-} from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 
 export const initialState: MonitoringState = {
   dataLoaded: false,
@@ -28,14 +17,20 @@ export const initialState: MonitoringState = {
 
 const reducer = createReducer(
   initialState,
-  on(CleanMonitoringDataAction, _ => initialState),
-  on(GetMonitoringDetailsAction, RequestCodesAction, RequestMonitoringAction, state =>
-    mergeRight(state, { isLoading: true }),
+  on(MONITORING_ACTIONS.cleanMonitoringData, (_) => initialState),
+  on(
+    MONITORING_ACTIONS.getMonitoringDetails,
+    MONITORING_ACTIONS.requestCodes,
+    MONITORING_ACTIONS.requestMonitoring,
+    (state) => mergeRight(state, { isLoading: true }),
   ),
-  on(GetMonitoringDetailsFailedAction, RequestCodesFailedAction, RequestMonitoringFailedAction, state =>
-    mergeRight(state, { isLoading: false }),
+  on(
+    MONITORING_ACTIONS.getMonitoringDetailsFailed,
+    MONITORING_ACTIONS.requestCodesFailed,
+    MONITORING_ACTIONS.requestMonitoringFailed,
+    (state) => mergeRight(state, { isLoading: false }),
   ),
-  on(GetMonitoringDetailsSuccessAction, (state, { detailsLevel, playerId, teamId, monitoringData }) => {
+  on(MONITORING_ACTIONS.getMonitoringDetailsSuccess, (state, { detailsLevel, playerId, teamId, monitoringData }) => {
     const target = detailsLevel === 'byPlayer' ? 'playerData' : 'teamData';
     const key = detailsLevel === 'byPlayer' ? (playerId as number) : (teamId as number);
     return pipe(
@@ -52,7 +47,7 @@ const reducer = createReducer(
       mergeRight(state) as (data: Partial<MonitoringState>) => MonitoringState,
     )(state);
   }),
-  on(RequestCodesSuccessAction, (state, { levelId, playerId, teamId, requestType, codes }) => {
+  on(MONITORING_ACTIONS.requestCodesSuccess, (state, { levelId, playerId, teamId, requestType, codes }) => {
     const propertyName = requestType === 'byLevel' ? teamId : playerId;
 
     return pipe(
@@ -62,28 +57,26 @@ const reducer = createReducer(
         [key: number]: CodesListResponse;
       },
       objOf(`${propertyName}`) as (data: { [key: number]: CodesListResponse }) => MonitoringState['codes'],
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mergeDeepRight(state.codes || ({} as any)) as (data: MonitoringState['codes']) => MonitoringState['codes'],
       objOf('codes') as (data: MonitoringState['codes']) => { codes: MonitoringState['codes'] },
       mergeRight({ isLoading: false }),
       mergeRight(state),
     )(codes);
   }),
-  on(RequestMonitoringSuccessAction, (state, { data }) => {
+  on(MONITORING_ACTIONS.requestMonitoringSuccess, (state, { data }) => {
     const pagesLeft = subtract(propOr(0, 'totalPages', data) as number, propOr(0, 'pageSaved', data) as number);
     const parsingStat = pipe(pick(['pageSaved', 'parsed', 'totalPages']), mergeLeft({ pagesLeft }))(data);
 
-    // tslint:disable-next-line: no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const totalData = propOr(null, 'totalData', data) as any;
 
     return mergeRight(state, { isLoading: false, dataLoaded: true, ...parsingStat, totalData });
   }),
 );
 
-export function monitoringReducer(monitoringState = initialState, action: Action): MonitoringState {
-  return reducer(monitoringState, action);
-}
-
+export const monitoringReducer = (monitoringState: MonitoringState, action: Action): MonitoringState =>
+  reducer(monitoringState, action);
 /* Selectors */
 export const selectMonitoringStore = (state: State) => state.monitoring as MonitoringState;
 export const isDataLoaded = createSelector(

@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { isNil } from 'ramda';
 
 import { State, TeamData } from '@app-common/models';
-import { RequestGameDetailsAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getFinishResults } from '@app-core/game-details/reducers/game-details.reducer';
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +28,7 @@ export class GameDataResolver implements Resolve<boolean> {
       select(getFinishResults),
       tap((data: TeamData[] | null) => {
         if (isNil(data)) {
-          this.store.dispatch(RequestGameDetailsAction({ domain, id }));
+          this.store.dispatch(GAME_DETAILS_ACTIONS.requestGameDetails({ domain, id }));
         }
       }),
       filter((data: TeamData[] | null) => !isNil(data)),

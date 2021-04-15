@@ -1,11 +1,7 @@
 import { mergeRight } from 'ramda';
 import { GamesState } from '@app-common/models';
 import { mockedGames } from '@app-common/mocks/games.mock';
-import {
-  RequestGamesAction,
-  RequestGamesSuccessAction,
-  RequestGamesFailedAction,
-} from '@app-core/games/actions/games.actions';
+import { GAMES_LIST_ACTIONS } from '@app-core/games/actions/games.actions';
 import { gamesReducer, initialState } from './games.reducer';
 
 const mutateState = mergeRight(initialState) as (data: Partial<GamesState>) => GamesState;
@@ -13,7 +9,7 @@ const mutateState = mergeRight(initialState) as (data: Partial<GamesState>) => G
 describe('Games Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const action = {} as any;
 
       const result = gamesReducer(initialState, action);
@@ -24,7 +20,7 @@ describe('Games Reducer', () => {
   describe('RequestGamesAction', () => {
     describe('RequestGamesAction', () => {
       it('should set loading flag to true', () => {
-        const action = RequestGamesAction();
+        const action = GAMES_LIST_ACTIONS.requestGames();
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -34,7 +30,7 @@ describe('Games Reducer', () => {
     });
     describe('RequestGamesFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = RequestGamesFailedAction({});
+        const action = GAMES_LIST_ACTIONS.requestGamesFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -47,7 +43,7 @@ describe('Games Reducer', () => {
     });
     describe('RequestGamesSuccessAction', () => {
       it('should set loading flag to false and store data to store', () => {
-        const action = RequestGamesSuccessAction({
+        const action = GAMES_LIST_ACTIONS.requestGamesSuccess({
           data: mockedGames,
         });
         const mutatedState = mutateState({

@@ -8,7 +8,7 @@ import { mockedGameDetails } from '@app-common/mocks/games.mock';
 import { MockedFormatDurationPipe } from '@app-common/pipes/duration-transform/duration-transform.pipe.mock';
 import { MockedGetPropertyPipe } from '@app-common/pipes/get-prop/get-prop.pipe.mock';
 import { MockedTotalStatCalculationPipe } from '@app-common/pipes/total-stat-calculation/total-stat-calculation.pipe.mock';
-import { ChangeTotalStatTabAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { TotalTableComponent } from './total-table.component';
 
 describe('Game Details: TotalTableComponent', () => {
@@ -46,7 +46,7 @@ describe('Game Details: TotalTableComponent', () => {
     fixture = TestBed.createComponent(TotalTableComponent);
     component = fixture.componentInstance;
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
 
     spyOn(store$, 'dispatch');
 
@@ -82,7 +82,7 @@ describe('Game Details: TotalTableComponent', () => {
   });
   describe('changeTab', () => {
     it('should dispatch ChangeTotalStatTabAction with new tab', () => {
-      const action = ChangeTotalStatTabAction({ tab: 1 });
+      const action = GAME_DETAILS_ACTIONS.changeTotalStatTab({ tab: 1 });
       component.changeTab({ tab: { textLabel: '1' } } as MatTabChangeEvent);
       expect(store$.dispatch).toHaveBeenCalledWith(action);
     });

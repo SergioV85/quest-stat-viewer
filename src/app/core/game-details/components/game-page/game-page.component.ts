@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 
 import { State, GameData } from '@app-common/models';
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
-import { SaveLevelsTypesAction, GetLatestDataFromEnAction } from '@app-core/game-details/actions/game-details.actions';
+import { GAME_DETAILS_ACTIONS } from '@app-core/game-details/actions/game-details.actions';
 import { getLoadingState, hasPendingChanges } from '@app-core/game-details/reducers/game-details.reducer';
 
 @Component({
@@ -53,11 +53,11 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   public saveChanges() {
-    this.store.dispatch(SaveLevelsTypesAction());
+    this.store.dispatch(GAME_DETAILS_ACTIONS.saveLevelsTypes());
   }
 
   public refreshData() {
-    this.store.dispatch(GetLatestDataFromEnAction());
+    this.store.dispatch(GAME_DETAILS_ACTIONS.getLatestDataFromEn());
   }
 
   public changeViewType({ value }: { value: string }) {

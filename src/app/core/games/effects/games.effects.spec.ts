@@ -4,14 +4,10 @@ import { Actions } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot, cold } from 'jasmine-marbles';
 
-import { ErrorNotificationAction } from '@app-common/actions/notification.actions';
-import { mockedGameDetails, mockedGames } from '@app-common/mocks/games.mock';
+import { NOTIFICATION_ACTIONS } from '@app-common/actions/notification.actions';
+import { mockedGames } from '@app-common/mocks/games.mock';
 import { ApiService } from '@app-common/services/api/api.service';
-import {
-  RequestGamesAction,
-  RequestGamesSuccessAction,
-  RequestGamesFailedAction,
-} from '@app-core/games/actions/games.actions';
+import { GAMES_LIST_ACTIONS } from '@app-core/games/actions/games.actions';
 import { GamesEffects } from './games.effects';
 
 describe('GamesEffects', () => {
@@ -26,17 +22,17 @@ describe('GamesEffects', () => {
       providers: [GamesEffects, provideMockActions(() => actions$), { provide: ApiService, useValue: apiService }],
     });
 
-    gamesEffects = TestBed.get<GamesEffects>(GamesEffects);
-    actions$ = TestBed.get<Actions>(Actions);
+    gamesEffects = TestBed.inject<GamesEffects>(GamesEffects);
+    actions$ = TestBed.inject<Observable<Actions>>(Actions);
   });
 
   it('should be created', () => {
     expect(gamesEffects).toBeTruthy();
   });
   describe('getGames$', () => {
-    const startAction = RequestGamesAction();
+    const startAction = GAMES_LIST_ACTIONS.requestGames();
     it('should send a request for getting games list and dispatch success action on complete', () => {
-      const successAction = RequestGamesSuccessAction({ data: mockedGames });
+      const successAction = GAMES_LIST_ACTIONS.requestGamesSuccess({ data: mockedGames });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-a|', { a: mockedGames });
@@ -47,8 +43,10 @@ describe('GamesEffects', () => {
     });
     it('should send a request for getting games list but dispatch error action on fail', () => {
       const error = new Error('Error');
-      const failAction = RequestGamesFailedAction({});
-      const messageAction = ErrorNotificationAction({ message: 'Извините, не удалось загрузить данные' });
+      const failAction = GAMES_LIST_ACTIONS.requestGamesFailed({});
+      const messageAction = NOTIFICATION_ACTIONS.errorNotification({
+        message: 'Извините, не удалось загрузить данные',
+      });
 
       actions$ = hot('-a', { a: startAction });
       const response$ = cold('-#|', {}, error);

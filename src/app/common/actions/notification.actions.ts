@@ -1,5 +1,17 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction, props, union } from '@ngrx/store';
 
-export const ErrorNotificationAction = createAction('[Notification] Error', props<{ message?: string }>());
-export const SuccessNotificationAction = createAction('[Notification] Success', props<{ message?: string }>());
-export const WarningNotificationAction = createAction('[Notification] Warning', props<{ message?: string }>());
+const errorNotification = createAction('[Notification] Error', props<{ message?: string }>());
+const successNotification = createAction('[Notification] Success', props<{ message?: string }>());
+const warningNotification = createAction('[Notification] Warning', props<{ message?: string }>());
+
+const actions = {
+  errorNotification,
+  successNotification,
+  warningNotification,
+};
+
+const notificationActions = union(actions);
+
+export type NotificationActionsType = typeof notificationActions;
+
+export const NOTIFICATION_ACTIONS = actions;

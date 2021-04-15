@@ -37,7 +37,7 @@ describe('Utils', () => {
       expect(getLevelTypeIcon(LevelType.General)).toEqual('fas fa-question');
     });
     it('should return the icon for unknown level', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(getLevelTypeIcon(null as any)).toEqual('fas fa-question');
     });
   });
@@ -76,7 +76,7 @@ describe('Utils', () => {
       expect(getLevelTypeName(LevelType.General)).toEqual('Неопределен');
     });
     it('should return the name for unknown level', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(getLevelTypeName(null as any)).toEqual('Неопределен');
     });
   });

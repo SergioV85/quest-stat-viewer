@@ -1,18 +1,7 @@
 import { mergeRight } from 'ramda';
 import { mockedMonitoringData } from '@app-common/mocks/monitoring.mock';
 import { MonitoringState } from '@app-common/models';
-import {
-  CleanMonitoringDataAction,
-  GetMonitoringDetailsAction,
-  GetMonitoringDetailsFailedAction,
-  GetMonitoringDetailsSuccessAction,
-  RequestCodesAction,
-  RequestCodesFailedAction,
-  RequestCodesSuccessAction,
-  RequestMonitoringAction,
-  RequestMonitoringFailedAction,
-  RequestMonitoringSuccessAction,
-} from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { monitoringReducer, initialState } from './monitoring.reducer';
 
 const mutateState = mergeRight(initialState) as (data: Partial<MonitoringState>) => MonitoringState;
@@ -20,7 +9,7 @@ const mutateState = mergeRight(initialState) as (data: Partial<MonitoringState>)
 describe('Monitoring Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const action = {} as any;
 
       const result = monitoringReducer(initialState, action);
@@ -30,7 +19,7 @@ describe('Monitoring Reducer', () => {
   });
   describe('CleanMonitoringDataAction', () => {
     it('should return initial state', () => {
-      const action = CleanMonitoringDataAction();
+      const action = MONITORING_ACTIONS.cleanMonitoringData();
       const mutatedState = mutateState({
         dataLoaded: true,
         isLoading: false,
@@ -47,7 +36,7 @@ describe('Monitoring Reducer', () => {
   describe('GetMonitoringDetails', () => {
     describe('GetMonitoringDetailsAction', () => {
       it('should set loading flag to true', () => {
-        const action = GetMonitoringDetailsAction({ playerId: 1, detailsLevel: 'byPlayer' });
+        const action = MONITORING_ACTIONS.getMonitoringDetails({ playerId: 1, detailsLevel: 'byPlayer' });
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -57,7 +46,7 @@ describe('Monitoring Reducer', () => {
     });
     describe('GetMonitoringDetailsFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = GetMonitoringDetailsFailedAction({});
+        const action = MONITORING_ACTIONS.getMonitoringDetailsFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -70,7 +59,7 @@ describe('Monitoring Reducer', () => {
     });
     describe('GetMonitoringDetailsSuccessAction', () => {
       it('should set loading flag to false and store data to store', () => {
-        const action = GetMonitoringDetailsSuccessAction({
+        const action = MONITORING_ACTIONS.getMonitoringDetailsSuccess({
           gameId: 45000,
           detailsLevel: 'byTeam',
           teamId: 12345,
@@ -95,7 +84,7 @@ describe('Monitoring Reducer', () => {
   describe('RequestCodes', () => {
     describe('RequestCodesAction', () => {
       it('should set loading flag to true', () => {
-        const action = RequestCodesAction({ query: { levelId: 1, requestType: '' } });
+        const action = MONITORING_ACTIONS.requestCodes({ query: { levelId: 1, requestType: '' } });
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -105,7 +94,7 @@ describe('Monitoring Reducer', () => {
     });
     describe('RequestCodesFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = RequestCodesFailedAction({});
+        const action = MONITORING_ACTIONS.requestCodesFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -134,7 +123,7 @@ describe('Monitoring Reducer', () => {
           userName: 'SergioV',
           _id: 'some.generic.id',
         };
-        const action = RequestCodesSuccessAction({
+        const action = MONITORING_ACTIONS.requestCodesSuccess({
           gameId: 45000,
           levelId: 2,
           playerId: 1,
@@ -160,7 +149,7 @@ describe('Monitoring Reducer', () => {
   describe('RequestMonitoring', () => {
     describe('RequestMonitoringAction', () => {
       it('should set loading flag to true', () => {
-        const action = RequestMonitoringAction({ id: 45000, domain: 'quest.ua' });
+        const action = MONITORING_ACTIONS.requestMonitoring({ id: 45000, domain: 'quest.ua' });
         const expectedState = mutateState({
           isLoading: true,
         });
@@ -170,7 +159,7 @@ describe('Monitoring Reducer', () => {
     });
     describe('RequestMonitoringFailedAction', () => {
       it('should set loading flag to false', () => {
-        const action = RequestMonitoringFailedAction({});
+        const action = MONITORING_ACTIONS.requestMonitoringFailed({});
         const mutatedState = mutateState({
           isLoading: true,
         });
@@ -183,7 +172,7 @@ describe('Monitoring Reducer', () => {
     });
     describe('RequestMonitoringSuccessAction', () => {
       it('should set loading flag to false', () => {
-        const action = RequestMonitoringSuccessAction({ data: mockedMonitoringData });
+        const action = MONITORING_ACTIONS.requestMonitoringSuccess({ data: mockedMonitoringData });
         const mutatedState = mutateState({
           isLoading: true,
         });

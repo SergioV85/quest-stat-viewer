@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { pathOr, mergeRight } from 'ramda';
 
 import { CodeEntry, State } from '@app-common/models';
-import { RequestCodesAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getCodes } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
@@ -32,9 +32,9 @@ export class CodesListComponent implements OnInit, OnDestroy, AfterViewInit {
         ? { teamId: this.uniqueId, levelId: this.levelId }
         : { playerId: this.uniqueId, levelId: this.levelId };
 
-    this.store.dispatch(RequestCodesAction({ query: mergeRight(request, { requestType: this.type }) }));
+    this.store.dispatch(MONITORING_ACTIONS.requestCodes({ query: mergeRight(request, { requestType: this.type }) }));
 
-    this.store.pipe(select(getCodes), takeUntil(this.ngUnsubscribe)).subscribe(codes => {
+    this.store.pipe(select(getCodes), takeUntil(this.ngUnsubscribe)).subscribe((codes) => {
       this.dataSource.data = pathOr([], [this.uniqueId, this.levelId], codes);
     });
   }

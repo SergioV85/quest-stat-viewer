@@ -20,7 +20,7 @@ describe('FilterByPropPipe', () => {
       expect(pipe.transform(teamData, 'id')).toEqual(95650);
     });
     it('should return value for nullable value', () => {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(pipe.transform(null as any, 'id')).toEqual(null);
     });
   });

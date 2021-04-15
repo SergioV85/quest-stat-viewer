@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { MonitoringTeamDetailedData, State, LevelData } from '@app-common/models';
 import { getLevels } from '@app-core/game-details/reducers/game-details.reducer';
-import { GetMonitoringDetailsAction } from '@app-core/monitoring/actions/monitoring.actions';
+import { MONITORING_ACTIONS } from '@app-core/monitoring/actions/monitoring.actions';
 import { getTeamData } from '@app-core/monitoring/reducers/monitoring.reducer';
 
 @Component({
@@ -25,7 +25,7 @@ export class MonitoringByTeamComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.store.dispatch(
-      GetMonitoringDetailsAction({
+      MONITORING_ACTIONS.getMonitoringDetails({
         teamId: this.id,
         detailsLevel: 'byTeam',
       }),

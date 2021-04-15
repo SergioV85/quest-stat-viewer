@@ -20,7 +20,7 @@ describe('Monitoring: MonitoringComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    store$ = TestBed.get<Store<State>>(Store);
+    store$ = TestBed.inject<Store<State>>(Store) as MockStore<State>;
     store$.overrideSelector(isDataParsed, true);
     store$.overrideSelector(getParsingStat, { pagesLeft: 1, pageSaved: 9, totalPages: 10 });
     store$.overrideSelector(getTotalData, mockedMonitoringData.totalData as MonitoringTeamGroupedData[]);

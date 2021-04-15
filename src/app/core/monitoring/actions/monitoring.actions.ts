@@ -1,12 +1,12 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction, props, union } from '@ngrx/store';
 import { CodesListRequest, MonitoringResponse, CodesListResponse, GameRequest } from '@app-common/models';
 
-export const CleanMonitoringDataAction = createAction('[Monitoring] Clean monitoring data');
-export const GetMonitoringDetailsAction = createAction(
+const cleanMonitoringData = createAction('[Monitoring] Clean monitoring data');
+const getMonitoringDetails = createAction(
   '[Monitoring] Request detailed monitoring',
   props<{ teamId?: number; playerId?: number; detailsLevel: string }>(),
 );
-export const GetMonitoringDetailsSuccessAction = createAction(
+const getMonitoringDetailsSuccess = createAction(
   '[Monitoring] Detailed monitoring saved to store',
   props<{
     gameId: number;
@@ -16,15 +16,12 @@ export const GetMonitoringDetailsSuccessAction = createAction(
     monitoringData: MonitoringResponse;
   }>(),
 );
-export const GetMonitoringDetailsFailedAction = createAction(
+const getMonitoringDetailsFailed = createAction(
   '[Monitoring] Request detailed game monitoring failed',
   props<{ message?: string }>(),
 );
-export const RequestCodesAction = createAction(
-  '[Monitoring] Request list of codes',
-  props<{ query: CodesListRequest }>(),
-);
-export const RequestCodesSuccessAction = createAction(
+const requestCodes = createAction('[Monitoring] Request list of codes', props<{ query: CodesListRequest }>());
+const requestCodesSuccess = createAction(
   '[Monitoring] Codes saved to store',
   props<{
     gameId: number;
@@ -35,16 +32,32 @@ export const RequestCodesSuccessAction = createAction(
     codes: CodesListResponse;
   }>(),
 );
-export const RequestCodesFailedAction = createAction(
-  '[Monitoring] Request list of codes failed',
-  props<{ message?: string }>(),
-);
-export const RequestMonitoringAction = createAction('[Monitoring] Request game monitoring', props<GameRequest>());
-export const RequestMonitoringSuccessAction = createAction(
+const requestCodesFailed = createAction('[Monitoring] Request list of codes failed', props<{ message?: string }>());
+const requestMonitoring = createAction('[Monitoring] Request game monitoring', props<GameRequest>());
+const requestMonitoringSuccess = createAction(
   '[Monitoring] Game monitoring saved to store',
   props<{ data: MonitoringResponse | null }>(),
 );
-export const RequestMonitoringFailedAction = createAction(
+const requestMonitoringFailed = createAction(
   '[Monitoring] Request game monitoring failed',
   props<{ message?: string }>(),
 );
+
+const actions = {
+  cleanMonitoringData,
+  getMonitoringDetails,
+  getMonitoringDetailsFailed,
+  getMonitoringDetailsSuccess,
+  requestCodes,
+  requestCodesFailed,
+  requestCodesSuccess,
+  requestMonitoring,
+  requestMonitoringFailed,
+  requestMonitoringSuccess,
+};
+
+const monitoringActions = union(actions);
+
+export type MonitoringActionsType = typeof monitoringActions;
+
+export const MONITORING_ACTIONS = actions;

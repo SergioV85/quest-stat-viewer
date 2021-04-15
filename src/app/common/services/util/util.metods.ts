@@ -83,6 +83,4 @@ export const getLevelTypeName = (type: number): string => {
   return name;
 };
 
-export function isNotNullOrUndefined<T>(input: null | undefined | T): input is T {
-  return !isNil(input);
-}
+export const isNotNullOrUndefined = <T>(input: null | undefined | T): input is T => !isNil(input);
