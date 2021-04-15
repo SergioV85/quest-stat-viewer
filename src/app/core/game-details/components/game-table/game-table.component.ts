@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { contains, indexOf, without } from 'ramda';
@@ -20,7 +20,7 @@ import { getLevels, getStatData } from '@app-core/game-details/reducers/game-det
 export class GameTableComponent implements OnInit, OnDestroy {
   public activeTab$?: Observable<string>;
 
-  public levels?: LevelData[];
+  public levels$?: Observable<LevelData[]>;
   public statData?: { teams: TeamData[][]; levels: TeamData[][] };
   public LevelType = LevelType;
   public selectedTeams: number[] = [];
@@ -29,9 +29,11 @@ export class GameTableComponent implements OnInit, OnDestroy {
 
   constructor(private readonly store: Store<State>) {}
 
+  public trackByLevel = (index: number, level: LevelData) => level.level;
+
   public ngOnInit() {
     this.activeTab$ = this.store.pipe(select(getActiveTab), takeUntil(this.ngUnsubscribe));
-    this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe)).subscribe(levels => (this.levels = levels));
+    this.levels$ = this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe));
     this.store.pipe(select(getStatData), takeUntil(this.ngUnsubscribe)).subscribe(data => (this.statData = data));
   }
 

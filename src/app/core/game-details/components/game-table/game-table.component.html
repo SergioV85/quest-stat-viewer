@@ -3,17 +3,18 @@
     <div class="gameTable__table-container">
       <div class="gameTable__stat card-deck">
         <ng-template ngFor
-            [ngForOf]="levels"
+            [ngForOf]="levels$ | async"
             let-level
+            let-levelsCount="count"
             let-isLast="last"
-            let-idx="index">
-          <level-card
-              class="gameTable__levelName gameTable__levelName--{{ LevelType[level.type] }} card"
+            let-idx="index"
+            [ngForTrackBy]="trackByLevel">
+          <level-card class="gameTable__levelName gameTable__levelName--{{ LevelType[level.type] }} card"
               [ngClass]="{
                 'gameTable__levelName--dismised': level.removed,
                 'mx-1': !isLast,
                 'gameTable__levelName--finishResult': isLast,
-                'mr-4': idx === (levels.length - 2)
+                'mr-4': idx === (levelsCount - 2)
               }"
               [levelInfo]="level"
               [isLastLevel]="isLast"
