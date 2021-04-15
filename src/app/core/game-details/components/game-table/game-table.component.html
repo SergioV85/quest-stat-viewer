@@ -7,8 +7,7 @@
             let-level
             let-levelsCount="count"
             let-isLast="last"
-            let-idx="index"
-            [ngForTrackBy]="trackByLevel">
+            let-idx="index">
           <level-card class="gameTable__levelName gameTable__levelName--{{ levelType[level.type] }} card"
               [ngClass]="{
                 'gameTable__levelName--dismised': level.removed,

@@ -1,24 +1,13 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "outDir": "../out-tsc/spec",
-    "target": "es5",
     "baseUrl": "./",
-    "types": [
-      "jasmine",
-      "node"
-    ],
+    "types": ["jasmine", "node"],
     "module": "commonjs"
   },
-  "files": [
-    "test.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ],
-  "exclude": [
-    "**/*.mock.ts",
-  ]
+  "files": ["test.ts", "polyfills.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts"],
+  "exclude": ["**/*.mock.ts"]
 }

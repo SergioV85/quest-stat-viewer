@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { contains, indexOf, without } from 'ramda';
+import { contains, equals, indexOf, without } from 'ramda';
 
 import { getActiveTab } from '@app-common/reducers/router/router.reducer';
 import { TeamData, State, LevelData, LevelType } from '@app-common/models';
@@ -29,12 +29,20 @@ export class GameTableComponent implements OnInit, OnDestroy {
 
   constructor(private readonly store: Store<State>) {}
 
-  public trackByLevel = (index: number, level: LevelData) => level.level;
-
   public ngOnInit() {
     this.activeTab$ = this.store.pipe(select(getActiveTab), takeUntil(this.ngUnsubscribe));
-    this.levels$ = this.store.pipe(select(getLevels), takeUntil(this.ngUnsubscribe));
-    this.store.pipe(select(getStatData), takeUntil(this.ngUnsubscribe)).subscribe((data) => (this.statData = data));
+    this.levels$ = this.store.pipe(
+      select(getLevels),
+      distinctUntilChanged((prevData, currData) => equals(currData, prevData)),
+      takeUntil(this.ngUnsubscribe),
+    );
+    this.store
+      .pipe(
+        select(getStatData),
+        distinctUntilChanged((prevData, currData) => equals(currData, prevData)),
+        takeUntil(this.ngUnsubscribe),
+      )
+      .subscribe((data) => (this.statData = data));
   }
 
   public ngOnDestroy() {

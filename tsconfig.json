@@ -1,25 +1,24 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "importHelpers": true,
     "strict": true,
-    "downlevelIteration": true,
     "module": "esnext",
     "outDir": "./dist/out-tsc",
     "baseUrl": "src",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "noImplicitAny": true,
+    "target": "es2020",
     "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom"],
     "paths": {
       "@app-common*": ["../src/app/common/*"],
-      "@app-core*": ["../src/app/core/*"],
-      "core-js/es7/reflect": ["../node_modules/core-js/proposals/reflect-metadata"],
-      "core-js/es6/*": ["../node_modules/core-js/es/*"]
+      "@app-core*": ["../src/app/core/*"]
     }
   },
   "angularCompilerOptions": {
